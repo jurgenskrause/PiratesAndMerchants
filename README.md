@@ -259,3 +259,7 @@ Phase 2A adds size-compatible berth allocation across dynamic docks and per-port
 ## Funded economy: Phase 2
 
 Buyer-owned purchase orders commit available funds; owner-attributed offers preserve seller identity. Dockside acceptance settles payment and ownership immediately, while timed handling keeps paid goods unavailable until physically delivered. Whole-unit pickups, partial sales, retained cargo and explicit dumping preserve ownership and conservation. See [the Phase 2 contract and compatibility inventory](docs/funded-markets-phase2.md) and [integrated conservation report](docs/phase2-conservation-results.json). Run the funded-market, funded-market-priority, funded-handling and phase2-conservation tests.
+
+## Browser benchmark
+
+Open **Benchmark** from the development main menu and run the fixed-seed sweep. It measures overview, land, water, and coast views at 32², 128², and 512². Optionally include six-merchant runs at 1× and 20×. Keep the tab visible at one viewport size, then use **Copy JSON** or **Download JSON** to share the result. Run the same sweep on both builds for a comparison. The report includes device/browser details, frame median/p95, app ticker time, long tasks, worker tick and message samples where applicable, generation time, and available JS heap. Browser frame intervals are not GPU timer measurements.

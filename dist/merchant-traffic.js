@@ -25,6 +25,7 @@ export class MerchantTraffic {
    const worker=this.workerFactory();this.worker=worker;
    worker.onmessage=({data})=>{
     if(this.worker!==worker||this.epoch!==epoch)return;
+    this.benchmarkObserver?.(data);
     if(data.type==='configuration-result'){this.configurationResult(data);return;}
     if(data.sessionId){if(this.sessionId&&this.sessionId!==data.sessionId)return;this.sessionId=data.sessionId;}
     if(data.configurationRevision!==undefined&&data.configurationRevision!==this.configurationRevision)return;

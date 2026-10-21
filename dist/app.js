@@ -25,7 +25,7 @@ import {centralPort} from './ports.js?v=babbc3d3950e';
 import {cloudFragment} from './atmosphere.js?v=babbc3d3950e';
 import {SailingTest} from './sailing-test.js?v=babbc3d3950e';
 import {Ocean} from './ocean.js?v=babbc3d3950e';
-import {axialToWorld,sampleWorld,BUILDING_SCALE} from './world.js?v=babbc3d3950e';
+import {axialToWorld,offsetToAxial,sampleWorld,BUILDING_SCALE} from './world.js?v=babbc3d3950e';
 import {Wind} from './wind.js?v=babbc3d3950e';
 import {WindField} from './wind-field.js?v=babbc3d3950e';
 import {PortRenderer} from './port-renderer.js?v=babbc3d3950e';
@@ -55,6 +55,70 @@ function requestApplication(edits,callback=()=>{}){const requestId=++application
 function worldConfigurationResult(m){if(m.selectedSnapshot){rememberDeveloperSelection(m);devConfiguration.revision=m.selectedSnapshot.revision;$('simulate').disabled=generating||!world||world.configuration?.revision!==devConfiguration.revision;}if(m.status==='accepted'&&m.activationBoundary==='simulation_restart'){sailingTest?.stop(false);shipInspector?.reset();previewEconomy=createPortEconomy(world);}}
 const devConfiguration=new DevConfigurationPanel({onApply:(session,warnings=[])=>{requestApplication(session.application.values);$('simulate').disabled=!world||world.configuration?.revision!==devConfiguration.revision;$('seed-note').textContent=($('simulate').disabled?'World configuration changed. Generate a new world to apply.':'Display preferences queued for the next frame.')+(warnings.length?' Warnings: '+warnings.map(w=>w.message).join(' '):'');}});
 ledgerPreview=new PortDashboard({getWorld:()=>({ports:[ledgerPreviewPort]})});
+let benchmarkRunning=false,benchmarkReport=null,benchmarkMainSamples=[];
+const benchmarkStatus=$('benchmark-status'),benchmarkProgress=$('benchmark-progress');
+const roundMetric=value=>Number.isFinite(value)?Math.round(value*100)/100:null;
+function percentile(values,p){if(!values.length)return null;const sorted=[...values].sort((a,b)=>a-b),position=(sorted.length-1)*p,low=Math.floor(position);return roundMetric(sorted[low]+(sorted[Math.ceil(position)]-sorted[low])*(position-low));}
+function benchmarkPoint(kind){
+ const n=world.n,h=world.h,at=i=>{const row=Math.floor(i/n),col=i%n,{q,r}=offsetToAxial(col,row);return axialToWorld(q,r);};
+ let land=-1,water=-1,coast=-1;
+ for(let i=0;i<h.length;i++){
+  if(land<0&&h[i]>.48)land=i;
+  if(water<0&&h[i]<.1&&world.depth[i]>=28)water=i;
+  if(coast<0&&h[i]>=.35&&h[i]<.4)coast=i;
+ }
+ return at(kind==='land'?(land>=0?land:Math.max(0,coast)):kind==='water'?(water>=0?water:0):coast>=0?coast:land>=0?land:0);
+}
+async function benchmarkFrames(label,size,view,speed=0){
+ const width=map.clientWidth,height=map.clientHeight,intervals=[],ticks=[],sizes=[];
+ let messages=0,longTaskMs=0,started=Infinity,ended=Infinity,sampling=false;
+ const observer=typeof PerformanceObserver==='function'&&PerformanceObserver.supportedEntryTypes?.includes('longtask')?new PerformanceObserver(list=>{for(const entry of list.getEntries())if(entry.startTime>=started&&entry.startTime<ended)longTaskMs+=entry.duration;}):null;
+ observer?.observe({entryTypes:['longtask']});
+ merchantTraffic.benchmarkObserver=data=>{if(data.type!=='state'||!sampling)return;messages++;if(Number.isFinite(data.benchmarkTickMs))ticks.push(data.benchmarkTickMs);if(messages%5===1)sizes.push(new TextEncoder().encode(JSON.stringify(data)).byteLength);};
+ try{
+  let previous=null,frames=0;await new Promise((resolve,reject)=>{
+   const frame=now=>{if(document.hidden||map.clientWidth!==width||map.clientHeight!==height){reject(Error('Tab was hidden or viewport changed. Run again without resizing.'));return;}
+    if(frames===30){started=now;sampling=true;benchmarkMainSamples=[];}if(previous!==null&&frames>30)intervals.push(now-previous);previous=now;frames++;
+    if(frames<150)requestAnimationFrame(frame);else resolve();};requestAnimationFrame(frame);
+  });
+  ended=performance.now();sampling=false;await new Promise(resolve=>setTimeout(resolve,0));
+  return{kind:label,mapSize:size,view,simulationSpeed:speed,seed:world.config.seed,zoom:roundMetric(scale),hexPixels:roundMetric(scale*1.7320508),viewport:[width,height],outputPixels:[app.canvas.width,app.canvas.height],filterResolution:filter.resolution,ships:merchantTraffic.fleetSnapshots?.length??0,frameCount:intervals.length,frameMedianMs:percentile(intervals,.5),frameP95Ms:percentile(intervals,.95),tickerMedianMs:percentile(benchmarkMainSamples,.5),tickerP95Ms:percentile(benchmarkMainSamples,.95),longTaskMs:roundMetric(longTaskMs),workerTickMedianMs:percentile(ticks,.5),workerTickP95Ms:percentile(ticks,.95),messageRateHz:roundMetric(messages/((ended-started)/1000)),sampledMessageBytesMedian:percentile(sizes,.5),jsHeapMiB:performance.memory?.usedJSHeapSize?roundMetric(performance.memory.usedJSHeapSize/1048576):null,generationMs:roundMetric(world.generationMs),workerGenerationMs:roundMetric(world.workerGenerationMs)};
+ }finally{merchantTraffic.benchmarkObserver=null;observer?.disconnect();}
+}
+async function runBenchmark(){
+ if(benchmarkRunning||!ready)return;benchmarkRunning=true;benchmarkReport=null;$('benchmark-start').disabled=true;$('benchmark-copy').disabled=true;$('benchmark-download').disabled=true;$('benchmark-close').disabled=true;$('dev-benchmark').close();
+ const previousSettings={seed:$('seed').value,size:$('size').value},previousAnimate=$('animate').checked,includeFleet=$('benchmark-fleet').checked;
+ const gl=app.renderer.gl,debug=gl.getExtension('WEBGL_debug_renderer_info');
+ const report={schema:'pirates-merchants-benchmark-v1',build:'phase2+benchmark-20261021',capturedAt:new Date().toISOString(),userAgent:navigator.userAgent,platform:navigator.platform,deviceMemoryGiB:navigator.deviceMemory??null,hardwareConcurrency:navigator.hardwareConcurrency??null,devicePixelRatio:devicePixelRatio,screen:[screen.width,screen.height],glVendor:debug?gl.getParameter(debug.UNMASKED_VENDOR_WEBGL):gl.getParameter(gl.VENDOR),glRenderer:debug?gl.getParameter(debug.UNMASKED_RENDERER_WEBGL):gl.getParameter(gl.RENDERER),gpuTimeMs:null,notes:['Frame intervals include browser scheduling and rendering; they are not GPU time.','Ticker time measures the app update callback, not total main-thread work. Long-task time includes tasks longer than 50 ms only.','Message byte size samples one in five state messages using JSON serialization on the main thread.'],scenes:[]};
+ const progress=message=>{benchmarkProgress.textContent=message;benchmarkProgress.hidden=false;benchmarkStatus.textContent=message;};
+ try{
+  $('seed').value='BENCHMARK-COAST-01';$('animate').checked=true;
+  for(const size of [32,128,512]){
+   $('size').value=String(size);$('tile-count').textContent=(size*size).toLocaleString()+' hexes';progress(`Generating ${size} × ${size}…`);await generate();
+   filter.resolution=1;cloudFilter.resolution=.5;
+   for(const view of ['overview','land','water','coast']){
+    progress(`${size} × ${size}: ${view} view…`);if(view==='overview')fit();else{camera=benchmarkPoint(view);scale=BUILDING_SCALE;sync();}
+    report.scenes.push(await benchmarkFrames('terrain',size,view));
+   }
+   if(includeFleet){
+    camera=benchmarkPoint('coast');scale=BUILDING_SCALE;sync();merchantTraffic.setDensity(6);merchantTraffic.start();
+    const deadline=performance.now()+12000;while(!merchantTraffic.sessionId&&performance.now()<deadline)await new Promise(resolve=>setTimeout(resolve,100));
+    if(!merchantTraffic.sessionId)throw Error('Fleet worker did not start. Partial report is available.');
+    for(const speed of [1,20]){progress(`${size} × ${size}: six-merchant fleet at ${speed}×…`);merchantTraffic.setSimulationSpeed(speed);await new Promise(resolve=>setTimeout(resolve,1000));report.scenes.push(await benchmarkFrames('fleet',size,'coast',speed));}
+    merchantTraffic.stop();
+   }
+  }
+  progress(`Finished ${report.scenes.length} scenes. Copy or download the JSON report.`);
+ }catch(error){report.error=error.message;progress(`Stopped: ${error.message} Partial report is available.`);}
+ finally{
+  benchmarkRunning=false;merchantTraffic.benchmarkObserver=null;merchantTraffic.stop();$('seed').value=previousSettings.seed;$('size').value=previousSettings.size;$('tile-count').textContent=(Number(previousSettings.size)**2).toLocaleString()+' hexes';$('animate').checked=previousAnimate;$('benchmark-start').disabled=false;$('benchmark-close').disabled=false;benchmarkReport=report;$('benchmark-copy').disabled=false;$('benchmark-download').disabled=false;
+  $('benchmark-result').textContent=JSON.stringify(report,null,2);$('benchmark-result').hidden=false;benchmarkProgress.hidden=true;mode('home');$('dev-benchmark').showModal();
+ }
+}
+$('dev-benchmark-button').onclick=()=>{$('dev-benchmark').showModal();};
+$('benchmark-close').onclick=()=>$('dev-benchmark').close();$('benchmark-start').onclick=runBenchmark;
+$('benchmark-copy').onclick=async()=>{if(!benchmarkReport)return;try{await navigator.clipboard.writeText(JSON.stringify(benchmarkReport,null,2));benchmarkStatus.textContent='JSON copied. Paste it in our chat.';}catch{benchmarkStatus.textContent='Copy failed. Use Download JSON instead.';}};
+$('benchmark-download').onclick=()=>{if(!benchmarkReport)return;const blob=new Blob([JSON.stringify(benchmarkReport,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='pirates-merchants-benchmark-'+new Date().toISOString().slice(0,10)+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};
 const previewButton=$('dev-ledger-preview')??(()=>{const actions=document.querySelector('.dev-menu-actions');if(!actions)return null;const button=document.createElement('button');button.id='dev-ledger-preview';button.type='button';button.textContent='Preview ledger';actions.append(button);return button;})();
 if(previewButton)previewButton.onclick=()=>ledgerPreview.open(ledgerPreviewPort);
 new DevRuntimeConfigurationPanel({requestApplication,requestWorld:(edits,callback)=>merchantTraffic?.requestConfiguration(edits,callback),restart:callback=>merchantTraffic?.restartConfiguration(callback),cancel:(scope,callback)=>{if(scope==='world')merchantTraffic?.cancelConfiguration(callback);else{applicationController.cancel('Developer cancelled batch');callback(applicationController.response({requestId:++applicationRequestId},'accepted',{revision:applicationController.active.revision,activationBoundary:'unchanged',snapshot:applicationController.active}));}},regenerate:()=>generate().catch(error=>{$('runtime-config-status').textContent=error.message;})});
@@ -193,17 +257,17 @@ async function init(){try{
  app.stage.addChild(bridgeUI.heat);
  new ResizeObserver(entries=>{for(const entry of entries)map.parentElement.style.setProperty('--map-hud-height',`${entry.contentRect.height}px`);}).observe(document.querySelector('.map-hud'));
  new ResizeObserver(()=>{const w=map.clientWidth,h=map.clientHeight;app.renderer.resize(w,h);plane.width=w;plane.height=h;cloudPlane.width=w;cloudPlane.height=h;cloudPlane.filterArea=new PIXI.Rectangle(0,0,w,h);plane.filterArea=new PIXI.Rectangle(0,0,w,h);sync();}).observe(map);
- let elapsed=0,frames=0,windUIElapsed=0;const windUniform=new Float32Array(2),waveOffset=new Float32Array(2),waveHeadings=new Float32Array(2);app.ticker.maxFPS=60;app.ticker.add(t=>{const applied=applicationController.activate('next_frame',{frame:++frameNumber});if(applied?.status==='accepted'){applicationSettings=applicationHolder.settings;sync();}const uniforms=filter.resources.worldUniforms.uniforms;
+ let elapsed=0,frames=0,windUIElapsed=0;const windUniform=new Float32Array(2),waveOffset=new Float32Array(2),waveHeadings=new Float32Array(2);app.ticker.maxFPS=60;app.ticker.add(t=>{const benchmarkTickStart=benchmarkRunning?performance.now():0;const applied=applicationController.activate('next_frame',{frame:++frameNumber});if(applied?.status==='accepted'){applicationSettings=applicationHolder.settings;sync();}const uniforms=filter.resources.worldUniforms.uniforms;
  if($('animate').checked&&!document.hidden){const speed=merchantTraffic.worker?(merchantTraffic.effectiveSpeed??simulationSpeed):1,steps=Math.ceil(speed),dt=Math.min(t.deltaMS/1000,.1)*speed/steps;for(let i=0;i<steps;i++){uniforms.uTime+=dt;wind.update(dt,$('wind-drift').checked);ocean.update(dt,wind);uniforms.uWavePhases=ocean.phases;uniforms.uWaveCycle=ocean.cycle;waveHeadings[0]=ocean.previous;waveHeadings[1]=ocean.heading;uniforms.uWaveHeadings=waveHeadings;uniforms.uWaveBlend=ocean.blend;uniforms.uWaveStrength=ocean.speed;if(windField){if(windField.update(dt,wind.vector))windSource.update();uniforms.uFieldAge=windField.age;}}}
  const vector=wind.vector;windUniform[0]=vector.x;windUniform[1]=vector.y;uniforms.uWind=windUniform;waveOffset[0]=wind.offset.x;waveOffset[1]=wind.offset.y;uniforms.uWaveOffset=waveOffset;cloudFilter.resources.cloudUniforms.uniforms.uFlow=waveOffset;cloudFilter.resources.cloudUniforms.uniforms.uTime=uniforms.uTime;cloudPlane.visible=$('layer').value==='0';
- if(!document.hidden&&!generating){const resolution=renderBudget.update(t.elapsedMS/1000);if(resolution!==null){filter.resolution=resolution;cloudFilter.resolution=resolution*.5;}}
+ if(!document.hidden&&!generating&&!benchmarkRunning){const resolution=renderBudget.update(t.elapsedMS/1000);if(resolution!==null){filter.resolution=resolution;cloudFilter.resolution=resolution*.5;}}
  const sailingRate=merchantTraffic.worker?(merchantTraffic.effectiveSpeed??simulationSpeed):1,sailingSteps=Math.ceil(sailingRate);for(let i=0;i<sailingSteps;i++)sailingTest.update(Math.min(t.deltaMS/1000,.1)*sailingRate/sailingSteps);sailingTest.render(camera,scale,map.clientWidth,map.clientHeight);
  merchantTraffic.update(t.deltaMS/1000);merchantTraffic.render(camera,scale,map.clientWidth,map.clientHeight);
  bridgeUI.render(camera,scale,map.clientWidth,map.clientHeight);
  windUIElapsed+=t.deltaMS;if(windUIElapsed>250){windUIElapsed=0;windUI();refreshShipTooltip();refreshPortTooltip();bridgeUI.refresh();shipInspector.refresh();economicOverview.refresh();if(portDashboard?.dialog?.open&&portDashboard.port)requestPortLedger(portDashboard.port);portDashboard.refresh();$('simulation-clock').textContent=merchantTraffic.worker?'Tick '+(merchantTraffic.bridgeState?.tick??0)+' · '+(merchantTraffic.effectiveSpeed??simulationSpeed).toFixed(1)+'× actual':'Simulation not started';}
- elapsed+=t.elapsedMS;frames++;if(elapsed>1000){$('performance').textContent=`${Math.round(frames*1000/elapsed)} FPS · WebGL2`;elapsed=0;frames=0;}});
+ elapsed+=t.elapsedMS;frames++;if(elapsed>1000){$('performance').textContent=`${Math.round(frames*1000/elapsed)} FPS · WebGL2`;elapsed=0;frames=0;}if(benchmarkRunning&&benchmarkTickStart)benchmarkMainSamples.push(performance.now()-benchmarkTickStart);});
  app.canvas.addEventListener('webglcontextlost',e=>{e.preventDefault();$('loading').textContent='Graphics connection lost. Reload to restore the chart.';$('loading').hidden=false;});
- ready=true;busy(false);$('dev-ready-status').textContent='Ready for testing. Configure options, then generate a world.';$('dev-world-button').disabled=false;$('dev-start-world').disabled=false;mode('home');registerTools();
+ ready=true;busy(false);$('dev-ready-status').textContent='Ready for testing. Configure options, then generate a world.';$('dev-world-button').disabled=false;$('dev-start-world').disabled=false;$('dev-benchmark-button').disabled=false;mode('home');registerTools();
 }catch(e){console.error(e);fail('Unable to start the map. '+e.message);}}
 function registerTools(){if(!document.modelContext?.registerTool)return;const lifecycle=new AbortController();window.addEventListener('pagehide',()=>lifecycle.abort(),{once:true});const properties={seed:{type:'string',minLength:1,maxLength:64},size:{type:'integer',enum:[32,64,128,256,512]},...Object.fromEntries(fields.map(k=>[k,{type:'number',minimum:k==='density'?10:0,maximum:k==='density'?90:100}]))};try{Promise.resolve(document.modelContext.registerTool({name:'generate_terrain',title:'Generate terrain',description:'Apply terrain settings and generate a new seeded archipelago in the workshop.',inputSchema:{type:'object',properties,additionalProperties:false},annotations:{readOnlyHint:false},async execute(input){if(!input||typeof input!=='object'||Array.isArray(input))throw Error('Expected terrain settings');for(const[k,v]of Object.entries(input)){const p=properties[k];if(!p)throw Error('Unknown setting: '+k);if(k==='seed'){if(typeof v!=='string'||!v.trim()||v.length>64)throw Error('Invalid seed');}else if(typeof v!=='number'||!Number.isFinite(v)||(p.enum?!p.enum.includes(v):v<p.minimum||v>p.maximum))throw Error('Invalid '+k);}if(generating||!ready)throw Error('Map is busy');for(const[k,v]of Object.entries(input))$(k).value=v;for(const k of fields)$(k+'-out').value=$(k).value+'%';$('tile-count').textContent=(Number($('size').value)**2).toLocaleString()+' hexes';return await generate();}},{signal:lifecycle.signal})).catch(console.warn);}catch(e){console.warn(e);}}
 init();

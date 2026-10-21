@@ -12,7 +12,7 @@ import {shipShadowStyle} from './sailing-test.js?v=babbc3d3950e';
 import {trafficPose} from './traffic-motion.js?v=babbc3d3950e';
 const fieldCopy=field=>field?{width:field.width,height:field.height,spacing:field.spacing,data:field.data}:null;
 export class MerchantTraffic {
- constructor({app,getWorld,getWind,getField,getBasePort,getFrames,getPlayer=()=>null,onInfrastructure=()=>{},onConfiguration=()=>{},workerFactory=()=>new Worker(new URL('./merchant.worker.js?v=babbc3d3950e',import.meta.url),{type:'module'}),status}){
+ constructor({app,getWorld,getWind,getField,getBasePort,getFrames,getPlayer=()=>null,onInfrastructure=()=>{},onConfiguration=()=>{},workerFactory=()=>new Worker(new URL('./merchant.worker.js?v=benchmark-20261021',import.meta.url),{type:'module'}),status}){
   Object.assign(this,{app,getWorld,getWind,getField,getBasePort,getFrames,getPlayer,onInfrastructure,onConfiguration,workerFactory,status});this.configurationRequests=new Map();this.configurationSerial=0;this.sessionId=null;this.worker=null;this.records=new Map();this.failed=new Set();this.epoch=0;this.environmentTime=0;this.playerTime=0;this.dockRequest=0;this.dockListener=null;this.density=6;this.simulationSpeed=1;
   this.layer=new PIXI.Container({isRenderGroup:true});this.layer.eventMode='none';app.stage.addChild(this.layer);this.layer.visible=false;
   this.showRoutes=false;this.routeLayer=new PIXI.Container({isRenderGroup:true});this.routes=new PIXI.Graphics();this.routeLayer.addChild(this.routes);this.layer.addChild(this.routeLayer);

@@ -16,7 +16,7 @@ import {createAssetLoader,industryRegistry,dockRegistry,assetRegistry} from './s
 function startupTimeout(promise,label,ms=25000){return new Promise((resolve,reject)=>{const timer=setTimeout(()=>reject(Error(label+' did not finish loading. Please reload this page.')),ms);Promise.resolve(promise).then(value=>{clearTimeout(timer);resolve(value);},error=>{clearTimeout(timer);reject(error);});});}
 const loadAsset=createAssetLoader(url=>startupTimeout(PIXI.Assets.load(url),'Artwork '+url));
 import {SHIP_ART} from './fleet.js?v=babbc3d3950e';
-import {MerchantTraffic} from './merchant-traffic.js?v=babbc3d3950e';
+import {MerchantTraffic} from './merchant-traffic.js?v=benchmark-20261021';
 import {RenderBudget} from './render-budget.js?v=babbc3d3950e';
 import {shipHitTest,writeShipTooltip} from './ship-tooltip.js?v=babbc3d3950e';
 import {writePortTooltip} from './port-tooltip.js?v=babbc3d3950e';
@@ -37,7 +37,7 @@ import {vertex,fragment,validateTerrainProgram} from './terrain-shader.js?v=opt-
 const $=id=>document.getElementById(id),map=$('map');
 const fields=['density','scale','roughness','moisture','mountains','industryDensity'];
 const renderBudget=new RenderBudget();
-const worker=new Worker(new URL('./generator.worker.js?v=babbc3d3950e',import.meta.url),{type:'module'});
+const worker=new Worker(new URL('./generator.worker.js?v=benchmark-20261021',import.meta.url),{type:'module'});
 let world,app,filter,mapSource,plane,camera={x:0,y:0},scale=1,fitScale=1,id=0,activeId=0,generating=false,ready=false,generationTimer=null;
 let resolveGeneration,rejectGeneration,townRenderer,portRenderer,industryIconRenderer,windField,windSource,shoreSource,sailingTest,merchantTraffic,cloudFilter,cloudPlane,depthSource;
 const portByTile=new Map(),industryByTile=new Map();

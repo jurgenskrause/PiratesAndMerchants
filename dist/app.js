@@ -86,37 +86,34 @@ async function benchmarkFrames(label,size,view,speed=0){
  }finally{merchantTraffic.benchmarkObserver=null;observer?.disconnect();}
 }
 async function runBenchmark(){
- if(benchmarkRunning||!ready)return;benchmarkRunning=true;benchmarkReport=null;$('benchmark-start').disabled=true;$('benchmark-copy').disabled=true;$('benchmark-download').disabled=true;$('benchmark-close').disabled=true;$('dev-benchmark').close();
- const previousSettings={seed:$('seed').value,size:$('size').value},previousAnimate=$('animate').checked,includeFleet=$('benchmark-fleet').checked;
+ if(benchmarkRunning||!ready)return;benchmarkRunning=true;benchmarkReport=null;$('dev-benchmark-button').disabled=true;$('benchmark-copy').disabled=true;$('benchmark-download').disabled=true;
+ const previousSettings={seed:$('seed').value,size:$('size').value},previousAnimate=$('animate').checked;
  const gl=app.renderer.gl,debug=gl.getExtension('WEBGL_debug_renderer_info');
- const report={schema:'pirates-merchants-benchmark-v1',build:'phase2+benchmark-20261021',capturedAt:new Date().toISOString(),userAgent:navigator.userAgent,platform:navigator.platform,deviceMemoryGiB:navigator.deviceMemory??null,hardwareConcurrency:navigator.hardwareConcurrency??null,devicePixelRatio:devicePixelRatio,screen:[screen.width,screen.height],glVendor:debug?gl.getParameter(debug.UNMASKED_VENDOR_WEBGL):gl.getParameter(gl.VENDOR),glRenderer:debug?gl.getParameter(debug.UNMASKED_RENDERER_WEBGL):gl.getParameter(gl.RENDERER),gpuTimeMs:null,notes:['Frame intervals include browser scheduling and rendering; they are not GPU time.','Ticker time measures the app update callback, not total main-thread work. Long-task time includes tasks longer than 50 ms only.','Message byte size samples one in five state messages using JSON serialization on the main thread.'],scenes:[]};
+ const report={schema:'pirates-merchants-benchmark-v2',build:'phase2+benchmark-50-20261021',capturedAt:new Date().toISOString(),userAgent:navigator.userAgent,platform:navigator.platform,deviceMemoryGiB:navigator.deviceMemory??null,hardwareConcurrency:navigator.hardwareConcurrency??null,devicePixelRatio:devicePixelRatio,screen:[screen.width,screen.height],glVendor:debug?gl.getParameter(debug.UNMASKED_VENDOR_WEBGL):gl.getParameter(gl.VENDOR),glRenderer:debug?gl.getParameter(debug.UNMASKED_RENDERER_WEBGL):gl.getParameter(gl.RENDERER),gpuTimeMs:null,requestedMerchants:50,notes:['Frame intervals include browser scheduling and rendering; they are not GPU time.','Ticker time measures the app update callback, not total main-thread work. Long-task time includes tasks longer than 50 ms only.','Message byte size samples one in five state messages using JSON serialization on the main thread.'],scenes:[]};
  const progress=message=>{benchmarkProgress.textContent=message;benchmarkProgress.hidden=false;benchmarkStatus.textContent=message;};
  try{
-  $('seed').value='BENCHMARK-COAST-01';$('animate').checked=true;
-  for(const size of [32,128,512]){
-   $('size').value=String(size);$('tile-count').textContent=(size*size).toLocaleString()+' hexes';progress(`Generating ${size} × ${size}…`);await generate();
-   filter.resolution=1;cloudFilter.resolution=.5;
-   for(const view of ['overview','land','water','coast']){
-    progress(`${size} × ${size}: ${view} view…`);if(view==='overview')fit();else{camera=benchmarkPoint(view);scale=BUILDING_SCALE;sync();}
-    report.scenes.push(await benchmarkFrames('terrain',size,view));
-   }
-   if(includeFleet){
-    camera=benchmarkPoint('coast');scale=BUILDING_SCALE;sync();merchantTraffic.setDensity(6);merchantTraffic.start();
-    const deadline=performance.now()+12000;while(!merchantTraffic.sessionId&&performance.now()<deadline)await new Promise(resolve=>setTimeout(resolve,100));
-    if(!merchantTraffic.sessionId)throw Error('Fleet worker did not start. Partial report is available.');
-    for(const speed of [1,20]){progress(`${size} × ${size}: six-merchant fleet at ${speed}×…`);merchantTraffic.setSimulationSpeed(speed);await new Promise(resolve=>setTimeout(resolve,1000));report.scenes.push(await benchmarkFrames('fleet',size,'coast',speed));}
-    merchantTraffic.stop();
-   }
+  $('seed').value='BENCHMARK-COAST-01';$('size').value='512';$('tile-count').textContent='262,144 hexes';$('animate').checked=true;
+  progress('Generating the 512 × 512 benchmark world…');await generate();
+  if(world.ports.length<2)throw Error('Benchmark seed has fewer than two trading ports.');
+  mode('simulation');camera=benchmarkPoint('coast');scale=BUILDING_SCALE;sync();filter.resolution=1;cloudFilter.resolution=.5;
+  progress('Launching 50 merchants…');merchantTraffic.setDensity(50);merchantTraffic.setSimulationSpeed(1);merchantTraffic.start();
+  const deadline=performance.now()+90000;while(!merchantTraffic.sessionId&&performance.now()<deadline)await new Promise(resolve=>setTimeout(resolve,100));
+  if(!merchantTraffic.sessionId)throw Error('Fleet worker did not start. See browser console for the worker error.');
+  for(const speed of [1,20]){
+   progress(`Measuring 50 merchants at ${speed}×…`);merchantTraffic.setSimulationSpeed(speed);await new Promise(resolve=>setTimeout(resolve,1500));
+   report.scenes.push(await benchmarkFrames('fleet',512,'coast',speed));
   }
-  progress(`Finished ${report.scenes.length} scenes. Copy or download the JSON report.`);
+  const actual=merchantTraffic.fleetSnapshots.filter(ship=>!ship.military).length;report.actualMerchants=actual;
+  if(actual<50)report.notes.push(`Only ${actual} of 50 merchants could launch in this world; measurements use the actual fleet.`);
+  progress(`Finished. ${actual} merchants active. Copy or download the JSON report.`);
  }catch(error){report.error=error.message;progress(`Stopped: ${error.message} Partial report is available.`);}
  finally{
-  benchmarkRunning=false;merchantTraffic.benchmarkObserver=null;merchantTraffic.stop();$('seed').value=previousSettings.seed;$('size').value=previousSettings.size;$('tile-count').textContent=(Number(previousSettings.size)**2).toLocaleString()+' hexes';$('animate').checked=previousAnimate;$('benchmark-start').disabled=false;$('benchmark-close').disabled=false;benchmarkReport=report;$('benchmark-copy').disabled=false;$('benchmark-download').disabled=false;
+  benchmarkRunning=false;merchantTraffic.benchmarkObserver=null;merchantTraffic.stop();$('seed').value=previousSettings.seed;$('size').value=previousSettings.size;$('tile-count').textContent=(Number(previousSettings.size)**2).toLocaleString()+' hexes';$('animate').checked=previousAnimate;$('dev-benchmark-button').disabled=false;benchmarkReport=report;$('benchmark-copy').disabled=false;$('benchmark-download').disabled=false;
   $('benchmark-result').textContent=JSON.stringify(report,null,2);$('benchmark-result').hidden=false;benchmarkProgress.hidden=true;mode('home');$('dev-benchmark').showModal();
  }
 }
-$('dev-benchmark-button').onclick=()=>{$('dev-benchmark').showModal();};
-$('benchmark-close').onclick=()=>$('dev-benchmark').close();$('benchmark-start').onclick=runBenchmark;
+$('dev-benchmark-button').onclick=runBenchmark;
+$('benchmark-close').onclick=()=>$('dev-benchmark').close();
 $('benchmark-copy').onclick=async()=>{if(!benchmarkReport)return;try{await navigator.clipboard.writeText(JSON.stringify(benchmarkReport,null,2));benchmarkStatus.textContent='JSON copied. Paste it in our chat.';}catch{benchmarkStatus.textContent='Copy failed. Use Download JSON instead.';}};
 $('benchmark-download').onclick=()=>{if(!benchmarkReport)return;const blob=new Blob([JSON.stringify(benchmarkReport,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='pirates-merchants-benchmark-'+new Date().toISOString().slice(0,10)+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};
 const previewButton=$('dev-ledger-preview')??(()=>{const actions=document.querySelector('.dev-menu-actions');if(!actions)return null;const button=document.createElement('button');button.id='dev-ledger-preview';button.type='button';button.textContent='Preview ledger';actions.append(button);return button;})();

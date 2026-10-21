@@ -1,0 +1,6 @@
+// Catch errors in the entire module graph, including registry initialization.
+function startupFailed(error){console.error('Game startup:',error);const loading=document.getElementById('loading');if(loading){loading.hidden=false;loading.textContent='Unable to start the map. '+(error?.message??String(error));}const status=document.getElementById('dev-ready-status');if(status)status.textContent='Unable to start. '+(error?.message??String(error));for(const id of ['generate','test-ship','dev-start-world','dev-world-button','simulate']){const control=document.getElementById(id);if(control)control.disabled=true;}}
+window.addEventListener('unhandledrejection',event=>startupFailed(event.reason));
+const loading=document.getElementById('loading');if(loading)loading.textContent='Loading game definitions…';
+const startupTimer=setTimeout(()=>startupFailed(Error('Game definitions did not finish loading. Please reload this page.')),30000);
+import('./app.js?v=babbc3d3950e').then(()=>{if(typeof document?.createElement==='function'&&typeof document.head?.append==='function'){const ledgerStyles=document.createElement('link');ledgerStyles.rel='stylesheet';ledgerStyles.href='ledger.css?v=c0ffee1';ledgerStyles.dataset.role='ledger-renderer';document.head.append(ledgerStyles);}clearTimeout(startupTimer);},error=>{clearTimeout(startupTimer);startupFailed(error);});

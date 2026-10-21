@@ -1,0 +1,10 @@
+import type {GoodsRecord,ProductionInputProvenance} from './goods-inventory.js';
+import type {RecipeItem,ManufacturingDefinition} from './industry-contract.js';
+export function decimalRatio(value:number):[bigint,bigint];
+export function costUnits(row:{acquisitionCostUnits?:number;acquisitionCost?:number}):number;
+export function costFields(units:number):{acquisitionCostUnits:number;acquisitionCost:number};
+export function proportionalCost(units:number,part:number,total:number):number;
+export function workerIncome(units:number,share:number):number;
+export function quantityPayment(units:number,quantity:number):number;
+export function allocateOutputCosts(inputs:readonly GoodsRecord[],outputs:readonly RecipeItem[],weights:Readonly<Record<string,number>>):(RecipeItem & {acquisitionCostUnits:number;acquisitionCost:number;productionInputs:ProductionInputProvenance[]})[];
+export function manufacturedPrice(rows:readonly GoodsRecord[],share:number,policy:ManufacturingDefinition['selling'],baselineUnits:number):{floorUnits:number;askingUnits:number;enforceCostFloor:boolean};

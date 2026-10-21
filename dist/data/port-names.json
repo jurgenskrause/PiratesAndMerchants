@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "description": "Fictional faction-themed port name catalog. Reused roots receive a Roman numeral for unique chart names.",
+  "factions": [
+    {"id":"british","name":"British","color":"#ba4746","pennantColor":"#ff6864","names":["Port Ashford","Kingshaven","Port Whitby","Queenswater","Fort Wexley","Bramble Bay","Port Fairhaven","Crown Anchorage","New Ellington","Port Alderwick","Westhaven","Stourmouth","Port Harrow","Kingsbridge","Oakwater","Port Redcliffe","Rosehaven","Northwick","Windsor Reach","Port Bellford","Greyhaven","Port Dunleigh","Greenwich Bay","Crownwater"]},
+    {"id":"spanish","name":"Spanish","color":"#d4a339","pennantColor":"#ffe05a","names":["Puerto Dorado","Bahía Serena","Puerto Esperanza","San Aurelio","Puerto del Sol","Santa Brisa","Bahía Esmeralda","Puerto Lucero","San Cristal","Santa Paloma","Puerto Cobre","Bahía Clara","San Esteban","Puerto del Alba","Santa Mariela","Costa Hermosa","Puerto Carmesí","Bahía del León","San Damián","Puerto Azucena","Santa Vela","Puerto Fortuna","Bahía Coral","San Teodoro"]},
+    {"id":"french","name":"French","color":"#5486b5","pennantColor":"#78caff","names":["Port Clair","Belle-Anse","Port Lumière","Baie des Lys","Port Émeraude","Sainte-Aurore","Anse Dorée","Port des Vents","Belle-Rive","Port Lavande","Baie Céleste","Saint-Marceau","Port Rosier","Anse Tranquille","Port Montclair","Sainte-Brise","Port Argent","Baie des Perles","Port Soleil","Roche-Blanche","Port Amarante","Anse Bleue","Saint-Lauriel","Port Mirabelle"]},
+    {"id":"pirate","name":"Pirate","color":"#464b48","pennantColor":"#d8e9dd","names":["Skull Cove","Blackwake","Cutlass Anchorage","Deadman's Reach","Rogue's Rest","Smuggler's Haven","Broken Compass","Gallows Bay","Black Gull Cove","Corsair's Refuge","Rumwater","Sharktooth Haven","Widow's Cove","Bloodmoon Bay","Last Lantern","Ironhook","The Crooked Mast","Stormhide","Ragged Sail","Siren's Hollow","Daggerpoint","Cinder Anchorage","Devil's Lantern","Freebooter's Rest"]}
+  ]
+}

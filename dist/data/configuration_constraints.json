@@ -1,0 +1,48 @@
+[
+  {
+    "id": "economy.whole_ticks_per_day",
+    "operator": "integer_multiple",
+    "setting_ids": [
+      "simulation.seconds_per_day",
+      "simulation.economic_tick_seconds"
+    ],
+    "severity": "error",
+    "message": "Seconds per day must be an integer multiple of the economic tick interval.",
+    "args": {}
+  },
+  {
+    "id": "navigation.threshold_within_cap",
+    "operator": "less_than_or_equal",
+    "setting_ids": [
+      "navigation.threat_threshold",
+      "threat.max_threat"
+    ],
+    "severity": "error",
+    "message": "Threat threshold must not exceed maximum threat.",
+    "args": {}
+  },
+  {
+    "id": "threat.recency_cutoff",
+    "operator": "less_than_or_equal",
+    "setting_ids": [
+      "threat.recency_window",
+      "threat.max_patrol_age"
+    ],
+    "severity": "warning",
+    "message": "Patrol recency window exceeds maximum patrol age; the existing algorithm clips protection at the age cutoff.",
+    "args": {}
+  },
+  {
+    "id": "simulation.economic_step_alignment",
+    "operator": "compatible_timing_intervals",
+    "setting_ids": [
+      "simulation.economic_tick_seconds",
+      "simulation.physics_tick_seconds"
+    ],
+    "severity": "warning",
+    "message": "Economic intervals do not align with whole physics steps; the accumulator may execute them on the next update boundary.",
+    "args": {
+      "mode": "whole_steps"
+    }
+  }
+]

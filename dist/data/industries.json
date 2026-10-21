@@ -1,0 +1,519 @@
+[
+  {
+    "id": "cotton",
+    "commodityId": "COTTON",
+    "productionPerTick": 2,
+    "industry_id": "cotton",
+    "display_name": "Cotton plantation",
+    "type": "PrimaryProduction",
+    "required_terrain": [
+      "any_land"
+    ],
+    "base_build_cost": {
+      "WOOD": 10
+    },
+    "inputs": [],
+    "outputs": [
+      {
+        "commodity_id": "COTTON",
+        "quantity_per_tick": 2
+      }
+    ],
+    "placement": {
+      "enabled": true,
+      "code": 1,
+      "min_height": 0.4,
+      "biomes": [
+        2,
+        3
+      ],
+      "suitability": "temperate",
+      "regional_balance_weight": 1
+    },
+    "graphics": {
+      "tile_asset": "industries",
+      "atlas_frame": 0,
+      "icon_asset": "industry:icons",
+      "icon_frame": 0
+    }
+  },
+  {
+    "id": "iron",
+    "commodityId": "IRON_ORE",
+    "productionPerTick": 2,
+    "industry_id": "iron",
+    "display_name": "Iron mine",
+    "type": "PrimaryProduction",
+    "required_terrain": [
+      "any_land"
+    ],
+    "base_build_cost": {
+      "WOOD": 10
+    },
+    "inputs": [],
+    "outputs": [
+      {
+        "commodity_id": "IRON_ORE",
+        "quantity_per_tick": 2
+      }
+    ],
+    "placement": {
+      "enabled": true,
+      "code": 2,
+      "min_height": 0.4,
+      "biomes": [
+        5
+      ],
+      "suitability": "rock",
+      "regional_balance_weight": 1
+    },
+    "graphics": {
+      "tile_asset": "industries",
+      "atlas_frame": 1,
+      "icon_asset": "industry:icons",
+      "icon_frame": 1
+    }
+  },
+  {
+    "id": "sugar",
+    "commodityId": "SUGAR",
+    "productionPerTick": 2,
+    "industry_id": "sugar",
+    "display_name": "Sugar plantation",
+    "type": "PrimaryProduction",
+    "required_terrain": [
+      "any_land"
+    ],
+    "base_build_cost": {
+      "WOOD": 10
+    },
+    "inputs": [],
+    "outputs": [
+      {
+        "commodity_id": "SUGAR",
+        "quantity_per_tick": 2
+      }
+    ],
+    "placement": {
+      "enabled": true,
+      "code": 3,
+      "min_height": 0.4,
+      "biomes": [
+        2,
+        3
+      ],
+      "suitability": "moisture",
+      "regional_balance_weight": 1
+    },
+    "graphics": {
+      "tile_asset": "industries",
+      "atlas_frame": 2,
+      "icon_asset": "industry:icons",
+      "icon_frame": 2
+    }
+  },
+  {
+    "id": "rum_distillery",
+    "industry_id": "rum_distillery",
+    "display_name": "Rum Distillery",
+    "type": "SecondaryManufacturing",
+    "required_terrain": [
+      "any_land"
+    ],
+    "base_build_cost": {
+      "WOOD": 40,
+      "IRON_BARS": 10
+    },
+    "inputs": [
+      {
+        "commodity_id": "SUGAR",
+        "quantity_per_tick": 2
+      },
+      {
+        "commodity_id": "WOOD",
+        "quantity_per_tick": 0.5
+      }
+    ],
+    "outputs": [
+      {
+        "commodity_id": "RUM",
+        "quantity_per_tick": 1.5
+      }
+    ],
+    "placement": {
+      "enabled": false,
+      "code": 4,
+      "min_height": 0.4,
+      "biomes": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "suitability": "temperate"
+    },
+    "graphics": {
+      "tile_asset": "industries",
+      "atlas_frame": 3,
+      "icon_asset": "industry:icons",
+      "icon_frame": 3
+    },
+    "manufacturing": {
+      "version": 1,
+      "tuning_status": "provisional",
+      "runtime_enabled": true,
+      "production_duration_seconds": 10,
+      "input_buffer_targets": {
+        "SUGAR": 10,
+        "WOOD": 2.5
+      },
+      "input_storage_capacities": {
+        "SUGAR": 20,
+        "WOOD": 5.0
+      },
+      "output_storage_capacities": {
+        "RUM": 30.0
+      },
+      "construction_duration_seconds": 60,
+      "working_capital_microgold": 1000000000,
+      "procurement": {
+        "review_interval_seconds": 10,
+        "bid_multiplier": 1,
+        "maximum_bid_multiplier": 10,
+        "input_priority": [
+          "SUGAR",
+          "WOOD"
+        ]
+      },
+      "selling": {
+        "review_interval_seconds": 10,
+        "ask_multiplier": 1.1,
+        "minimum_markup_fraction": 0,
+        "enforce_cost_floor": true
+      },
+      "output_cost_weights": {
+        "RUM": 1.0
+      }
+    }
+  },
+  {
+    "id": "textile_mill",
+    "industry_id": "textile_mill",
+    "display_name": "Textile Mill",
+    "type": "SecondaryManufacturing",
+    "required_terrain": [
+      "any_land"
+    ],
+    "base_build_cost": {
+      "WOOD": 40,
+      "IRON_BARS": 10
+    },
+    "inputs": [
+      {
+        "commodity_id": "COTTON",
+        "quantity_per_tick": 2
+      }
+    ],
+    "outputs": [
+      {
+        "commodity_id": "TEXTILES",
+        "quantity_per_tick": 1
+      }
+    ],
+    "placement": {
+      "enabled": false,
+      "code": 5,
+      "min_height": 0.4,
+      "biomes": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "suitability": "temperate"
+    },
+    "graphics": {
+      "tile_asset": "industries",
+      "atlas_frame": 4,
+      "icon_asset": "industry:icons",
+      "icon_frame": 4
+    },
+    "manufacturing": {
+      "version": 1,
+      "tuning_status": "provisional",
+      "runtime_enabled": true,
+      "production_duration_seconds": 10,
+      "input_buffer_targets": {
+        "COTTON": 10
+      },
+      "input_storage_capacities": {
+        "COTTON": 20
+      },
+      "output_storage_capacities": {
+        "TEXTILES": 20
+      },
+      "construction_duration_seconds": 60,
+      "working_capital_microgold": 1000000000,
+      "procurement": {
+        "review_interval_seconds": 10,
+        "bid_multiplier": 1,
+        "maximum_bid_multiplier": 10,
+        "input_priority": [
+          "COTTON"
+        ]
+      },
+      "selling": {
+        "review_interval_seconds": 10,
+        "ask_multiplier": 1.1,
+        "minimum_markup_fraction": 0,
+        "enforce_cost_floor": true
+      },
+      "output_cost_weights": {
+        "TEXTILES": 1.0
+      }
+    }
+  },
+  {
+    "id": "ironworks",
+    "industry_id": "ironworks",
+    "display_name": "Ironworks",
+    "type": "SecondaryManufacturing",
+    "required_terrain": [
+      "any_land"
+    ],
+    "base_build_cost": {
+      "WOOD": 40,
+      "IRON_BARS": 10
+    },
+    "inputs": [
+      {
+        "commodity_id": "IRON_ORE",
+        "quantity_per_tick": 2
+      },
+      {
+        "commodity_id": "WOOD",
+        "quantity_per_tick": 0.5
+      }
+    ],
+    "outputs": [
+      {
+        "commodity_id": "IRON_BARS",
+        "quantity_per_tick": 1
+      }
+    ],
+    "placement": {
+      "enabled": false,
+      "code": 6,
+      "min_height": 0.4,
+      "biomes": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "suitability": "temperate"
+    },
+    "graphics": {
+      "tile_asset": "industries",
+      "atlas_frame": 5,
+      "icon_asset": "industry:icons",
+      "icon_frame": 5
+    },
+    "manufacturing": {
+      "version": 1,
+      "tuning_status": "provisional",
+      "runtime_enabled": true,
+      "production_duration_seconds": 10,
+      "input_buffer_targets": {
+        "IRON_ORE": 10,
+        "WOOD": 2.5
+      },
+      "input_storage_capacities": {
+        "IRON_ORE": 20,
+        "WOOD": 5.0
+      },
+      "output_storage_capacities": {
+        "IRON_BARS": 20
+      },
+      "construction_duration_seconds": 60,
+      "working_capital_microgold": 1000000000,
+      "procurement": {
+        "review_interval_seconds": 10,
+        "bid_multiplier": 1,
+        "maximum_bid_multiplier": 10,
+        "input_priority": [
+          "IRON_ORE",
+          "WOOD"
+        ]
+      },
+      "selling": {
+        "review_interval_seconds": 10,
+        "ask_multiplier": 1.1,
+        "minimum_markup_fraction": 0,
+        "enforce_cost_floor": true
+      },
+      "output_cost_weights": {
+        "IRON_BARS": 1.0
+      }
+    }
+  },
+  {
+    "id": "cannon_foundry",
+    "industry_id": "cannon_foundry",
+    "display_name": "Cannon Foundry",
+    "type": "SecondaryManufacturing",
+    "required_terrain": [
+      "any_land"
+    ],
+    "base_build_cost": {
+      "WOOD": 40,
+      "IRON_BARS": 10
+    },
+    "inputs": [
+      {
+        "commodity_id": "IRON_BARS",
+        "quantity_per_tick": 3
+      }
+    ],
+    "outputs": [
+      {
+        "commodity_id": "CANNONS",
+        "quantity_per_tick": 0.25
+      }
+    ],
+    "placement": {
+      "enabled": false,
+      "code": 6,
+      "min_height": 0.4,
+      "biomes": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "suitability": "temperate"
+    },
+    "graphics": {
+      "tile_asset": "industries",
+      "atlas_frame": 5,
+      "icon_asset": "industry:icons",
+      "icon_frame": 6
+    },
+    "manufacturing": {
+      "version": 1,
+      "tuning_status": "provisional",
+      "runtime_enabled": true,
+      "production_duration_seconds": 10,
+      "input_buffer_targets": {
+        "IRON_BARS": 15
+      },
+      "input_storage_capacities": {
+        "IRON_BARS": 30
+      },
+      "output_storage_capacities": {
+        "CANNONS": 5.0
+      },
+      "construction_duration_seconds": 60,
+      "working_capital_microgold": 1000000000,
+      "procurement": {
+        "review_interval_seconds": 10,
+        "bid_multiplier": 1,
+        "maximum_bid_multiplier": 10,
+        "input_priority": [
+          "IRON_BARS"
+        ]
+      },
+      "selling": {
+        "review_interval_seconds": 10,
+        "ask_multiplier": 1.1,
+        "minimum_markup_fraction": 0,
+        "enforce_cost_floor": true
+      },
+      "output_cost_weights": {
+        "CANNONS": 1.0
+      }
+    }
+  },
+  {
+    "id": "cannonball_foundry",
+    "industry_id": "cannonball_foundry",
+    "display_name": "Cannonball Foundry",
+    "type": "SecondaryManufacturing",
+    "required_terrain": [
+      "any_land"
+    ],
+    "base_build_cost": {
+      "WOOD": 40,
+      "IRON_BARS": 10
+    },
+    "inputs": [
+      {
+        "commodity_id": "IRON_BARS",
+        "quantity_per_tick": 1
+      }
+    ],
+    "outputs": [
+      {
+        "commodity_id": "CANNONBALLS",
+        "quantity_per_tick": 2
+      }
+    ],
+    "placement": {
+      "enabled": false,
+      "code": 6,
+      "min_height": 0.4,
+      "biomes": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "suitability": "temperate"
+    },
+    "graphics": {
+      "tile_asset": "industries",
+      "atlas_frame": 5,
+      "icon_asset": "industry:icons",
+      "icon_frame": 7
+    },
+    "manufacturing": {
+      "version": 1,
+      "tuning_status": "provisional",
+      "runtime_enabled": true,
+      "production_duration_seconds": 10,
+      "input_buffer_targets": {
+        "IRON_BARS": 5
+      },
+      "input_storage_capacities": {
+        "IRON_BARS": 10
+      },
+      "output_storage_capacities": {
+        "CANNONBALLS": 40
+      },
+      "construction_duration_seconds": 60,
+      "working_capital_microgold": 1000000000,
+      "procurement": {
+        "review_interval_seconds": 10,
+        "bid_multiplier": 1,
+        "maximum_bid_multiplier": 10,
+        "input_priority": [
+          "IRON_BARS"
+        ]
+      },
+      "selling": {
+        "review_interval_seconds": 10,
+        "ask_multiplier": 1.1,
+        "minimum_markup_fraction": 0,
+        "enforce_cost_floor": true
+      },
+      "output_cost_weights": {
+        "CANNONBALLS": 1.0
+      }
+    }
+  }
+]

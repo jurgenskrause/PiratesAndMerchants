@@ -1,0 +1,138 @@
+[
+  {
+    "id": "house",
+    "building_type_id": "house",
+    "display_name": "Residential Housing",
+    "prosperity_tier_required": 1,
+    "housing_capacity": 50,
+    "variants": [
+      "town:variant:0",
+      "town:variant:1",
+      "town:variant:2",
+      "town:variant:3"
+    ],
+    "derelict_variant": "town:derelict",
+    "build_cost": {
+      "WOOD": 10
+    },
+    "renovation_multiplier": 0.3
+  },
+  {
+    "id": "fountain",
+    "building_type_id": "fountain",
+    "display_name": "Fountain",
+    "prosperity_tier_required": 2,
+    "housing_capacity": 0,
+    "variants": [
+      "town:variant:4",
+      "town:variant:5"
+    ],
+    "derelict_variant": "town:derelict",
+    "build_cost": {
+      "WOOD": 5,
+      "IRON_BARS": 2
+    },
+    "renovation_multiplier": 0.3
+  },
+  {
+    "id": "warehouse",
+    "building_type_id": "warehouse",
+    "display_name": "Warehouse",
+    "prosperity_tier_required": 1,
+    "housing_capacity": 0,
+    "variants": [
+      "town:variant:6",
+      "town:variant:7"
+    ],
+    "derelict_variant": "town:derelict",
+    "build_cost": {
+      "WOOD": 25,
+      "IRON_BARS": 5
+    },
+    "renovation_multiplier": 0.3
+  },
+  {
+    "id": "stables",
+    "building_type_id": "stables",
+    "display_name": "Stables",
+    "prosperity_tier_required": 1,
+    "housing_capacity": 0,
+    "variants": [
+      "town:variant:8",
+      "town:variant:9"
+    ],
+    "derelict_variant": "town:derelict",
+    "build_cost": {
+      "WOOD": 15,
+      "IRON_BARS": 2
+    },
+    "renovation_multiplier": 0.3
+  },
+  {
+    "id": "derelict",
+    "building_type_id": "derelict",
+    "display_name": "Derelict Building",
+    "prosperity_tier_required": 0,
+    "housing_capacity": 0,
+    "variants": [
+      "town:variant:10",
+      "town:variant:11"
+    ],
+    "derelict_variant": "town:derelict",
+    "build_cost": {
+      "WOOD": 0
+    },
+    "renovation_multiplier": 0.3
+  },
+  {
+    "id": "housing_block",
+    "building_type_id": "housing_block",
+    "display_name": "Residential Quarter",
+    "prosperity_tier_required": 2,
+    "housing_capacity": 500,
+    "variants": [
+      "town:variant:12",
+      "town:variant:13"
+    ],
+    "derelict_variant": "town:derelict",
+    "build_cost": {
+      "WOOD": 40,
+      "IRON_BARS": 5
+    },
+    "renovation_multiplier": 0.3
+  },
+  {
+    "id": "townhouse",
+    "building_type_id": "townhouse",
+    "display_name": "Town Houses",
+    "prosperity_tier_required": 2,
+    "housing_capacity": 150,
+    "variants": [
+      "town:variant:12",
+      "town:variant:13"
+    ],
+    "derelict_variant": "town:derelict",
+    "build_cost": {
+      "WOOD": 40,
+      "IRON_BARS": 5
+    },
+    "renovation_multiplier": 0.3
+  },
+  {
+    "id": "town_hall",
+    "building_type_id": "town_hall",
+    "display_name": "Town Hall",
+    "prosperity_tier_required": 2,
+    "housing_capacity": 0,
+    "variants": [
+      "town:variant:14",
+      "town:variant:15"
+    ],
+    "derelict_variant": "town:derelict",
+    "build_cost": {
+      "WOOD": 40,
+      "IRON_BARS": 5
+    },
+    "renovation_multiplier": 0.3
+  }
+]

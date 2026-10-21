@@ -1,0 +1,56 @@
+[
+  {
+    "id": "endpoint",
+    "kind": "endpoint",
+    "mask": 1,
+    "asset_id": "road:endpoint"
+  },
+  {
+    "id": "straight",
+    "kind": "straight",
+    "mask": 9,
+    "asset_id": "road:straight"
+  },
+  {
+    "id": "curve-gentle",
+    "kind": "curve",
+    "mask": 5,
+    "asset_id": "road:curve-gentle"
+  },
+  {
+    "id": "curve-sharp",
+    "kind": "curve",
+    "mask": 3,
+    "asset_id": "road:curve-sharp"
+  },
+  {
+    "id": "junction-y",
+    "kind": "junction",
+    "mask": 21,
+    "asset_id": "road:junction-y"
+  },
+  {
+    "id": "junction-t",
+    "kind": "junction",
+    "mask": 11,
+    "asset_id": "road:junction-t"
+  },
+  {
+    "id": "junction-fork",
+    "kind": "junction",
+    "mask": 7,
+    "asset_id": "road:junction-fork"
+  },
+  {
+    "id": "junction-offset",
+    "kind": "junction",
+    "mask": 13,
+    "asset_id": "road:junction-offset"
+  },
+  {
+    "id": "urban-infill",
+    "kind": "urban_infill",
+    "mask": 0,
+    "asset_id": "road:urban-infill"
+  }
+]

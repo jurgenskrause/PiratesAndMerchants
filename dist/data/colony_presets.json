@@ -1,0 +1,152 @@
+[
+  {
+    "id": "crown_hub_preset",
+    "colony_preset_id": "crown_hub_preset",
+    "settlement_type": "Crown Hub",
+    "tier": "large",
+    "initial_population": 2500,
+    "initial_prosperity": 3.0,
+    "min_island_tiles": 70,
+    "trade_stock_multiplier": 3.0,
+    "consumption_stock_multiplier": 2.0,
+    "tile_layout": {
+      "core_port": {
+        "q": 0,
+        "r": 0
+      },
+      "docks": [
+        {
+          "q": 1,
+          "r": 0,
+          "type": "deep_water_quay"
+        },
+        {
+          "q": 0,
+          "r": 1,
+          "type": "small_pier"
+        }
+      ],
+      "town_tiles": [
+        {
+          "q": 0,
+          "r": -1,
+          "building": "fountain"
+        },
+        {
+          "q": -1,
+          "r": 0,
+          "building": "warehouse"
+        },
+        {
+          "q": -1,
+          "r": 1,
+          "building": "housing_block"
+        },
+        {
+          "q": -2,
+          "r": 1,
+          "building": "housing_block"
+        },
+        {
+          "q": -2,
+          "r": 0,
+          "building": "housing_block"
+        },
+        {
+          "q": -1,
+          "r": -1,
+          "building": "housing_block"
+        },
+        {
+          "q": 0,
+          "r": -2,
+          "building": "housing_block"
+        },
+        {
+          "q": 1,
+          "r": -2,
+          "building": "stables"
+        },
+        {
+          "q": 1,
+          "r": -1,
+          "building": "town_hall"
+        }
+      ],
+      "feeder_roads": true
+    }
+  },
+  {
+    "id": "settlement_preset",
+    "colony_preset_id": "settlement_preset",
+    "settlement_type": "Settlement",
+    "tier": "medium",
+    "initial_population": 200,
+    "initial_prosperity": 2.0,
+    "min_island_tiles": 70,
+    "trade_stock_multiplier": 1.5,
+    "consumption_stock_multiplier": 1.25,
+    "tile_layout": {
+      "core_port": {
+        "q": 0,
+        "r": 0
+      },
+      "docks": [
+        {
+          "q": 1,
+          "r": 0,
+          "type": "deep_water_quay"
+        },
+        {
+          "q": 0,
+          "r": 1,
+          "type": "small_pier"
+        }
+      ],
+      "town_tiles": [
+        {
+          "q": 0,
+          "r": -1,
+          "building": "warehouse"
+        },
+        {
+          "q": -1,
+          "r": 0,
+          "building": "townhouse"
+        },
+        {
+          "q": -1,
+          "r": 1,
+          "building": "house"
+        }
+      ],
+      "feeder_roads": true
+    }
+  },
+  {
+    "id": "outpost_preset",
+    "colony_preset_id": "outpost_preset",
+    "settlement_type": "Fishing Village",
+    "tier": "small",
+    "initial_population": 50,
+    "initial_prosperity": 1.0,
+    "min_island_tiles": 50,
+    "trade_stock_multiplier": 1.0,
+    "consumption_stock_multiplier": 1.0,
+    "tile_layout": {
+      "core_port": {
+        "q": 0,
+        "r": 0
+      },
+      "docks": [
+        {
+          "q": 1,
+          "r": 0,
+          "type": "small_pier"
+        }
+      ],
+      "town_tiles": [],
+      "feeder_roads": false
+    }
+  }
+]

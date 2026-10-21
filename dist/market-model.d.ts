@@ -1,0 +1,2 @@
+import type {EconomicEngine,Stockpile,MarketChange} from './economy.js';
+export class MarketModel {constructor(economy:EconomicEngine);listenerErrors:unknown[];subscribe(listener:(event:MarketChange)=>void):()=>void;getPortSupplies(id:string):readonly Readonly<Stockpile>[];getPortStockpile(id:string,commodity:string):Readonly<Stockpile>;getPortTaxRate(id:string):number;getMarketRevision(id:string):number;dispose():void;}

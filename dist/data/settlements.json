@@ -1,0 +1,51 @@
+[
+  {
+    "id": "port",
+    "display_name": "Port",
+    "min_island_tiles": 50,
+    "tax_rate": 0,
+    "consumption_stock": 75,
+    "consumption_target": 75,
+    "trade_capacity": 150,
+    "base_consumption_rate": 0.1,
+    "specialty_stock": 500,
+    "ordinary_stock": 0,
+    "ordinary_stock_step": 0,
+    "ordinary_stock_variants": 4,
+    "treasury_balance": 5000,
+    "graphics": {
+      "dock_asset": "docks",
+      "harbor_asset": "harbors"
+    },
+    "initial_dock_type": "deep_water_quay",
+    "dock_growth": {
+      "max_queue_wait_ticks": 60,
+      "review_interval_ticks": 15,
+      "build_cooldown_ticks": 120,
+      "max_docks": 6,
+      "wait_sample_window_ticks": 180,
+      "min_anchor_coast_distance": 2,
+      "preferred_anchor_coast_distance": 3
+    },
+    "extra_ports": {
+      "min_island_tiles": 600,
+      "max_ports": 3,
+      "min_hex_spacing": 18,
+      "spawn_chance": 0.6
+    },
+    "initial_dock_mix": [
+      "small_pier",
+      "deep_water_quay"
+    ],
+    "urban_growth": {
+      "initial_population": 50,
+      "initial_capacity": 50,
+      "review_interval_ticks": 30,
+      "housing_type": "house",
+      "base_weight": 1,
+      "coastal_bonus": 1.5,
+      "road_weight": 1,
+      "selection": "weighted"
+    }
+  }
+]

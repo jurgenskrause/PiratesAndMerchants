@@ -1,0 +1,135 @@
+[
+  {
+    "id": "small_pier",
+    "dock_type_id": "small_pier",
+    "display_name": "Small Dock",
+    "required_min_berth_size": "Medium",
+    "max_simultaneous_ships": 2,
+    "min_water_depth": 0.01,
+    "build_cost": {
+      "WOOD": 25
+    },
+    "layout": {
+      "side_slots": 2,
+      "pier_end_occupies_all": true,
+      "length_tiles": 1,
+      "adjacent_tip_only": true,
+      "large_ship_exclusive": false
+    },
+    "graphics": {
+      "rotations": {
+        "0": {
+          "asset_id": "dock:hex-tiles",
+          "atlas_frame": 0
+        },
+        "60": {
+          "asset_id": "dock:hex-tiles",
+          "atlas_frame": 1
+        },
+        "120": {
+          "asset_id": "dock:hex-tiles",
+          "atlas_frame": 2
+        },
+        "180": {
+          "asset_id": "dock:hex-tiles",
+          "atlas_frame": 3
+        },
+        "240": {
+          "asset_id": "dock:hex-tiles",
+          "atlas_frame": 4
+        },
+        "300": {
+          "asset_id": "dock:hex-tiles",
+          "atlas_frame": 5
+        }
+      },
+      "tint": "#ffffff"
+    }
+  },
+  {
+    "id": "deep_water_quay",
+    "dock_type_id": "deep_water_quay",
+    "display_name": "Large Deep-Water Dock",
+    "required_min_berth_size": "ExtraLarge",
+    "max_simultaneous_ships": 3,
+    "min_water_depth": 0.01,
+    "build_cost": {
+      "WOOD": 100,
+      "IRON_BARS": 40
+    },
+    "layout": {
+      "side_slots": 3,
+      "pier_end_occupies_all": true,
+      "length_tiles": 2,
+      "adjacent_tip_only": true,
+      "large_ship_exclusive": true
+    },
+    "graphics": {
+      "rotations": {
+        "0": {
+          "asset_id": "dock:hex-tiles",
+          "atlas_frame": 6
+        },
+        "60": {
+          "asset_id": "dock:hex-tiles",
+          "atlas_frame": 7
+        },
+        "120": {
+          "asset_id": "dock:hex-tiles",
+          "atlas_frame": 8
+        },
+        "180": {
+          "asset_id": "dock:hex-tiles",
+          "atlas_frame": 9
+        },
+        "240": {
+          "asset_id": "dock:hex-tiles",
+          "atlas_frame": 10
+        },
+        "300": {
+          "asset_id": "dock:hex-tiles",
+          "atlas_frame": 11
+        }
+      },
+      "tint": "#ffffff",
+      "tip_rotations": {
+        "0": {
+          "asset_id": "dock:hex-tiles",
+          "atlas_frame": 12,
+          "center_offset": [
+            0.03,
+            0.0
+          ]
+        },
+        "60": {
+          "asset_id": "dock:hex-tiles",
+          "atlas_frame": 13,
+          "center_offset": [
+            0.015000000000000003,
+            -0.025980762113533156
+          ]
+        },
+        "120": {
+          "asset_id": "dock:hex-tiles",
+          "atlas_frame": 14,
+          "center_offset": [
+            -0.014999999999999993,
+            -0.02598076211353316
+          ]
+        },
+        "180": {
+          "asset_id": "dock:hex-tiles",
+          "atlas_frame": 15
+        },
+        "240": {
+          "asset_id": "dock:hex-tiles",
+          "atlas_frame": 16
+        },
+        "300": {
+          "asset_id": "dock:hex-tiles",
+          "atlas_frame": 17
+        }
+      }
+    }
+  }
+]

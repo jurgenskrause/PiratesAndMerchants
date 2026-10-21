@@ -1,0 +1,2667 @@
+{
+  "scenario": "phase2-funded-markets-conservation",
+  "openingGold": 4500,
+  "openingUnits": 4500000000,
+  "grants": [
+    {
+      "accountId": "FACTION:ENGLAND",
+      "ownerType": "FACTION",
+      "ownerId": "ENGLAND",
+      "amountUnits": 500000000,
+      "amount": 500,
+      "reason": "Retained faction initial treasury"
+    },
+    {
+      "accountId": "FACTION:FRANCE",
+      "ownerType": "FACTION",
+      "ownerId": "FRANCE",
+      "amountUnits": 0,
+      "amount": 0,
+      "reason": "Retained faction initial treasury"
+    },
+    {
+      "accountId": "FACTION:SPAIN",
+      "ownerType": "FACTION",
+      "ownerId": "SPAIN",
+      "amountUnits": 0,
+      "amount": 0,
+      "reason": "Retained faction initial treasury"
+    },
+    {
+      "accountId": "FACTION:PIRATES",
+      "ownerType": "FACTION",
+      "ownerId": "PIRATES",
+      "amountUnits": 0,
+      "amount": 0,
+      "reason": "Retained faction initial treasury"
+    },
+    {
+      "accountId": "PORT:A",
+      "ownerType": "PORT",
+      "ownerId": "A",
+      "amountUnits": 1000000000,
+      "amount": 1000,
+      "reason": "Initial port population funds"
+    },
+    {
+      "accountId": "PORT_TAX:A",
+      "ownerType": "PORT_TAX",
+      "ownerId": "A",
+      "amountUnits": 0,
+      "amount": 0,
+      "reason": "Opening pending tax receipts"
+    },
+    {
+      "accountId": "PORT:B",
+      "ownerType": "PORT",
+      "ownerId": "B",
+      "amountUnits": 1000000000,
+      "amount": 1000,
+      "reason": "Initial port population funds"
+    },
+    {
+      "accountId": "PORT_TAX:B",
+      "ownerType": "PORT_TAX",
+      "ownerId": "B",
+      "amountUnits": 0,
+      "amount": 0,
+      "reason": "Opening pending tax receipts"
+    },
+    {
+      "accountId": "INDUSTRY:distillery",
+      "ownerType": "INDUSTRY",
+      "ownerId": "distillery",
+      "amountUnits": 1000000000,
+      "amount": 1000,
+      "reason": "Initial industry working capital"
+    },
+    {
+      "accountId": "MERCHANT:vessel-1",
+      "ownerType": "MERCHANT",
+      "ownerId": "vessel-1",
+      "amountUnits": 1000000000,
+      "amount": 1000,
+      "reason": "Initial vessel seed capital"
+    },
+    {
+      "accountId": "SAILORS_PURSE:vessel-1",
+      "ownerType": "SAILORS_PURSE",
+      "ownerId": "vessel-1",
+      "amountUnits": 0,
+      "amount": 0,
+      "reason": "initial capital"
+    },
+    {
+      "accountId": "MAINTENANCE_PURSE:vessel-1",
+      "ownerType": "MAINTENANCE_PURSE",
+      "ownerId": "vessel-1",
+      "amountUnits": 0,
+      "amount": 0,
+      "reason": "initial capital"
+    }
+  ],
+  "closingGold": 4500,
+  "closingUnits": 4500000000,
+  "unexplainedMoneyUnits": 0,
+  "accounts": [
+    {
+      "id": "FACTION:ENGLAND",
+      "ownerType": "FACTION",
+      "ownerId": "ENGLAND",
+      "balanceUnits": 500000000,
+      "committedUnits": 0,
+      "active": true,
+      "balance": 500,
+      "committed": 0,
+      "spendableUnits": 500000000,
+      "spendable": 500
+    },
+    {
+      "id": "FACTION:FRANCE",
+      "ownerType": "FACTION",
+      "ownerId": "FRANCE",
+      "balanceUnits": 0,
+      "committedUnits": 0,
+      "active": true,
+      "balance": 0,
+      "committed": 0,
+      "spendableUnits": 0,
+      "spendable": 0
+    },
+    {
+      "id": "FACTION:SPAIN",
+      "ownerType": "FACTION",
+      "ownerId": "SPAIN",
+      "balanceUnits": 0,
+      "committedUnits": 0,
+      "active": true,
+      "balance": 0,
+      "committed": 0,
+      "spendableUnits": 0,
+      "spendable": 0
+    },
+    {
+      "id": "FACTION:PIRATES",
+      "ownerType": "FACTION",
+      "ownerId": "PIRATES",
+      "balanceUnits": 0,
+      "committedUnits": 0,
+      "active": true,
+      "balance": 0,
+      "committed": 0,
+      "spendableUnits": 0,
+      "spendable": 0
+    },
+    {
+      "id": "PORT:A",
+      "ownerType": "PORT",
+      "ownerId": "A",
+      "balanceUnits": 2535890855,
+      "committedUnits": 0,
+      "active": true,
+      "balance": 2535.890855,
+      "committed": 0,
+      "spendableUnits": 2535890855,
+      "spendable": 2535.890855
+    },
+    {
+      "id": "PORT_TAX:A",
+      "ownerType": "PORT_TAX",
+      "ownerId": "A",
+      "balanceUnits": 0,
+      "committedUnits": 0,
+      "active": true,
+      "balance": 0,
+      "committed": 0,
+      "spendableUnits": 0,
+      "spendable": 0
+    },
+    {
+      "id": "PORT:B",
+      "ownerType": "PORT",
+      "ownerId": "B",
+      "balanceUnits": 301840890,
+      "committedUnits": 301840889,
+      "active": true,
+      "balance": 301.84089,
+      "committed": 301.840889,
+      "spendableUnits": 1,
+      "spendable": 0.000001
+    },
+    {
+      "id": "PORT_TAX:B",
+      "ownerType": "PORT_TAX",
+      "ownerId": "B",
+      "balanceUnits": 0,
+      "committedUnits": 0,
+      "active": true,
+      "balance": 0,
+      "committed": 0,
+      "spendableUnits": 0,
+      "spendable": 0
+    },
+    {
+      "id": "INDUSTRY:distillery",
+      "ownerType": "INDUSTRY",
+      "ownerId": "distillery",
+      "balanceUnits": 1162268255,
+      "committedUnits": 0,
+      "active": true,
+      "balance": 1162.268255,
+      "committed": 0,
+      "spendableUnits": 1162268255,
+      "spendable": 1162.268255
+    },
+    {
+      "id": "MERCHANT:vessel-1",
+      "ownerType": "MERCHANT",
+      "ownerId": "vessel-1",
+      "balanceUnits": 0,
+      "committedUnits": 0,
+      "active": false,
+      "balance": 0,
+      "committed": 0,
+      "spendableUnits": 0,
+      "spendable": 0
+    },
+    {
+      "id": "SAILORS_PURSE:vessel-1",
+      "ownerType": "SAILORS_PURSE",
+      "ownerId": "vessel-1",
+      "balanceUnits": 0,
+      "committedUnits": 0,
+      "active": false,
+      "balance": 0,
+      "committed": 0,
+      "spendableUnits": 0,
+      "spendable": 0
+    },
+    {
+      "id": "MAINTENANCE_PURSE:vessel-1",
+      "ownerType": "MAINTENANCE_PURSE",
+      "ownerId": "vessel-1",
+      "balanceUnits": 0,
+      "committedUnits": 0,
+      "active": false,
+      "balance": 0,
+      "committed": 0,
+      "spendableUnits": 0,
+      "spendable": 0
+    }
+  ],
+  "commitments": [
+    {
+      "id": "market:buffer:PORT:B:RUM",
+      "accountId": "PORT:B",
+      "amountUnits": 201840889
+    },
+    {
+      "id": "market:buffer:PORT:B:WOOD",
+      "accountId": "PORT:B",
+      "amountUnits": 100000000
+    }
+  ],
+  "checkpoints": [
+    {
+      "label": "Production, locally funded inputs, manufacturing, wages, consumption and finite buffer bids",
+      "totalUnits": 4500000000,
+      "committedUnits": 900000000,
+      "accounts": [
+        {
+          "id": "FACTION:ENGLAND",
+          "ownerType": "FACTION",
+          "ownerId": "ENGLAND",
+          "balanceUnits": 500000000,
+          "committedUnits": 0,
+          "active": true,
+          "balance": 500,
+          "committed": 0,
+          "spendableUnits": 500000000,
+          "spendable": 500
+        },
+        {
+          "id": "FACTION:FRANCE",
+          "ownerType": "FACTION",
+          "ownerId": "FRANCE",
+          "balanceUnits": 0,
+          "committedUnits": 0,
+          "active": true,
+          "balance": 0,
+          "committed": 0,
+          "spendableUnits": 0,
+          "spendable": 0
+        },
+        {
+          "id": "FACTION:SPAIN",
+          "ownerType": "FACTION",
+          "ownerId": "SPAIN",
+          "balanceUnits": 0,
+          "committedUnits": 0,
+          "active": true,
+          "balance": 0,
+          "committed": 0,
+          "spendableUnits": 0,
+          "spendable": 0
+        },
+        {
+          "id": "FACTION:PIRATES",
+          "ownerType": "FACTION",
+          "ownerId": "PIRATES",
+          "balanceUnits": 0,
+          "committedUnits": 0,
+          "active": true,
+          "balance": 0,
+          "committed": 0,
+          "spendableUnits": 0,
+          "spendable": 0
+        },
+        {
+          "id": "PORT:A",
+          "ownerType": "PORT",
+          "ownerId": "A",
+          "balanceUnits": 1004018097,
+          "committedUnits": 0,
+          "active": true,
+          "balance": 1004.018097,
+          "committed": 0,
+          "spendableUnits": 1004018097,
+          "spendable": 1004.018097
+        },
+        {
+          "id": "PORT_TAX:A",
+          "ownerType": "PORT_TAX",
+          "ownerId": "A",
+          "balanceUnits": 0,
+          "committedUnits": 0,
+          "active": true,
+          "balance": 0,
+          "committed": 0,
+          "spendableUnits": 0,
+          "spendable": 0
+        },
+        {
+          "id": "PORT:B",
+          "ownerType": "PORT",
+          "ownerId": "B",
+          "balanceUnits": 1000000000,
+          "committedUnits": 900000000,
+          "active": true,
+          "balance": 1000,
+          "committed": 900,
+          "spendableUnits": 100000000,
+          "spendable": 100
+        },
+        {
+          "id": "PORT_TAX:B",
+          "ownerType": "PORT_TAX",
+          "ownerId": "B",
+          "balanceUnits": 0,
+          "committedUnits": 0,
+          "active": true,
+          "balance": 0,
+          "committed": 0,
+          "spendableUnits": 0,
+          "spendable": 0
+        },
+        {
+          "id": "INDUSTRY:distillery",
+          "ownerType": "INDUSTRY",
+          "ownerId": "distillery",
+          "balanceUnits": 995981903,
+          "committedUnits": 0,
+          "active": true,
+          "balance": 995.981903,
+          "committed": 0,
+          "spendableUnits": 995981903,
+          "spendable": 995.981903
+        },
+        {
+          "id": "MERCHANT:vessel-1",
+          "ownerType": "MERCHANT",
+          "ownerId": "vessel-1",
+          "balanceUnits": 1000000000,
+          "committedUnits": 0,
+          "active": true,
+          "balance": 1000,
+          "committed": 0,
+          "spendableUnits": 1000000000,
+          "spendable": 1000
+        },
+        {
+          "id": "SAILORS_PURSE:vessel-1",
+          "ownerType": "SAILORS_PURSE",
+          "ownerId": "vessel-1",
+          "balanceUnits": 0,
+          "committedUnits": 0,
+          "active": true,
+          "balance": 0,
+          "committed": 0,
+          "spendableUnits": 0,
+          "spendable": 0
+        },
+        {
+          "id": "MAINTENANCE_PURSE:vessel-1",
+          "ownerType": "MAINTENANCE_PURSE",
+          "ownerId": "vessel-1",
+          "balanceUnits": 0,
+          "committedUnits": 0,
+          "active": true,
+          "balance": 0,
+          "committed": 0,
+          "spendableUnits": 0,
+          "spendable": 0
+        }
+      ],
+      "commitments": [
+        {
+          "id": "market:buffer:PORT:B:WOOD",
+          "accountId": "PORT:B",
+          "amountUnits": 500000000
+        },
+        {
+          "id": "market:buffer:PORT:B:RUM",
+          "accountId": "PORT:B",
+          "amountUnits": 400000000
+        }
+      ],
+      "inTransit": [],
+      "completed": [],
+      "goodsInTransit": []
+    },
+    {
+      "label": "Origin purse settlement",
+      "totalUnits": 4500000000,
+      "committedUnits": 900000000,
+      "accounts": [
+        {
+          "id": "FACTION:ENGLAND",
+          "ownerType": "FACTION",
+          "ownerId": "ENGLAND",
+          "balanceUnits": 500000000,
+          "committedUnits": 0,
+          "active": true,
+          "balance": 500,
+          "committed": 0,
+          "spendableUnits": 500000000,
+          "spendable": 500
+        },
+        {
+          "id": "FACTION:FRANCE",
+          "ownerType": "FACTION",
+          "ownerId": "FRANCE",
+          "balanceUnits": 0,
+          "committedUnits": 0,
+          "active": true,
+          "balance": 0,
+          "committed": 0,
+          "spendableUnits": 0,
+          "spendable": 0
+        },
+        {
+          "id": "FACTION:SPAIN",
+          "ownerType": "FACTION",
+          "ownerId": "SPAIN",
+          "balanceUnits": 0,
+          "committedUnits": 0,
+          "active": true,
+          "balance": 0,
+          "committed": 0,
+          "spendableUnits": 0,
+          "spendable": 0
+        },
+        {
+          "id": "FACTION:PIRATES",
+          "ownerType": "FACTION",
+          "ownerId": "PIRATES",
+          "balanceUnits": 0,
+          "committedUnits": 0,
+          "active": true,
+          "balance": 0,
+          "committed": 0,
+          "spendableUnits": 0,
+          "spendable": 0
+        },
+        {
+          "id": "PORT:A",
+          "ownerType": "PORT",
+          "ownerId": "A",
+          "balanceUnits": 1004326540,
+          "committedUnits": 0,
+          "active": true,
+          "balance": 1004.32654,
+          "committed": 0,
+          "spendableUnits": 1004326540,
+          "spendable": 1004.32654
+        },
+        {
+          "id": "PORT_TAX:A",
+          "ownerType": "PORT_TAX",
+          "ownerId": "A",
+          "balanceUnits": 0,
+          "committedUnits": 0,
+          "active": true,
+          "balance": 0,
+          "committed": 0,
+          "spendableUnits": 0,
+          "spendable": 0
+        },
+        {
+          "id": "PORT:B",
+          "ownerType": "PORT",
+          "ownerId": "B",
+          "balanceUnits": 1000000000,
+          "committedUnits": 900000000,
+          "active": true,
+          "balance": 1000,
+          "committed": 900,
+          "spendableUnits": 100000000,
+          "spendable": 100
+        },
+        {
+          "id": "PORT_TAX:B",
+          "ownerType": "PORT_TAX",
+          "ownerId": "B",
+          "balanceUnits": 0,
+          "committedUnits": 0,
+          "active": true,
+          "balance": 0,
+          "committed": 0,
+          "spendableUnits": 0,
+          "spendable": 0
+        },
+        {
+          "id": "INDUSTRY:distillery",
+          "ownerType": "INDUSTRY",
+          "ownerId": "distillery",
+          "balanceUnits": 995981903,
+          "committedUnits": 0,
+          "active": true,
+          "balance": 995.981903,
+          "committed": 0,
+          "spendableUnits": 995981903,
+          "spendable": 995.981903
+        },
+        {
+          "id": "MERCHANT:vessel-1",
+          "ownerType": "MERCHANT",
+          "ownerId": "vessel-1",
+          "balanceUnits": 999691557,
+          "committedUnits": 0,
+          "active": true,
+          "balance": 999.691557,
+          "committed": 0,
+          "spendableUnits": 999691557,
+          "spendable": 999.691557
+        },
+        {
+          "id": "SAILORS_PURSE:vessel-1",
+          "ownerType": "SAILORS_PURSE",
+          "ownerId": "vessel-1",
+          "balanceUnits": 0,
+          "committedUnits": 0,
+          "active": true,
+          "balance": 0,
+          "committed": 0,
+          "spendableUnits": 0,
+          "spendable": 0
+        },
+        {
+          "id": "MAINTENANCE_PURSE:vessel-1",
+          "ownerType": "MAINTENANCE_PURSE",
+          "ownerId": "vessel-1",
+          "balanceUnits": 0,
+          "committedUnits": 0,
+          "active": true,
+          "balance": 0,
+          "committed": 0,
+          "spendableUnits": 0,
+          "spendable": 0
+        }
+      ],
+      "commitments": [
+        {
+          "id": "market:buffer:PORT:B:WOOD",
+          "accountId": "PORT:B",
+          "amountUnits": 500000000
+        },
+        {
+          "id": "market:buffer:PORT:B:RUM",
+          "accountId": "PORT:B",
+          "amountUnits": 400000000
+        }
+      ],
+      "inTransit": [],
+      "completed": [],
+      "goodsInTransit": []
+    },
+    {
+      "label": "Immediate purchases, producer split and reserved paid pickups",
+      "totalUnits": 4500000000,
+      "committedUnits": 900000000,
+      "accounts": [
+        {
+          "id": "FACTION:ENGLAND",
+          "ownerType": "FACTION",
+          "ownerId": "ENGLAND",
+          "balanceUnits": 500000000,
+          "committedUnits": 0,
+          "active": true,
+          "balance": 500,
+          "committed": 0,
+          "spendableUnits": 500000000,
+          "spendable": 500
+        },
+        {
+          "id": "FACTION:FRANCE",
+          "ownerType": "FACTION",
+          "ownerId": "FRANCE",
+          "balanceUnits": 0,
+          "committedUnits": 0,
+          "active": true,
+          "balance": 0,
+          "committed": 0,
+          "spendableUnits": 0,
+          "spendable": 0
+        },
+        {
+          "id": "FACTION:SPAIN",
+          "ownerType": "FACTION",
+          "ownerId": "SPAIN",
+          "balanceUnits": 0,
+          "committedUnits": 0,
+          "active": true,
+          "balance": 0,
+          "committed": 0,
+          "spendableUnits": 0,
+          "spendable": 0
+        },
+        {
+          "id": "FACTION:PIRATES",
+          "ownerType": "FACTION",
+          "ownerId": "PIRATES",
+          "balanceUnits": 0,
+          "committedUnits": 0,
+          "active": true,
+          "balance": 0,
+          "committed": 0,
+          "spendableUnits": 0,
+          "spendable": 0
+        },
+        {
+          "id": "PORT:A",
+          "ownerType": "PORT",
+          "ownerId": "A",
+          "balanceUnits": 1089787722,
+          "committedUnits": 0,
+          "active": true,
+          "balance": 1089.787722,
+          "committed": 0,
+          "spendableUnits": 1089787722,
+          "spendable": 1089.787722
+        },
+        {
+          "id": "PORT_TAX:A",
+          "ownerType": "PORT_TAX",
+          "ownerId": "A",
+          "balanceUnits": 0,
+          "committedUnits": 0,
+          "active": true,
+          "balance": 0,
+          "committed": 0,
+          "spendableUnits": 0,
+          "spendable": 0
+        },
+        {
+          "id": "PORT:B",
+          "ownerType": "PORT",
+          "ownerId": "B",
+          "balanceUnits": 1000000000,
+          "committedUnits": 900000000,
+          "active": true,
+          "balance": 1000,
+          "committed": 900,
+          "spendableUnits": 100000000,
+          "spendable": 100
+        },
+        {
+          "id": "PORT_TAX:B",
+          "ownerType": "PORT_TAX",
+          "ownerId": "B",
+          "balanceUnits": 0,
+          "committedUnits": 0,
+          "active": true,
+          "balance": 0,
+          "committed": 0,
+          "spendableUnits": 0,
+          "spendable": 0
+        },
+        {
+          "id": "INDUSTRY:distillery",
+          "ownerType": "INDUSTRY",
+          "ownerId": "distillery",
+          "balanceUnits": 1145981903,
+          "committedUnits": 0,
+          "active": true,
+          "balance": 1145.981903,
+          "committed": 0,
+          "spendableUnits": 1145981903,
+          "spendable": 1145.981903
+        },
+        {
+          "id": "MERCHANT:vessel-1",
+          "ownerType": "MERCHANT",
+          "ownerId": "vessel-1",
+          "balanceUnits": 764230375,
+          "committedUnits": 0,
+          "active": true,
+          "balance": 764.230375,
+          "committed": 0,
+          "spendableUnits": 764230375,
+          "spendable": 764.230375
+        },
+        {
+          "id": "SAILORS_PURSE:vessel-1",
+          "ownerType": "SAILORS_PURSE",
+          "ownerId": "vessel-1",
+          "balanceUnits": 0,
+          "committedUnits": 0,
+          "active": true,
+          "balance": 0,
+          "committed": 0,
+          "spendableUnits": 0,
+          "spendable": 0
+        },
+        {
+          "id": "MAINTENANCE_PURSE:vessel-1",
+          "ownerType": "MAINTENANCE_PURSE",
+          "ownerId": "vessel-1",
+          "balanceUnits": 0,
+          "committedUnits": 0,
+          "active": true,
+          "balance": 0,
+          "committed": 0,
+          "spendableUnits": 0,
+          "spendable": 0
+        }
+      ],
+      "commitments": [
+        {
+          "id": "market:buffer:PORT:B:WOOD",
+          "accountId": "PORT:B",
+          "amountUnits": 500000000
+        },
+        {
+          "id": "market:buffer:PORT:B:RUM",
+          "accountId": "PORT:B",
+          "amountUnits": 400000000
+        }
+      ],
+      "inTransit": [
+        {
+          "id": "transfer:pickup:pickup%3Avessel-1%3A1%3A1%3AWOOD:offer-1",
+          "shipId": "vessel-1",
+          "portId": "A",
+          "commodityId": "WOOD",
+          "buyerAccountId": "MERCHANT:vessel-1",
+          "sellerAccountId": "PORT:A",
+          "kind": "PICKUP",
+          "ownerAccountId": "MERCHANT:vessel-1",
+          "sourceLocation": "MARKET:A",
+          "destination": "SHIP:vessel-1",
+          "remainingLocation": "MARKET:A",
+          "reservationId": "TRANSFER:transfer:pickup:pickup%3Avessel-1%3A1%3A1%3AWOOD:offer-1",
+          "quantity": 6,
+          "remainingQuantity": 6,
+          "handledQuantity": 0,
+          "paymentUnits": 35461182,
+          "priceUnits": 5910197,
+          "orderId": "order-4",
+          "offerId": "offer-1",
+          "status": "AWAITING_HANDLING"
+        },
+        {
+          "id": "transfer:pickup:pickup%3Avessel-1%3A1%3A1%3ARUM:offer-3",
+          "shipId": "vessel-1",
+          "portId": "A",
+          "commodityId": "RUM",
+          "buyerAccountId": "MERCHANT:vessel-1",
+          "sellerAccountId": "INDUSTRY:distillery",
+          "kind": "PICKUP",
+          "ownerAccountId": "MERCHANT:vessel-1",
+          "sourceLocation": "MARKET:A",
+          "destination": "SHIP:vessel-1",
+          "remainingLocation": "MARKET:A",
+          "reservationId": "TRANSFER:transfer:pickup:pickup%3Avessel-1%3A1%3A1%3ARUM:offer-3",
+          "quantity": 1,
+          "remainingQuantity": 1,
+          "handledQuantity": 0,
+          "paymentUnits": 200000000,
+          "priceUnits": 200000000,
+          "orderId": "order-5",
+          "offerId": "offer-3",
+          "status": "AWAITING_HANDLING"
+        }
+      ],
+      "completed": [],
+      "goodsInTransit": [
+        {
+          "ownerAccountId": "MERCHANT:vessel-1",
+          "location": "MARKET:A",
+          "commodityId": "WOOD",
+          "quantity": 6,
+          "originPortId": "A",
+          "reservationId": "TRANSFER:transfer:pickup:pickup%3Avessel-1%3A1%3A1%3AWOOD:offer-1",
+          "acquisitionCost": 35.461182,
+          "id": "goods-14",
+          "contraband": false,
+          "manufacturingIndustryAccountId": null
+        },
+        {
+          "ownerAccountId": "MERCHANT:vessel-1",
+          "manufacturingIndustryAccountId": null,
+          "location": "MARKET:A",
+          "commodityId": "RUM",
+          "quantity": 1,
+          "originPortId": "A",
+          "reservationId": "TRANSFER:transfer:pickup:pickup%3Avessel-1%3A1%3A1%3ARUM:offer-3",
+          "acquisitionCost": 200,
+          "id": "goods-15",
+          "contraband": false
+        }
+      ]
+    },
+    {
+      "label": "Sea accrual, once-only purse settlement, funded arrival acceptance, partial sale and ownership aboard",
+      "totalUnits": 4500000000,
+      "committedUnits": 200000000,
+      "accounts": [
+        {
+          "id": "FACTION:ENGLAND",
+          "ownerType": "FACTION",
+          "ownerId": "ENGLAND",
+          "balanceUnits": 500000000,
+          "committedUnits": 0,
+          "active": true,
+          "balance": 500,
+          "committed": 0,
+          "spendableUnits": 500000000,
+          "spendable": 500
+        },
+        {
+          "id": "FACTION:FRANCE",
+          "ownerType": "FACTION",
+          "ownerId": "FRANCE",
+          "balanceUnits": 0,
+          "committedUnits": 0,
+          "active": true,
+          "balance": 0,
+          "committed": 0,
+          "spendableUnits": 0,
+          "spendable": 0
+        },
+        {
+          "id": "FACTION:SPAIN",
+          "ownerType": "FACTION",
+          "ownerId": "SPAIN",
+          "balanceUnits": 0,
+          "committedUnits": 0,
+          "active": true,
+          "balance": 0,
+          "committed": 0,
+          "spendableUnits": 0,
+          "spendable": 0
+        },
+        {
+          "id": "FACTION:PIRATES",
+          "ownerType": "FACTION",
+          "ownerId": "PIRATES",
+          "balanceUnits": 0,
+          "committedUnits": 0,
+          "active": true,
+          "balance": 0,
+          "committed": 0,
+          "spendableUnits": 0,
+          "spendable": 0
+        },
+        {
+          "id": "PORT:A",
+          "ownerType": "PORT",
+          "ownerId": "A",
+          "balanceUnits": 1089787722,
+          "committedUnits": 0,
+          "active": true,
+          "balance": 1089.787722,
+          "committed": 0,
+          "spendableUnits": 1089787722,
+          "spendable": 1089.787722
+        },
+        {
+          "id": "PORT_TAX:A",
+          "ownerType": "PORT_TAX",
+          "ownerId": "A",
+          "balanceUnits": 0,
+          "committedUnits": 0,
+          "active": true,
+          "balance": 0,
+          "committed": 0,
+          "spendableUnits": 0,
+          "spendable": 0
+        },
+        {
+          "id": "PORT:B",
+          "ownerType": "PORT",
+          "ownerId": "B",
+          "balanceUnits": 301840890,
+          "committedUnits": 200000000,
+          "active": true,
+          "balance": 301.84089,
+          "committed": 200,
+          "spendableUnits": 101840890,
+          "spendable": 101.84089
+        },
+        {
+          "id": "PORT_TAX:B",
+          "ownerType": "PORT_TAX",
+          "ownerId": "B",
+          "balanceUnits": 0,
+          "committedUnits": 0,
+          "active": true,
+          "balance": 0,
+          "committed": 0,
+          "spendableUnits": 0,
+          "spendable": 0
+        },
+        {
+          "id": "INDUSTRY:distillery",
+          "ownerType": "INDUSTRY",
+          "ownerId": "distillery",
+          "balanceUnits": 1145981903,
+          "committedUnits": 0,
+          "active": true,
+          "balance": 1145.981903,
+          "committed": 0,
+          "spendableUnits": 1145981903,
+          "spendable": 1145.981903
+        },
+        {
+          "id": "MERCHANT:vessel-1",
+          "ownerType": "MERCHANT",
+          "ownerId": "vessel-1",
+          "balanceUnits": 1462389485,
+          "committedUnits": 0,
+          "active": true,
+          "balance": 1462.389485,
+          "committed": 0,
+          "spendableUnits": 1462389485,
+          "spendable": 1462.389485
+        },
+        {
+          "id": "SAILORS_PURSE:vessel-1",
+          "ownerType": "SAILORS_PURSE",
+          "ownerId": "vessel-1",
+          "balanceUnits": 0,
+          "committedUnits": 0,
+          "active": true,
+          "balance": 0,
+          "committed": 0,
+          "spendableUnits": 0,
+          "spendable": 0
+        },
+        {
+          "id": "MAINTENANCE_PURSE:vessel-1",
+          "ownerType": "MAINTENANCE_PURSE",
+          "ownerId": "vessel-1",
+          "balanceUnits": 0,
+          "committedUnits": 0,
+          "active": true,
+          "balance": 0,
+          "committed": 0,
+          "spendableUnits": 0,
+          "spendable": 0
+        }
+      ],
+      "commitments": [
+        {
+          "id": "market:buffer:PORT:B:RUM",
+          "accountId": "PORT:B",
+          "amountUnits": 200000000
+        }
+      ],
+      "inTransit": [
+        {
+          "id": "transfer:delivery:dock%3Avessel-1%3A2%3AWOOD:buffer%3APORT%3AB%3AWOOD",
+          "shipId": "vessel-1",
+          "portId": "B",
+          "commodityId": "WOOD",
+          "buyerAccountId": "PORT:B",
+          "sellerAccountId": "MERCHANT:vessel-1",
+          "kind": "DELIVERY",
+          "ownerAccountId": "PORT:B",
+          "sourceLocation": "SHIP:vessel-1",
+          "destination": "TOWN:B",
+          "remainingLocation": "SHIP:vessel-1",
+          "reservationId": "TRANSFER:transfer:delivery:dock%3Avessel-1%3A2%3AWOOD:buffer%3APORT%3AB%3AWOOD",
+          "quantity": 5,
+          "remainingQuantity": 5,
+          "handledQuantity": 0,
+          "paymentUnits": 500000000,
+          "priceUnits": 100000000,
+          "orderId": "buffer:PORT:B:WOOD",
+          "offerId": null,
+          "status": "AWAITING_HANDLING"
+        },
+        {
+          "id": "transfer:delivery:dock%3Avessel-1%3A2%3ARUM:buffer%3APORT%3AB%3ARUM",
+          "shipId": "vessel-1",
+          "portId": "B",
+          "commodityId": "RUM",
+          "buyerAccountId": "PORT:B",
+          "sellerAccountId": "MERCHANT:vessel-1",
+          "kind": "DELIVERY",
+          "ownerAccountId": "PORT:B",
+          "sourceLocation": "SHIP:vessel-1",
+          "destination": "TOWN:B",
+          "remainingLocation": "SHIP:vessel-1",
+          "reservationId": "TRANSFER:transfer:delivery:dock%3Avessel-1%3A2%3ARUM:buffer%3APORT%3AB%3ARUM",
+          "quantity": 1,
+          "remainingQuantity": 1,
+          "handledQuantity": 0,
+          "paymentUnits": 200000000,
+          "priceUnits": 200000000,
+          "orderId": "buffer:PORT:B:RUM",
+          "offerId": null,
+          "status": "AWAITING_HANDLING"
+        }
+      ],
+      "completed": [
+        {
+          "id": "transfer:pickup:pickup%3Avessel-1%3A1%3A1%3AWOOD:offer-1",
+          "shipId": "vessel-1",
+          "portId": "A",
+          "commodityId": "WOOD",
+          "buyerAccountId": "MERCHANT:vessel-1",
+          "sellerAccountId": "PORT:A",
+          "kind": "PICKUP",
+          "ownerAccountId": "MERCHANT:vessel-1",
+          "sourceLocation": "MARKET:A",
+          "destination": "SHIP:vessel-1",
+          "remainingLocation": null,
+          "reservationId": null,
+          "quantity": 6,
+          "remainingQuantity": 0,
+          "handledQuantity": 6,
+          "paymentUnits": 35461182,
+          "priceUnits": 5910197,
+          "orderId": "order-4",
+          "offerId": "offer-1",
+          "status": "COMPLETED"
+        },
+        {
+          "id": "transfer:pickup:pickup%3Avessel-1%3A1%3A1%3ARUM:offer-3",
+          "shipId": "vessel-1",
+          "portId": "A",
+          "commodityId": "RUM",
+          "buyerAccountId": "MERCHANT:vessel-1",
+          "sellerAccountId": "INDUSTRY:distillery",
+          "kind": "PICKUP",
+          "ownerAccountId": "MERCHANT:vessel-1",
+          "sourceLocation": "MARKET:A",
+          "destination": "SHIP:vessel-1",
+          "remainingLocation": null,
+          "reservationId": null,
+          "quantity": 1,
+          "remainingQuantity": 0,
+          "handledQuantity": 1,
+          "paymentUnits": 200000000,
+          "priceUnits": 200000000,
+          "orderId": "order-5",
+          "offerId": "offer-3",
+          "status": "COMPLETED"
+        }
+      ],
+      "goodsInTransit": [
+        {
+          "ownerAccountId": "PORT:B",
+          "location": "SHIP:vessel-1",
+          "commodityId": "WOOD",
+          "quantity": 5,
+          "originPortId": "A",
+          "reservationId": "TRANSFER:transfer:delivery:dock%3Avessel-1%3A2%3AWOOD:buffer%3APORT%3AB%3AWOOD",
+          "acquisitionCost": 500,
+          "id": "goods-18",
+          "contraband": false,
+          "manufacturingIndustryAccountId": null
+        },
+        {
+          "ownerAccountId": "PORT:B",
+          "manufacturingIndustryAccountId": null,
+          "location": "SHIP:vessel-1",
+          "commodityId": "RUM",
+          "quantity": 1,
+          "originPortId": "A",
+          "reservationId": "TRANSFER:transfer:delivery:dock%3Avessel-1%3A2%3ARUM:buffer%3APORT%3AB%3ARUM",
+          "acquisitionCost": 200,
+          "id": "goods-19",
+          "contraband": false
+        }
+      ]
+    },
+    {
+      "label": "Paid unloading without a second payment; unsold remainder returned on removal",
+      "totalUnits": 4500000000,
+      "committedUnits": 200000000,
+      "accounts": [
+        {
+          "id": "FACTION:ENGLAND",
+          "ownerType": "FACTION",
+          "ownerId": "ENGLAND",
+          "balanceUnits": 500000000,
+          "committedUnits": 0,
+          "active": true,
+          "balance": 500,
+          "committed": 0,
+          "spendableUnits": 500000000,
+          "spendable": 500
+        },
+        {
+          "id": "FACTION:FRANCE",
+          "ownerType": "FACTION",
+          "ownerId": "FRANCE",
+          "balanceUnits": 0,
+          "committedUnits": 0,
+          "active": true,
+          "balance": 0,
+          "committed": 0,
+          "spendableUnits": 0,
+          "spendable": 0
+        },
+        {
+          "id": "FACTION:SPAIN",
+          "ownerType": "FACTION",
+          "ownerId": "SPAIN",
+          "balanceUnits": 0,
+          "committedUnits": 0,
+          "active": true,
+          "balance": 0,
+          "committed": 0,
+          "spendableUnits": 0,
+          "spendable": 0
+        },
+        {
+          "id": "FACTION:PIRATES",
+          "ownerType": "FACTION",
+          "ownerId": "PIRATES",
+          "balanceUnits": 0,
+          "committedUnits": 0,
+          "active": true,
+          "balance": 0,
+          "committed": 0,
+          "spendableUnits": 0,
+          "spendable": 0
+        },
+        {
+          "id": "PORT:A",
+          "ownerType": "PORT",
+          "ownerId": "A",
+          "balanceUnits": 2552177207,
+          "committedUnits": 0,
+          "active": true,
+          "balance": 2552.177207,
+          "committed": 0,
+          "spendableUnits": 2552177207,
+          "spendable": 2552.177207
+        },
+        {
+          "id": "PORT_TAX:A",
+          "ownerType": "PORT_TAX",
+          "ownerId": "A",
+          "balanceUnits": 0,
+          "committedUnits": 0,
+          "active": true,
+          "balance": 0,
+          "committed": 0,
+          "spendableUnits": 0,
+          "spendable": 0
+        },
+        {
+          "id": "PORT:B",
+          "ownerType": "PORT",
+          "ownerId": "B",
+          "balanceUnits": 301840890,
+          "committedUnits": 200000000,
+          "active": true,
+          "balance": 301.84089,
+          "committed": 200,
+          "spendableUnits": 101840890,
+          "spendable": 101.84089
+        },
+        {
+          "id": "PORT_TAX:B",
+          "ownerType": "PORT_TAX",
+          "ownerId": "B",
+          "balanceUnits": 0,
+          "committedUnits": 0,
+          "active": true,
+          "balance": 0,
+          "committed": 0,
+          "spendableUnits": 0,
+          "spendable": 0
+        },
+        {
+          "id": "INDUSTRY:distillery",
+          "ownerType": "INDUSTRY",
+          "ownerId": "distillery",
+          "balanceUnits": 1145981903,
+          "committedUnits": 0,
+          "active": true,
+          "balance": 1145.981903,
+          "committed": 0,
+          "spendableUnits": 1145981903,
+          "spendable": 1145.981903
+        },
+        {
+          "id": "MERCHANT:vessel-1",
+          "ownerType": "MERCHANT",
+          "ownerId": "vessel-1",
+          "balanceUnits": 0,
+          "committedUnits": 0,
+          "active": false,
+          "balance": 0,
+          "committed": 0,
+          "spendableUnits": 0,
+          "spendable": 0
+        },
+        {
+          "id": "SAILORS_PURSE:vessel-1",
+          "ownerType": "SAILORS_PURSE",
+          "ownerId": "vessel-1",
+          "balanceUnits": 0,
+          "committedUnits": 0,
+          "active": false,
+          "balance": 0,
+          "committed": 0,
+          "spendableUnits": 0,
+          "spendable": 0
+        },
+        {
+          "id": "MAINTENANCE_PURSE:vessel-1",
+          "ownerType": "MAINTENANCE_PURSE",
+          "ownerId": "vessel-1",
+          "balanceUnits": 0,
+          "committedUnits": 0,
+          "active": false,
+          "balance": 0,
+          "committed": 0,
+          "spendableUnits": 0,
+          "spendable": 0
+        }
+      ],
+      "commitments": [
+        {
+          "id": "market:buffer:PORT:B:RUM",
+          "accountId": "PORT:B",
+          "amountUnits": 200000000
+        }
+      ],
+      "inTransit": [],
+      "completed": [
+        {
+          "id": "transfer:pickup:pickup%3Avessel-1%3A1%3A1%3AWOOD:offer-1",
+          "shipId": "vessel-1",
+          "portId": "A",
+          "commodityId": "WOOD",
+          "buyerAccountId": "MERCHANT:vessel-1",
+          "sellerAccountId": "PORT:A",
+          "kind": "PICKUP",
+          "ownerAccountId": "MERCHANT:vessel-1",
+          "sourceLocation": "MARKET:A",
+          "destination": "SHIP:vessel-1",
+          "remainingLocation": null,
+          "reservationId": null,
+          "quantity": 6,
+          "remainingQuantity": 0,
+          "handledQuantity": 6,
+          "paymentUnits": 35461182,
+          "priceUnits": 5910197,
+          "orderId": "order-4",
+          "offerId": "offer-1",
+          "status": "COMPLETED"
+        },
+        {
+          "id": "transfer:pickup:pickup%3Avessel-1%3A1%3A1%3ARUM:offer-3",
+          "shipId": "vessel-1",
+          "portId": "A",
+          "commodityId": "RUM",
+          "buyerAccountId": "MERCHANT:vessel-1",
+          "sellerAccountId": "INDUSTRY:distillery",
+          "kind": "PICKUP",
+          "ownerAccountId": "MERCHANT:vessel-1",
+          "sourceLocation": "MARKET:A",
+          "destination": "SHIP:vessel-1",
+          "remainingLocation": null,
+          "reservationId": null,
+          "quantity": 1,
+          "remainingQuantity": 0,
+          "handledQuantity": 1,
+          "paymentUnits": 200000000,
+          "priceUnits": 200000000,
+          "orderId": "order-5",
+          "offerId": "offer-3",
+          "status": "COMPLETED"
+        },
+        {
+          "id": "transfer:delivery:dock%3Avessel-1%3A2%3AWOOD:buffer%3APORT%3AB%3AWOOD",
+          "shipId": "vessel-1",
+          "portId": "B",
+          "commodityId": "WOOD",
+          "buyerAccountId": "PORT:B",
+          "sellerAccountId": "MERCHANT:vessel-1",
+          "kind": "DELIVERY",
+          "ownerAccountId": "PORT:B",
+          "sourceLocation": "SHIP:vessel-1",
+          "destination": "TOWN:B",
+          "remainingLocation": null,
+          "reservationId": null,
+          "quantity": 5,
+          "remainingQuantity": 0,
+          "handledQuantity": 5,
+          "paymentUnits": 500000000,
+          "priceUnits": 100000000,
+          "orderId": "buffer:PORT:B:WOOD",
+          "offerId": null,
+          "status": "COMPLETED"
+        },
+        {
+          "id": "transfer:delivery:dock%3Avessel-1%3A2%3ARUM:buffer%3APORT%3AB%3ARUM",
+          "shipId": "vessel-1",
+          "portId": "B",
+          "commodityId": "RUM",
+          "buyerAccountId": "PORT:B",
+          "sellerAccountId": "MERCHANT:vessel-1",
+          "kind": "DELIVERY",
+          "ownerAccountId": "PORT:B",
+          "sourceLocation": "SHIP:vessel-1",
+          "destination": "TOWN:B",
+          "remainingLocation": null,
+          "reservationId": null,
+          "quantity": 1,
+          "remainingQuantity": 0,
+          "handledQuantity": 1,
+          "paymentUnits": 200000000,
+          "priceUnits": 200000000,
+          "orderId": "buffer:PORT:B:RUM",
+          "offerId": null,
+          "status": "COMPLETED"
+        }
+      ],
+      "goodsInTransit": []
+    },
+    {
+      "label": "Further production, manufacturing, consumption and material-only construction",
+      "totalUnits": 4500000000,
+      "committedUnits": 301840889,
+      "accounts": [
+        {
+          "id": "FACTION:ENGLAND",
+          "ownerType": "FACTION",
+          "ownerId": "ENGLAND",
+          "balanceUnits": 500000000,
+          "committedUnits": 0,
+          "active": true,
+          "balance": 500,
+          "committed": 0,
+          "spendableUnits": 500000000,
+          "spendable": 500
+        },
+        {
+          "id": "FACTION:FRANCE",
+          "ownerType": "FACTION",
+          "ownerId": "FRANCE",
+          "balanceUnits": 0,
+          "committedUnits": 0,
+          "active": true,
+          "balance": 0,
+          "committed": 0,
+          "spendableUnits": 0,
+          "spendable": 0
+        },
+        {
+          "id": "FACTION:SPAIN",
+          "ownerType": "FACTION",
+          "ownerId": "SPAIN",
+          "balanceUnits": 0,
+          "committedUnits": 0,
+          "active": true,
+          "balance": 0,
+          "committed": 0,
+          "spendableUnits": 0,
+          "spendable": 0
+        },
+        {
+          "id": "FACTION:PIRATES",
+          "ownerType": "FACTION",
+          "ownerId": "PIRATES",
+          "balanceUnits": 0,
+          "committedUnits": 0,
+          "active": true,
+          "balance": 0,
+          "committed": 0,
+          "spendableUnits": 0,
+          "spendable": 0
+        },
+        {
+          "id": "PORT:A",
+          "ownerType": "PORT",
+          "ownerId": "A",
+          "balanceUnits": 2535890855,
+          "committedUnits": 0,
+          "active": true,
+          "balance": 2535.890855,
+          "committed": 0,
+          "spendableUnits": 2535890855,
+          "spendable": 2535.890855
+        },
+        {
+          "id": "PORT_TAX:A",
+          "ownerType": "PORT_TAX",
+          "ownerId": "A",
+          "balanceUnits": 0,
+          "committedUnits": 0,
+          "active": true,
+          "balance": 0,
+          "committed": 0,
+          "spendableUnits": 0,
+          "spendable": 0
+        },
+        {
+          "id": "PORT:B",
+          "ownerType": "PORT",
+          "ownerId": "B",
+          "balanceUnits": 301840890,
+          "committedUnits": 301840889,
+          "active": true,
+          "balance": 301.84089,
+          "committed": 301.840889,
+          "spendableUnits": 1,
+          "spendable": 0.000001
+        },
+        {
+          "id": "PORT_TAX:B",
+          "ownerType": "PORT_TAX",
+          "ownerId": "B",
+          "balanceUnits": 0,
+          "committedUnits": 0,
+          "active": true,
+          "balance": 0,
+          "committed": 0,
+          "spendableUnits": 0,
+          "spendable": 0
+        },
+        {
+          "id": "INDUSTRY:distillery",
+          "ownerType": "INDUSTRY",
+          "ownerId": "distillery",
+          "balanceUnits": 1162268255,
+          "committedUnits": 0,
+          "active": true,
+          "balance": 1162.268255,
+          "committed": 0,
+          "spendableUnits": 1162268255,
+          "spendable": 1162.268255
+        },
+        {
+          "id": "MERCHANT:vessel-1",
+          "ownerType": "MERCHANT",
+          "ownerId": "vessel-1",
+          "balanceUnits": 0,
+          "committedUnits": 0,
+          "active": false,
+          "balance": 0,
+          "committed": 0,
+          "spendableUnits": 0,
+          "spendable": 0
+        },
+        {
+          "id": "SAILORS_PURSE:vessel-1",
+          "ownerType": "SAILORS_PURSE",
+          "ownerId": "vessel-1",
+          "balanceUnits": 0,
+          "committedUnits": 0,
+          "active": false,
+          "balance": 0,
+          "committed": 0,
+          "spendableUnits": 0,
+          "spendable": 0
+        },
+        {
+          "id": "MAINTENANCE_PURSE:vessel-1",
+          "ownerType": "MAINTENANCE_PURSE",
+          "ownerId": "vessel-1",
+          "balanceUnits": 0,
+          "committedUnits": 0,
+          "active": false,
+          "balance": 0,
+          "committed": 0,
+          "spendableUnits": 0,
+          "spendable": 0
+        }
+      ],
+      "commitments": [
+        {
+          "id": "market:buffer:PORT:B:RUM",
+          "accountId": "PORT:B",
+          "amountUnits": 201840889
+        },
+        {
+          "id": "market:buffer:PORT:B:WOOD",
+          "accountId": "PORT:B",
+          "amountUnits": 100000000
+        }
+      ],
+      "inTransit": [],
+      "completed": [
+        {
+          "id": "transfer:pickup:pickup%3Avessel-1%3A1%3A1%3AWOOD:offer-1",
+          "shipId": "vessel-1",
+          "portId": "A",
+          "commodityId": "WOOD",
+          "buyerAccountId": "MERCHANT:vessel-1",
+          "sellerAccountId": "PORT:A",
+          "kind": "PICKUP",
+          "ownerAccountId": "MERCHANT:vessel-1",
+          "sourceLocation": "MARKET:A",
+          "destination": "SHIP:vessel-1",
+          "remainingLocation": null,
+          "reservationId": null,
+          "quantity": 6,
+          "remainingQuantity": 0,
+          "handledQuantity": 6,
+          "paymentUnits": 35461182,
+          "priceUnits": 5910197,
+          "orderId": "order-4",
+          "offerId": "offer-1",
+          "status": "COMPLETED"
+        },
+        {
+          "id": "transfer:pickup:pickup%3Avessel-1%3A1%3A1%3ARUM:offer-3",
+          "shipId": "vessel-1",
+          "portId": "A",
+          "commodityId": "RUM",
+          "buyerAccountId": "MERCHANT:vessel-1",
+          "sellerAccountId": "INDUSTRY:distillery",
+          "kind": "PICKUP",
+          "ownerAccountId": "MERCHANT:vessel-1",
+          "sourceLocation": "MARKET:A",
+          "destination": "SHIP:vessel-1",
+          "remainingLocation": null,
+          "reservationId": null,
+          "quantity": 1,
+          "remainingQuantity": 0,
+          "handledQuantity": 1,
+          "paymentUnits": 200000000,
+          "priceUnits": 200000000,
+          "orderId": "order-5",
+          "offerId": "offer-3",
+          "status": "COMPLETED"
+        },
+        {
+          "id": "transfer:delivery:dock%3Avessel-1%3A2%3AWOOD:buffer%3APORT%3AB%3AWOOD",
+          "shipId": "vessel-1",
+          "portId": "B",
+          "commodityId": "WOOD",
+          "buyerAccountId": "PORT:B",
+          "sellerAccountId": "MERCHANT:vessel-1",
+          "kind": "DELIVERY",
+          "ownerAccountId": "PORT:B",
+          "sourceLocation": "SHIP:vessel-1",
+          "destination": "TOWN:B",
+          "remainingLocation": null,
+          "reservationId": null,
+          "quantity": 5,
+          "remainingQuantity": 0,
+          "handledQuantity": 5,
+          "paymentUnits": 500000000,
+          "priceUnits": 100000000,
+          "orderId": "buffer:PORT:B:WOOD",
+          "offerId": null,
+          "status": "COMPLETED"
+        },
+        {
+          "id": "transfer:delivery:dock%3Avessel-1%3A2%3ARUM:buffer%3APORT%3AB%3ARUM",
+          "shipId": "vessel-1",
+          "portId": "B",
+          "commodityId": "RUM",
+          "buyerAccountId": "PORT:B",
+          "sellerAccountId": "MERCHANT:vessel-1",
+          "kind": "DELIVERY",
+          "ownerAccountId": "PORT:B",
+          "sourceLocation": "SHIP:vessel-1",
+          "destination": "TOWN:B",
+          "remainingLocation": null,
+          "reservationId": null,
+          "quantity": 1,
+          "remainingQuantity": 0,
+          "handledQuantity": 1,
+          "paymentUnits": 200000000,
+          "priceUnits": 200000000,
+          "orderId": "buffer:PORT:B:RUM",
+          "offerId": null,
+          "status": "COMPLETED"
+        }
+      ],
+      "goodsInTransit": []
+    }
+  ],
+  "trades": [
+    {
+      "acceptanceId": null,
+      "id": "fill-1",
+      "paymentId": "payment-1",
+      "tick": 1,
+      "buyerAccountId": "INDUSTRY:distillery",
+      "commodityId": "WOOD",
+      "quantity": 0.5,
+      "sellerAccountId": "PORT:A",
+      "sourceLocation": "MARKET:A",
+      "sourceReservationId": "OFFER:offer-1",
+      "goods": [
+        {
+          "id": "goods-4",
+          "ownerAccountId": "PORT:A",
+          "commodityId": "WOOD",
+          "quantity": 0.5,
+          "location": "MARKET:A",
+          "reservationId": "OFFER:offer-1",
+          "originPortId": "A",
+          "manufacturingIndustryAccountId": null,
+          "acquisitionCost": 0
+        }
+      ],
+      "unitPrice": 5.689263,
+      "unitPriceUnits": 5689263,
+      "totalPayment": 2.844632,
+      "totalPaymentUnits": 2844632,
+      "recipients": [
+        {
+          "accountId": "PORT:A",
+          "amountUnits": 2844632,
+          "amount": 2.844632
+        }
+      ],
+      "sales": [
+        {
+          "sellerAccountId": "PORT:A",
+          "quantity": 0.5,
+          "paymentUnits": 2844632,
+          "payment": 2.844632,
+          "allocation": false,
+          "recipients": [
+            {
+              "accountId": "PORT:A",
+              "amountUnits": 2844632,
+              "amount": 2.844632,
+              "role": "owner_revenue"
+            }
+          ]
+        }
+      ],
+      "action": "pickup",
+      "orderId": "buffer:INDUSTRY:distillery:WOOD",
+      "offerId": "offer-1",
+      "transferId": null
+    },
+    {
+      "acceptanceId": null,
+      "id": "fill-2",
+      "paymentId": "payment-2",
+      "tick": 1,
+      "buyerAccountId": "INDUSTRY:distillery",
+      "commodityId": "SUGAR",
+      "quantity": 2,
+      "sellerAccountId": "PORT:A",
+      "sourceLocation": "MARKET:A",
+      "sourceReservationId": "OFFER:offer-2",
+      "goods": [
+        {
+          "id": "goods-5",
+          "ownerAccountId": "PORT:A",
+          "commodityId": "SUGAR",
+          "quantity": 2,
+          "location": "MARKET:A",
+          "reservationId": "OFFER:offer-2",
+          "originPortId": "A",
+          "manufacturingIndustryAccountId": null,
+          "acquisitionCost": 0
+        }
+      ],
+      "unitPrice": 8.455954,
+      "unitPriceUnits": 8455954,
+      "totalPayment": 16.911908,
+      "totalPaymentUnits": 16911908,
+      "recipients": [
+        {
+          "accountId": "PORT:A",
+          "amountUnits": 16911908,
+          "amount": 16.911908
+        }
+      ],
+      "sales": [
+        {
+          "sellerAccountId": "PORT:A",
+          "quantity": 2,
+          "paymentUnits": 16911908,
+          "payment": 16.911908,
+          "allocation": false,
+          "recipients": [
+            {
+              "accountId": "PORT:A",
+              "amountUnits": 16911908,
+              "amount": 16.911908,
+              "role": "owner_revenue"
+            }
+          ]
+        }
+      ],
+      "action": "pickup",
+      "orderId": "buffer:INDUSTRY:distillery:SUGAR",
+      "offerId": "offer-2",
+      "transferId": null
+    },
+    {
+      "acceptanceId": null,
+      "id": "fill-3",
+      "paymentId": "payment-3",
+      "tick": 1,
+      "buyerAccountId": "INDUSTRY:distillery",
+      "commodityId": "WOOD",
+      "quantity": 0.5,
+      "sellerAccountId": "PORT:A",
+      "sourceLocation": "MARKET:A",
+      "sourceReservationId": "OFFER:offer-1",
+      "goods": [
+        {
+          "id": "goods-4",
+          "ownerAccountId": "PORT:A",
+          "commodityId": "WOOD",
+          "quantity": 0.5,
+          "location": "MARKET:A",
+          "reservationId": "OFFER:offer-1",
+          "originPortId": "A",
+          "manufacturingIndustryAccountId": null,
+          "acquisitionCost": 0
+        }
+      ],
+      "unitPrice": 5.797801,
+      "unitPriceUnits": 5797801,
+      "totalPayment": 2.898901,
+      "totalPaymentUnits": 2898901,
+      "recipients": [
+        {
+          "accountId": "PORT:A",
+          "amountUnits": 2898901,
+          "amount": 2.898901
+        }
+      ],
+      "sales": [
+        {
+          "sellerAccountId": "PORT:A",
+          "quantity": 0.5,
+          "paymentUnits": 2898901,
+          "payment": 2.898901,
+          "allocation": false,
+          "recipients": [
+            {
+              "accountId": "PORT:A",
+              "amountUnits": 2898901,
+              "amount": 2.898901,
+              "role": "owner_revenue"
+            }
+          ]
+        }
+      ],
+      "action": "pickup",
+      "orderId": "buffer:INDUSTRY:distillery:WOOD",
+      "offerId": "offer-1",
+      "transferId": null
+    },
+    {
+      "acceptanceId": null,
+      "id": "fill-4",
+      "paymentId": "payment-4",
+      "tick": 1,
+      "buyerAccountId": "INDUSTRY:distillery",
+      "commodityId": "SUGAR",
+      "quantity": 2,
+      "sellerAccountId": "PORT:A",
+      "sourceLocation": "MARKET:A",
+      "sourceReservationId": "OFFER:offer-2",
+      "goods": [
+        {
+          "id": "goods-5",
+          "ownerAccountId": "PORT:A",
+          "commodityId": "SUGAR",
+          "quantity": 2,
+          "location": "MARKET:A",
+          "reservationId": "OFFER:offer-2",
+          "originPortId": "A",
+          "manufacturingIndustryAccountId": null,
+          "acquisitionCost": 0
+        }
+      ],
+      "unitPrice": 9.431328,
+      "unitPriceUnits": 9431328,
+      "totalPayment": 18.862656,
+      "totalPaymentUnits": 18862656,
+      "recipients": [
+        {
+          "accountId": "PORT:A",
+          "amountUnits": 18862656,
+          "amount": 18.862656
+        }
+      ],
+      "sales": [
+        {
+          "sellerAccountId": "PORT:A",
+          "quantity": 2,
+          "paymentUnits": 18862656,
+          "payment": 18.862656,
+          "allocation": false,
+          "recipients": [
+            {
+              "accountId": "PORT:A",
+              "amountUnits": 18862656,
+              "amount": 18.862656,
+              "role": "owner_revenue"
+            }
+          ]
+        }
+      ],
+      "action": "pickup",
+      "orderId": "buffer:INDUSTRY:distillery:SUGAR",
+      "offerId": "offer-2",
+      "transferId": null
+    },
+    {
+      "acceptanceId": null,
+      "id": "fill-5",
+      "paymentId": "payment-5",
+      "tick": 1,
+      "buyerAccountId": "PORT:A",
+      "commodityId": "RUM",
+      "quantity": 0.25,
+      "sellerAccountId": "INDUSTRY:distillery",
+      "sourceLocation": "MARKET:A",
+      "sourceReservationId": "OFFER:offer-3",
+      "goods": [
+        {
+          "id": "goods-11",
+          "ownerAccountId": "INDUSTRY:distillery",
+          "commodityId": "RUM",
+          "quantity": 0.25,
+          "location": "MARKET:A",
+          "reservationId": "OFFER:offer-3",
+          "originPortId": "A",
+          "manufacturingIndustryAccountId": "INDUSTRY:distillery",
+          "acquisitionCost": 0
+        }
+      ],
+      "unitPrice": 200,
+      "unitPriceUnits": 200000000,
+      "totalPayment": 50,
+      "totalPaymentUnits": 50000000,
+      "recipients": [
+        {
+          "accountId": "INDUSTRY:distillery",
+          "amountUnits": 37500000,
+          "amount": 37.5
+        },
+        {
+          "accountId": "PORT:A",
+          "amountUnits": 12500000,
+          "amount": 12.5
+        }
+      ],
+      "sales": [
+        {
+          "sellerAccountId": "INDUSTRY:distillery",
+          "quantity": 0.25,
+          "paymentUnits": 50000000,
+          "payment": 50,
+          "allocation": false,
+          "recipients": [
+            {
+              "accountId": "INDUSTRY:distillery",
+              "amountUnits": 37500000,
+              "amount": 37.5,
+              "role": "industry_retained"
+            },
+            {
+              "accountId": "PORT:A",
+              "amountUnits": 12500000,
+              "amount": 12.5,
+              "role": "manufacturing_worker_income"
+            }
+          ]
+        }
+      ],
+      "action": "pickup",
+      "orderId": "buffer:PORT:A:RUM",
+      "offerId": "offer-3",
+      "transferId": null
+    },
+    {
+      "acceptanceId": "pickup:vessel-1:1:1:WOOD",
+      "id": "transfer:pickup:pickup%3Avessel-1%3A1%3A1%3AWOOD:offer-1",
+      "paymentId": "pickup:pickup%3Avessel-1%3A1%3A1%3AWOOD:offer-1",
+      "tick": 1,
+      "buyerAccountId": "MERCHANT:vessel-1",
+      "commodityId": "WOOD",
+      "quantity": 6,
+      "sellerAccountId": "PORT:A",
+      "sourceLocation": "MARKET:A",
+      "sourceReservationId": "OFFER:offer-1",
+      "goods": [
+        {
+          "id": "goods-4",
+          "ownerAccountId": "PORT:A",
+          "commodityId": "WOOD",
+          "quantity": 6,
+          "location": "MARKET:A",
+          "reservationId": "OFFER:offer-1",
+          "originPortId": "A",
+          "manufacturingIndustryAccountId": null,
+          "acquisitionCost": 0
+        }
+      ],
+      "unitPrice": 5.910197,
+      "unitPriceUnits": 5910197,
+      "totalPayment": 35.461182,
+      "totalPaymentUnits": 35461182,
+      "recipients": [
+        {
+          "accountId": "PORT:A",
+          "amountUnits": 35461182,
+          "amount": 35.461182
+        }
+      ],
+      "sales": [
+        {
+          "sellerAccountId": "PORT:A",
+          "quantity": 6,
+          "paymentUnits": 35461182,
+          "payment": 35.461182,
+          "allocation": false,
+          "recipients": [
+            {
+              "accountId": "PORT:A",
+              "amountUnits": 35461182,
+              "amount": 35.461182,
+              "role": "owner_revenue"
+            }
+          ]
+        }
+      ],
+      "action": "pickup",
+      "orderId": "order-4",
+      "offerId": "offer-1",
+      "transferId": "transfer:pickup:pickup%3Avessel-1%3A1%3A1%3AWOOD:offer-1"
+    },
+    {
+      "acceptanceId": "pickup:vessel-1:1:1:RUM",
+      "id": "transfer:pickup:pickup%3Avessel-1%3A1%3A1%3ARUM:offer-3",
+      "paymentId": "pickup:pickup%3Avessel-1%3A1%3A1%3ARUM:offer-3",
+      "tick": 1,
+      "buyerAccountId": "MERCHANT:vessel-1",
+      "commodityId": "RUM",
+      "quantity": 1,
+      "sellerAccountId": "INDUSTRY:distillery",
+      "sourceLocation": "MARKET:A",
+      "sourceReservationId": "OFFER:offer-3",
+      "goods": [
+        {
+          "id": "goods-11",
+          "ownerAccountId": "INDUSTRY:distillery",
+          "commodityId": "RUM",
+          "quantity": 1,
+          "location": "MARKET:A",
+          "reservationId": "OFFER:offer-3",
+          "originPortId": "A",
+          "manufacturingIndustryAccountId": "INDUSTRY:distillery",
+          "acquisitionCost": 0
+        }
+      ],
+      "unitPrice": 200,
+      "unitPriceUnits": 200000000,
+      "totalPayment": 200,
+      "totalPaymentUnits": 200000000,
+      "recipients": [
+        {
+          "accountId": "INDUSTRY:distillery",
+          "amountUnits": 150000000,
+          "amount": 150
+        },
+        {
+          "accountId": "PORT:A",
+          "amountUnits": 50000000,
+          "amount": 50
+        }
+      ],
+      "sales": [
+        {
+          "sellerAccountId": "INDUSTRY:distillery",
+          "quantity": 1,
+          "paymentUnits": 200000000,
+          "payment": 200,
+          "allocation": false,
+          "recipients": [
+            {
+              "accountId": "INDUSTRY:distillery",
+              "amountUnits": 150000000,
+              "amount": 150,
+              "role": "industry_retained"
+            },
+            {
+              "accountId": "PORT:A",
+              "amountUnits": 50000000,
+              "amount": 50,
+              "role": "manufacturing_worker_income"
+            }
+          ]
+        }
+      ],
+      "action": "pickup",
+      "orderId": "order-5",
+      "offerId": "offer-3",
+      "transferId": "transfer:pickup:pickup%3Avessel-1%3A1%3A1%3ARUM:offer-3"
+    },
+    {
+      "acceptanceId": "dock:vessel-1:2:WOOD",
+      "id": "transfer:delivery:dock%3Avessel-1%3A2%3AWOOD:buffer%3APORT%3AB%3AWOOD",
+      "paymentId": "delivery:dock%3Avessel-1%3A2%3AWOOD:buffer%3APORT%3AB%3AWOOD",
+      "tick": 1,
+      "buyerAccountId": "PORT:B",
+      "commodityId": "WOOD",
+      "quantity": 5,
+      "sellerAccountId": "MERCHANT:vessel-1",
+      "sourceLocation": "SHIP:vessel-1",
+      "sourceReservationId": null,
+      "goods": [
+        {
+          "id": "goods-16",
+          "ownerAccountId": "MERCHANT:vessel-1",
+          "commodityId": "WOOD",
+          "quantity": 5,
+          "location": "SHIP:vessel-1",
+          "reservationId": null,
+          "originPortId": "A",
+          "manufacturingIndustryAccountId": null,
+          "acquisitionCost": 29.550985
+        }
+      ],
+      "unitPrice": 100,
+      "unitPriceUnits": 100000000,
+      "totalPayment": 500,
+      "totalPaymentUnits": 500000000,
+      "recipients": [
+        {
+          "accountId": "MERCHANT:vessel-1",
+          "amountUnits": 500000000,
+          "amount": 500
+        }
+      ],
+      "sales": [
+        {
+          "sellerAccountId": "MERCHANT:vessel-1",
+          "quantity": 5,
+          "paymentUnits": 500000000,
+          "payment": 500,
+          "allocation": false,
+          "recipients": [
+            {
+              "accountId": "MERCHANT:vessel-1",
+              "amountUnits": 500000000,
+              "amount": 500,
+              "role": "owner_revenue"
+            }
+          ]
+        }
+      ],
+      "action": "delivery",
+      "orderId": "buffer:PORT:B:WOOD",
+      "offerId": null,
+      "transferId": "transfer:delivery:dock%3Avessel-1%3A2%3AWOOD:buffer%3APORT%3AB%3AWOOD"
+    },
+    {
+      "acceptanceId": "dock:vessel-1:2:RUM",
+      "id": "transfer:delivery:dock%3Avessel-1%3A2%3ARUM:buffer%3APORT%3AB%3ARUM",
+      "paymentId": "delivery:dock%3Avessel-1%3A2%3ARUM:buffer%3APORT%3AB%3ARUM",
+      "tick": 1,
+      "buyerAccountId": "PORT:B",
+      "commodityId": "RUM",
+      "quantity": 1,
+      "sellerAccountId": "MERCHANT:vessel-1",
+      "sourceLocation": "SHIP:vessel-1",
+      "sourceReservationId": null,
+      "goods": [
+        {
+          "id": "goods-17",
+          "ownerAccountId": "MERCHANT:vessel-1",
+          "commodityId": "RUM",
+          "quantity": 1,
+          "location": "SHIP:vessel-1",
+          "reservationId": null,
+          "originPortId": "A",
+          "manufacturingIndustryAccountId": null,
+          "acquisitionCost": 200
+        }
+      ],
+      "unitPrice": 200,
+      "unitPriceUnits": 200000000,
+      "totalPayment": 200,
+      "totalPaymentUnits": 200000000,
+      "recipients": [
+        {
+          "accountId": "MERCHANT:vessel-1",
+          "amountUnits": 200000000,
+          "amount": 200
+        }
+      ],
+      "sales": [
+        {
+          "sellerAccountId": "MERCHANT:vessel-1",
+          "quantity": 1,
+          "paymentUnits": 200000000,
+          "payment": 200,
+          "allocation": false,
+          "recipients": [
+            {
+              "accountId": "MERCHANT:vessel-1",
+              "amountUnits": 200000000,
+              "amount": 200,
+              "role": "owner_revenue"
+            }
+          ]
+        }
+      ],
+      "action": "delivery",
+      "orderId": "buffer:PORT:B:RUM",
+      "offerId": null,
+      "transferId": "transfer:delivery:dock%3Avessel-1%3A2%3ARUM:buffer%3APORT%3AB%3ARUM"
+    },
+    {
+      "acceptanceId": null,
+      "id": "fill-6",
+      "paymentId": "payment-2430",
+      "tick": 2,
+      "buyerAccountId": "PORT:A",
+      "commodityId": "RUM",
+      "quantity": 0.25,
+      "sellerAccountId": "INDUSTRY:distillery",
+      "sourceLocation": "MARKET:A",
+      "sourceReservationId": "OFFER:offer-3",
+      "goods": [
+        {
+          "id": "goods-11",
+          "ownerAccountId": "INDUSTRY:distillery",
+          "commodityId": "RUM",
+          "quantity": 0.25,
+          "location": "MARKET:A",
+          "reservationId": "OFFER:offer-3",
+          "originPortId": "A",
+          "manufacturingIndustryAccountId": "INDUSTRY:distillery",
+          "acquisitionCost": 0
+        }
+      ],
+      "unitPrice": 200,
+      "unitPriceUnits": 200000000,
+      "totalPayment": 50,
+      "totalPaymentUnits": 50000000,
+      "recipients": [
+        {
+          "accountId": "INDUSTRY:distillery",
+          "amountUnits": 37500000,
+          "amount": 37.5
+        },
+        {
+          "accountId": "PORT:A",
+          "amountUnits": 12500000,
+          "amount": 12.5
+        }
+      ],
+      "sales": [
+        {
+          "sellerAccountId": "INDUSTRY:distillery",
+          "quantity": 0.25,
+          "paymentUnits": 50000000,
+          "payment": 50,
+          "allocation": false,
+          "recipients": [
+            {
+              "accountId": "INDUSTRY:distillery",
+              "amountUnits": 37500000,
+              "amount": 37.5,
+              "role": "industry_retained"
+            },
+            {
+              "accountId": "PORT:A",
+              "amountUnits": 12500000,
+              "amount": 12.5,
+              "role": "manufacturing_worker_income"
+            }
+          ]
+        }
+      ],
+      "action": "pickup",
+      "orderId": "buffer:PORT:A:RUM",
+      "offerId": "offer-3",
+      "transferId": null
+    },
+    {
+      "acceptanceId": null,
+      "id": "fill-7",
+      "paymentId": "payment-2431",
+      "tick": 2,
+      "buyerAccountId": "INDUSTRY:distillery",
+      "commodityId": "WOOD",
+      "quantity": 0.5,
+      "sellerAccountId": "PORT:A",
+      "sourceLocation": "MARKET:A",
+      "sourceReservationId": "OFFER:offer-1",
+      "goods": [
+        {
+          "id": "goods-4",
+          "ownerAccountId": "PORT:A",
+          "commodityId": "WOOD",
+          "quantity": 0.5,
+          "location": "MARKET:A",
+          "reservationId": "OFFER:offer-1",
+          "originPortId": "A",
+          "manufacturingIndustryAccountId": null,
+          "acquisitionCost": 0.07986752702702703
+        }
+      ],
+      "unitPrice": 6.750259,
+      "unitPriceUnits": 6750259,
+      "totalPayment": 3.37513,
+      "totalPaymentUnits": 3375130,
+      "recipients": [
+        {
+          "accountId": "PORT:A",
+          "amountUnits": 3375130,
+          "amount": 3.37513
+        }
+      ],
+      "sales": [
+        {
+          "sellerAccountId": "PORT:A",
+          "quantity": 0.5,
+          "paymentUnits": 3375130,
+          "payment": 3.37513,
+          "allocation": false,
+          "recipients": [
+            {
+              "accountId": "PORT:A",
+              "amountUnits": 3375130,
+              "amount": 3.37513,
+              "role": "owner_revenue"
+            }
+          ]
+        }
+      ],
+      "action": "pickup",
+      "orderId": "buffer:INDUSTRY:distillery:WOOD",
+      "offerId": "offer-1",
+      "transferId": null
+    },
+    {
+      "acceptanceId": null,
+      "id": "fill-8",
+      "paymentId": "payment-2432",
+      "tick": 2,
+      "buyerAccountId": "INDUSTRY:distillery",
+      "commodityId": "SUGAR",
+      "quantity": 2,
+      "sellerAccountId": "PORT:A",
+      "sourceLocation": "MARKET:A",
+      "sourceReservationId": "OFFER:offer-2",
+      "goods": [
+        {
+          "id": "goods-5",
+          "ownerAccountId": "PORT:A",
+          "commodityId": "SUGAR",
+          "quantity": 2,
+          "location": "MARKET:A",
+          "reservationId": "OFFER:offer-2",
+          "originPortId": "A",
+          "manufacturingIndustryAccountId": null,
+          "acquisitionCost": 0
+        }
+      ],
+      "unitPrice": 8.919259,
+      "unitPriceUnits": 8919259,
+      "totalPayment": 17.838518,
+      "totalPaymentUnits": 17838518,
+      "recipients": [
+        {
+          "accountId": "PORT:A",
+          "amountUnits": 17838518,
+          "amount": 17.838518
+        }
+      ],
+      "sales": [
+        {
+          "sellerAccountId": "PORT:A",
+          "quantity": 2,
+          "paymentUnits": 17838518,
+          "payment": 17.838518,
+          "allocation": false,
+          "recipients": [
+            {
+              "accountId": "PORT:A",
+              "amountUnits": 17838518,
+              "amount": 17.838518,
+              "role": "owner_revenue"
+            }
+          ]
+        }
+      ],
+      "action": "pickup",
+      "orderId": "buffer:INDUSTRY:distillery:SUGAR",
+      "offerId": "offer-2",
+      "transferId": null
+    }
+  ],
+  "goods": [
+    {
+      "commodity": "WOOD",
+      "opening": 30,
+      "created": 4,
+      "removed": 3.25,
+      "closing": 30.75,
+      "unexplained": 0,
+      "flows": [
+        {
+          "operation": "created:primary production",
+          "quantity": 4
+        },
+        {
+          "operation": "removed:manufacturing input",
+          "quantity": 1
+        },
+        {
+          "operation": "removed:dumping",
+          "quantity": 0.25
+        },
+        {
+          "operation": "removed:town consumption",
+          "quantity": 1
+        },
+        {
+          "operation": "removed:construction",
+          "quantity": 1
+        }
+      ]
+    },
+    {
+      "commodity": "SUGAR",
+      "opening": 20,
+      "created": 6,
+      "removed": 4,
+      "closing": 22,
+      "unexplained": 0,
+      "flows": [
+        {
+          "operation": "created:primary production",
+          "quantity": 6
+        },
+        {
+          "operation": "removed:manufacturing input",
+          "quantity": 4
+        }
+      ]
+    },
+    {
+      "commodity": "RUM",
+      "opening": 1,
+      "created": 3,
+      "removed": 1,
+      "closing": 3,
+      "unexplained": 0,
+      "flows": [
+        {
+          "operation": "created:primary production",
+          "quantity": 0
+        },
+        {
+          "operation": "removed:town consumption",
+          "quantity": 1
+        },
+        {
+          "operation": "created:manufacturing output",
+          "quantity": 3
+        }
+      ]
+    }
+  ],
+  "runningCosts": {
+    "elapsedSeaSeconds": 40.299999999998995,
+    "pendingSeaSeconds": 0,
+    "fundedSailorsUnits": 806000,
+    "fundedMaintenanceUnits": 1343333,
+    "unfundedSailorsUnits": 0,
+    "unfundedMaintenanceUnits": 0,
+    "settledUnits": 2149333,
+    "fundedSailors": 0.806,
+    "fundedMaintenance": 1.343333,
+    "unfundedSailors": 0,
+    "unfundedMaintenance": 0,
+    "settledGold": 2.149333,
+    "fractionalSailorsMicrogold": 9.163159120362252e-11,
+    "fractionalMaintenanceMicrogold": 0.33333333333325754,
+    "dockings": 2,
+    "lastSettlement": {
+      "portId": "B",
+      "sailorsUnits": 690334,
+      "maintenanceUnits": 1150556,
+      "totalUnits": 1840890,
+      "sailors": 0.690334,
+      "maintenance": 1.150556,
+      "total": 1.84089,
+      "seaSeconds": 34.51666666666599,
+      "docking": 2
+    }
+  },
+  "accountAndPurseTotals": {
+    "FACTION": 500000000,
+    "PORT": 2837731745,
+    "PORT_TAX": 0,
+    "INDUSTRY": 1162268255,
+    "MERCHANT": 0,
+    "SAILORS_PURSE": 0,
+    "MAINTENANCE_PURSE": 0
+  },
+  "pendingTransfers": [],
+  "completedTransfers": [
+    {
+      "id": "transfer:pickup:pickup%3Avessel-1%3A1%3A1%3AWOOD:offer-1",
+      "shipId": "vessel-1",
+      "portId": "A",
+      "commodityId": "WOOD",
+      "buyerAccountId": "MERCHANT:vessel-1",
+      "sellerAccountId": "PORT:A",
+      "kind": "PICKUP",
+      "ownerAccountId": "MERCHANT:vessel-1",
+      "sourceLocation": "MARKET:A",
+      "destination": "SHIP:vessel-1",
+      "remainingLocation": null,
+      "reservationId": null,
+      "quantity": 6,
+      "remainingQuantity": 0,
+      "handledQuantity": 6,
+      "paymentUnits": 35461182,
+      "priceUnits": 5910197,
+      "orderId": "order-4",
+      "offerId": "offer-1",
+      "status": "COMPLETED"
+    },
+    {
+      "id": "transfer:pickup:pickup%3Avessel-1%3A1%3A1%3ARUM:offer-3",
+      "shipId": "vessel-1",
+      "portId": "A",
+      "commodityId": "RUM",
+      "buyerAccountId": "MERCHANT:vessel-1",
+      "sellerAccountId": "INDUSTRY:distillery",
+      "kind": "PICKUP",
+      "ownerAccountId": "MERCHANT:vessel-1",
+      "sourceLocation": "MARKET:A",
+      "destination": "SHIP:vessel-1",
+      "remainingLocation": null,
+      "reservationId": null,
+      "quantity": 1,
+      "remainingQuantity": 0,
+      "handledQuantity": 1,
+      "paymentUnits": 200000000,
+      "priceUnits": 200000000,
+      "orderId": "order-5",
+      "offerId": "offer-3",
+      "status": "COMPLETED"
+    },
+    {
+      "id": "transfer:delivery:dock%3Avessel-1%3A2%3AWOOD:buffer%3APORT%3AB%3AWOOD",
+      "shipId": "vessel-1",
+      "portId": "B",
+      "commodityId": "WOOD",
+      "buyerAccountId": "PORT:B",
+      "sellerAccountId": "MERCHANT:vessel-1",
+      "kind": "DELIVERY",
+      "ownerAccountId": "PORT:B",
+      "sourceLocation": "SHIP:vessel-1",
+      "destination": "TOWN:B",
+      "remainingLocation": null,
+      "reservationId": null,
+      "quantity": 5,
+      "remainingQuantity": 0,
+      "handledQuantity": 5,
+      "paymentUnits": 500000000,
+      "priceUnits": 100000000,
+      "orderId": "buffer:PORT:B:WOOD",
+      "offerId": null,
+      "status": "COMPLETED"
+    },
+    {
+      "id": "transfer:delivery:dock%3Avessel-1%3A2%3ARUM:buffer%3APORT%3AB%3ARUM",
+      "shipId": "vessel-1",
+      "portId": "B",
+      "commodityId": "RUM",
+      "buyerAccountId": "PORT:B",
+      "sellerAccountId": "MERCHANT:vessel-1",
+      "kind": "DELIVERY",
+      "ownerAccountId": "PORT:B",
+      "sourceLocation": "SHIP:vessel-1",
+      "destination": "TOWN:B",
+      "remainingLocation": null,
+      "reservationId": null,
+      "quantity": 1,
+      "remainingQuantity": 0,
+      "handledQuantity": 1,
+      "paymentUnits": 200000000,
+      "priceUnits": 200000000,
+      "orderId": "buffer:PORT:B:RUM",
+      "offerId": null,
+      "status": "COMPLETED"
+    }
+  ],
+  "losses": [
+    {
+      "id": "loss-1",
+      "shipId": "vessel-1",
+      "ownerAccountId": "MERCHANT:vessel-1",
+      "commodityId": "WOOD",
+      "location": "SHIP:vessel-1",
+      "quantity": 0.25,
+      "acquisitionCost": 1.47754925,
+      "tick": 1,
+      "reason": "dumping",
+      "goods": [
+        {
+          "ownerAccountId": "MERCHANT:vessel-1",
+          "location": "SHIP:vessel-1",
+          "commodityId": "WOOD",
+          "quantity": 0.25,
+          "originPortId": "A",
+          "reservationId": null,
+          "acquisitionCost": 1.47754925,
+          "id": "goods-16",
+          "contraband": false,
+          "manufacturingIndustryAccountId": null
+        }
+      ]
+    }
+  ],
+  "goodsRecords": [
+    {
+      "ownerAccountId": "PORT:A",
+      "manufacturingIndustryAccountId": null,
+      "location": "TOWN:A",
+      "commodityId": "RUM",
+      "quantity": 1,
+      "originPortId": "A",
+      "reservationId": null,
+      "acquisitionCost": 87.5,
+      "id": "goods-3",
+      "contraband": false
+    },
+    {
+      "ownerAccountId": "PORT:A",
+      "location": "MARKET:A",
+      "commodityId": "SUGAR",
+      "quantity": 20,
+      "originPortId": "A",
+      "reservationId": "OFFER:offer-2",
+      "acquisitionCost": 0,
+      "id": "goods-5",
+      "contraband": false,
+      "manufacturingIndustryAccountId": null
+    },
+    {
+      "ownerAccountId": "PORT:B",
+      "location": "TOWN:B",
+      "commodityId": "WOOD",
+      "quantity": 4,
+      "originPortId": "A",
+      "reservationId": null,
+      "acquisitionCost": 399.9999999999998,
+      "id": "goods-20",
+      "contraband": false,
+      "manufacturingIndustryAccountId": null
+    },
+    {
+      "ownerAccountId": "PORT:B",
+      "manufacturingIndustryAccountId": null,
+      "location": "TOWN:B",
+      "commodityId": "RUM",
+      "quantity": 0.5,
+      "originPortId": "A",
+      "reservationId": null,
+      "acquisitionCost": 100,
+      "id": "goods-21",
+      "contraband": false
+    },
+    {
+      "ownerAccountId": "INDUSTRY:distillery",
+      "manufacturingIndustryAccountId": "INDUSTRY:distillery",
+      "location": "MARKET:A",
+      "commodityId": "RUM",
+      "quantity": 1.5,
+      "originPortId": "A",
+      "reservationId": "OFFER:offer-6",
+      "acquisitionCost": 0,
+      "id": "goods-26",
+      "contraband": false
+    },
+    {
+      "ownerAccountId": "INDUSTRY:distillery",
+      "location": "INDUSTRY:distillery",
+      "commodityId": "WOOD",
+      "quantity": 0.5,
+      "originPortId": "A",
+      "reservationId": null,
+      "acquisitionCost": 3.37513,
+      "id": "goods-27",
+      "contraband": false,
+      "manufacturingIndustryAccountId": null
+    },
+    {
+      "ownerAccountId": "INDUSTRY:distillery",
+      "location": "INDUSTRY:distillery",
+      "commodityId": "SUGAR",
+      "quantity": 2,
+      "originPortId": "A",
+      "reservationId": null,
+      "acquisitionCost": 17.838518,
+      "id": "goods-28",
+      "contraband": false,
+      "manufacturingIndustryAccountId": null
+    },
+    {
+      "ownerAccountId": "PORT:A",
+      "location": "MARKET:A",
+      "commodityId": "WOOD",
+      "quantity": 26.25,
+      "originPortId": "A",
+      "reservationId": "OFFER:offer-7",
+      "acquisitionCost": 4.193045168918919,
+      "id": "goods-30",
+      "contraband": false,
+      "manufacturingIndustryAccountId": null
+    }
+  ],
+  "remainingCompatibilityPaths": [
+    "Flat trade/quote APIs return migration errors",
+    "depositCargo permits same-owner local allocation only",
+    "Headless operator load/sell explicitly accept and handle funded transfers",
+    "Recorded external capture and initialization are administrative goods sources"
+  ],
+  "remainingActiveMoneySources": [],
+  "remainingActiveMoneySinks": []
+}

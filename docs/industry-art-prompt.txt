@@ -1,0 +1,9 @@
+Use case: stylized-concept.
+Asset type: Pirates & Merchants boardgame terrain atlas, one opaque image at 1536x512.
+Exactly 3 columns by 1 row of equally sized SQUARE FULL-BLEED tiles, edge-to-edge with hard boundaries at one third and two thirds of the image. NO margins, gaps, borders, text, grid lines, hex outlines, transparency, water or coastline.
+Reading order LEFT: cotton plantation; CENTER: iron mine; RIGHT: sugar plantation.
+Each square is an entire cultivated or excavated LAND PARCEL viewed overhead with a modest consistent south-facing angle to structures and northwest light. Land and industry fill every square entirely, never a floating building/icon.
+LEFT square: orderly rows of green cotton bushes bearing clearly readable white cotton tufts fill most of the square; small modest Mediterranean plaster plantation shed with terracotta roof near upper center. Muted green and golden earthy ground continues to all four edges.
+CENTER square: gray craggy rocky terrain fills the ENTIRE square edge to edge, a dark mine entrance with timber supports, small ore cart, reddish iron ore piles, and tiny slate-roofed work shed. Strong broad rocky shapes.
+RIGHT square: strong parallel rows of tall pale green sugarcane fill most of the square; modest plaster mill/shed with terracotta roof and bundled cane near upper center. Cultivated ground continues to all edges.
+Style: refined watercolor and delicate ink boardgame illustration; calm broad brushwork, LOW to MODERATE detail, readable at 55px, NO fine grit or noisy speckles. Mediterranean small plaster buildings, terracotta or slate roofs, muted greens, golden sand, gray rock. Stronger landscape footprint than buildings. Identical scale, view, north-up orientation, and light across the three tiles; no rotation. No people, flags, large chimneys, smoke, letters, labels, numbers, or decorative framing.

@@ -1,0 +1,3 @@
+export const GLOBAL_DAILY_WAGE_PER_CREW:number;
+export const SIMULATION_SETTINGS:Readonly<{globalDailyWagePerCrew:number;secondsPerDay:number;economicTickSeconds:number;physicsTickSeconds:number;baseUrgencyTicks:number;referenceDistance:number;mapScaleFactor:number;standardShipSpeed:number;safetyMarginFactor:number;baseLedgerAgeTicks:number;baseQueueReviewTicks:number;baseJobReviewTicks:number}>;
+export function dailyShipOverhead(baseHullMaintenance:number,currentCrewCount:number,wage?:number):number;

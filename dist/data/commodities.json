@@ -1,0 +1,54 @@
+[
+  {
+    "id": "COTTON",
+    "name": "Cotton",
+    "basePrice": 8
+  },
+  {
+    "id": "IRON_ORE",
+    "name": "Iron ore",
+    "basePrice": 12
+  },
+  {
+    "id": "SUGAR",
+    "name": "Sugar",
+    "basePrice": 6
+  },
+  {
+    "id": "WOOD",
+    "name": "Wood",
+    "basePrice": 7
+  },
+  {
+    "id": "TEXTILES",
+    "name": "Textiles",
+    "basePrice": 20
+  },
+  {
+    "id": "RUM",
+    "name": "Rum",
+    "basePrice": 18
+  },
+  {
+    "id": "IRON_BARS",
+    "name": "Iron bars",
+    "basePrice": 24
+  },
+  {
+    "id": "CANNONS",
+    "name": "Cannons",
+    "basePrice": 80
+  },
+  {
+    "id": "SPICES",
+    "name": "Spices",
+    "basePrice": 40
+  },
+  {
+    "id": "CANNONBALLS",
+    "name": "Cannonballs",
+    "basePrice": 16,
+    "market_enabled": true,
+    "settlement_supply_enabled": false
+  }
+]

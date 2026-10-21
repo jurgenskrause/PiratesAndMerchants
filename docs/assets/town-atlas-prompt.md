@@ -1,0 +1,9 @@
+# Town artwork generation
+
+Mode: built-in image generation with transparent background.
+
+Integrated asset: `dist/gfx/buildings/town-atlas-v1.png`.
+
+Prompt:
+
+Create one production-ready transparent PNG sprite ATLAS for an existing top-down hex-map age-of-sail colony game. Exactly a perfectly regular 4 columns by 4 rows grid, 16 equally sized square cells, no gutters or grid lines. Each isolated sprite is centered within its cell with a full 18% transparent safety margin on every edge. Same size and camera in every cell: slightly elevated top-down/isometric view, front and roof visible, matching warm hand-painted watercolor/ink miniature 17th-century Caribbean port buildings: ivory stucco, rough pale stone, weathered timber, ochre and terracotta roofs, restrained dark slate details, tiny soft shadows. Asset fits within a pointy-top hex at runtime; no square background, no terrain tile, no label. Precise row-major contents: row1: four DIFFERENT modest residential cottages (gable, hipped roof, courtyard cottage, timber cottage); row2: two DIFFERENT stone fountain plazas, then two DIFFERENT cargo warehouses with crates and barrels; row3: two DIFFERENT timber stable yards with stalls, then two DIFFERENT derelict roofless buildings with rubble; row4: two DIFFERENT dense residential terrace blocks for 500 occupants per hex (cluster of 4-6 buildings), then two DIFFERENT civic town halls. All sixteen images fully separate and must not overlap another cell. Keep designs readable at small scale, rich crafted detail at zoom. ABSOLUTELY NO FLAGS, NO BANNERS, NO PENNANTS, NO HERALDRY, NO NATIONAL SYMBOLS, NO FLAGPOLES, NO TEXT, no people, no watermark. Buildings must be faction-neutral so the game cannot ever show another faction's flag. Render true transparent alpha outside each building and its compact decorative ground footprint. Square overall atlas.

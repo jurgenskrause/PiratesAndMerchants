@@ -1,0 +1,414 @@
+[
+  {
+    "id": "naming_british",
+    "bank_id": "naming_british",
+    "captains": {
+      "first_names": [
+        "William",
+        "Thomas",
+        "Edward",
+        "Henry"
+      ],
+      "last_names": [
+        "Hawkins",
+        "Drake",
+        "Ashford",
+        "Bennett"
+      ]
+    },
+    "governors": {
+      "first_names": [
+        "William",
+        "Thomas",
+        "Edward",
+        "Henry"
+      ],
+      "last_names": [
+        "Hawkins",
+        "Drake",
+        "Ashford",
+        "Bennett"
+      ]
+    },
+    "ports": {
+      "prefixes": [
+        ""
+      ],
+      "roots": [
+        "Port Ashford",
+        "Kingshaven",
+        "Port Whitby",
+        "Queenswater",
+        "Fort Wexley",
+        "Bramble Bay",
+        "Port Fairhaven",
+        "Crown Anchorage",
+        "New Ellington",
+        "Port Alderwick",
+        "Westhaven",
+        "Stourmouth",
+        "Port Harrow",
+        "Kingsbridge",
+        "Oakwater",
+        "Port Redcliffe",
+        "Rosehaven",
+        "Northwick",
+        "Windsor Reach",
+        "Port Bellford",
+        "Greyhaven",
+        "Port Dunleigh",
+        "Greenwich Bay",
+        "Crownwater"
+      ]
+    },
+    "islands": [
+      "Port Ashford Island",
+      "Kingshaven Island",
+      "Port Whitby Island",
+      "Queenswater Island",
+      "Fort Wexley Island",
+      "Bramble Bay Island",
+      "Port Fairhaven Island",
+      "Crown Anchorage Island",
+      "New Ellington Island",
+      "Port Alderwick Island",
+      "Westhaven Island",
+      "Stourmouth Island",
+      "Port Harrow Island",
+      "Kingsbridge Island",
+      "Oakwater Island",
+      "Port Redcliffe Island",
+      "Rosehaven Island",
+      "Northwick Island",
+      "Windsor Reach Island",
+      "Port Bellford Island",
+      "Greyhaven Island",
+      "Port Dunleigh Island",
+      "Greenwich Bay Island",
+      "Crownwater Island"
+    ],
+    "ships": {
+      "military": [
+        "Resolute",
+        "Sea Venture",
+        "Crown",
+        "Swift"
+      ],
+      "merchant": [
+        "Sea Venture",
+        "Crown",
+        "Swift",
+        "Resolute"
+      ]
+    }
+  },
+  {
+    "id": "naming_spanish",
+    "bank_id": "naming_spanish",
+    "captains": {
+      "first_names": [
+        "Diego",
+        "Alonso",
+        "Isabel",
+        "Juan"
+      ],
+      "last_names": [
+        "de Vega",
+        "Cortes",
+        "Alvarez",
+        "Morales"
+      ]
+    },
+    "governors": {
+      "first_names": [
+        "Diego",
+        "Alonso",
+        "Isabel",
+        "Juan"
+      ],
+      "last_names": [
+        "de Vega",
+        "Cortes",
+        "Alvarez",
+        "Morales"
+      ]
+    },
+    "ports": {
+      "prefixes": [
+        ""
+      ],
+      "roots": [
+        "Puerto Dorado",
+        "Bahía Serena",
+        "Puerto Esperanza",
+        "San Aurelio",
+        "Puerto del Sol",
+        "Santa Brisa",
+        "Bahía Esmeralda",
+        "Puerto Lucero",
+        "San Cristal",
+        "Santa Paloma",
+        "Puerto Cobre",
+        "Bahía Clara",
+        "San Esteban",
+        "Puerto del Alba",
+        "Santa Mariela",
+        "Costa Hermosa",
+        "Puerto Carmesí",
+        "Bahía del León",
+        "San Damián",
+        "Puerto Azucena",
+        "Santa Vela",
+        "Puerto Fortuna",
+        "Bahía Coral",
+        "San Teodoro"
+      ]
+    },
+    "islands": [
+      "Puerto Dorado Island",
+      "Bahía Serena Island",
+      "Puerto Esperanza Island",
+      "San Aurelio Island",
+      "Puerto del Sol Island",
+      "Santa Brisa Island",
+      "Bahía Esmeralda Island",
+      "Puerto Lucero Island",
+      "San Cristal Island",
+      "Santa Paloma Island",
+      "Puerto Cobre Island",
+      "Bahía Clara Island",
+      "San Esteban Island",
+      "Puerto del Alba Island",
+      "Santa Mariela Island",
+      "Costa Hermosa Island",
+      "Puerto Carmesí Island",
+      "Bahía del León Island",
+      "San Damián Island",
+      "Puerto Azucena Island",
+      "Santa Vela Island",
+      "Puerto Fortuna Island",
+      "Bahía Coral Island",
+      "San Teodoro Island"
+    ],
+    "ships": {
+      "military": [
+        "Esperanza",
+        "Estrella",
+        "San Miguel",
+        "Dorada"
+      ],
+      "merchant": [
+        "Estrella",
+        "San Miguel",
+        "Dorada",
+        "Esperanza"
+      ]
+    }
+  },
+  {
+    "id": "naming_french",
+    "bank_id": "naming_french",
+    "captains": {
+      "first_names": [
+        "Jean",
+        "Pierre",
+        "Louis",
+        "Anne"
+      ],
+      "last_names": [
+        "Duval",
+        "Moreau",
+        "Laurent",
+        "Boucher"
+      ]
+    },
+    "governors": {
+      "first_names": [
+        "Jean",
+        "Pierre",
+        "Louis",
+        "Anne"
+      ],
+      "last_names": [
+        "Duval",
+        "Moreau",
+        "Laurent",
+        "Boucher"
+      ]
+    },
+    "ports": {
+      "prefixes": [
+        ""
+      ],
+      "roots": [
+        "Port Clair",
+        "Belle-Anse",
+        "Port Lumière",
+        "Baie des Lys",
+        "Port Émeraude",
+        "Sainte-Aurore",
+        "Anse Dorée",
+        "Port des Vents",
+        "Belle-Rive",
+        "Port Lavande",
+        "Baie Céleste",
+        "Saint-Marceau",
+        "Port Rosier",
+        "Anse Tranquille",
+        "Port Montclair",
+        "Sainte-Brise",
+        "Port Argent",
+        "Baie des Perles",
+        "Port Soleil",
+        "Roche-Blanche",
+        "Port Amarante",
+        "Anse Bleue",
+        "Saint-Lauriel",
+        "Port Mirabelle"
+      ]
+    },
+    "islands": [
+      "Port Clair Island",
+      "Belle-Anse Island",
+      "Port Lumière Island",
+      "Baie des Lys Island",
+      "Port Émeraude Island",
+      "Sainte-Aurore Island",
+      "Anse Dorée Island",
+      "Port des Vents Island",
+      "Belle-Rive Island",
+      "Port Lavande Island",
+      "Baie Céleste Island",
+      "Saint-Marceau Island",
+      "Port Rosier Island",
+      "Anse Tranquille Island",
+      "Port Montclair Island",
+      "Sainte-Brise Island",
+      "Port Argent Island",
+      "Baie des Perles Island",
+      "Port Soleil Island",
+      "Roche-Blanche Island",
+      "Port Amarante Island",
+      "Anse Bleue Island",
+      "Saint-Lauriel Island",
+      "Port Mirabelle Island"
+    ],
+    "ships": {
+      "military": [
+        "Étoile",
+        "Belle Aurore",
+        "Lys",
+        "Espérance"
+      ],
+      "merchant": [
+        "Belle Aurore",
+        "Lys",
+        "Espérance",
+        "Étoile"
+      ]
+    }
+  },
+  {
+    "id": "naming_pirate",
+    "bank_id": "naming_pirate",
+    "captains": {
+      "first_names": [
+        "Jack",
+        "Morgan",
+        "Mary",
+        "Edward"
+      ],
+      "last_names": [
+        "Read",
+        "Bonny",
+        "Blackwood",
+        "Rackham"
+      ]
+    },
+    "governors": {
+      "first_names": [
+        "Jack",
+        "Morgan",
+        "Mary",
+        "Edward"
+      ],
+      "last_names": [
+        "Read",
+        "Bonny",
+        "Blackwood",
+        "Rackham"
+      ]
+    },
+    "ports": {
+      "prefixes": [
+        ""
+      ],
+      "roots": [
+        "Skull Cove",
+        "Blackwake",
+        "Cutlass Anchorage",
+        "Deadman's Reach",
+        "Rogue's Rest",
+        "Smuggler's Haven",
+        "Broken Compass",
+        "Gallows Bay",
+        "Black Gull Cove",
+        "Corsair's Refuge",
+        "Rumwater",
+        "Sharktooth Haven",
+        "Widow's Cove",
+        "Bloodmoon Bay",
+        "Last Lantern",
+        "Ironhook",
+        "The Crooked Mast",
+        "Stormhide",
+        "Ragged Sail",
+        "Siren's Hollow",
+        "Daggerpoint",
+        "Cinder Anchorage",
+        "Devil's Lantern",
+        "Freebooter's Rest"
+      ]
+    },
+    "islands": [
+      "Skull Cove Island",
+      "Blackwake Island",
+      "Cutlass Anchorage Island",
+      "Deadman's Reach Island",
+      "Rogue's Rest Island",
+      "Smuggler's Haven Island",
+      "Broken Compass Island",
+      "Gallows Bay Island",
+      "Black Gull Cove Island",
+      "Corsair's Refuge Island",
+      "Rumwater Island",
+      "Sharktooth Haven Island",
+      "Widow's Cove Island",
+      "Bloodmoon Bay Island",
+      "Last Lantern Island",
+      "Ironhook Island",
+      "The Crooked Mast Island",
+      "Stormhide Island",
+      "Ragged Sail Island",
+      "Siren's Hollow Island",
+      "Daggerpoint Island",
+      "Cinder Anchorage Island",
+      "Devil's Lantern Island",
+      "Freebooter's Rest Island"
+    ],
+    "ships": {
+      "military": [
+        "Black Gull",
+        "Ragged Sail",
+        "Corsair",
+        "Stormhide"
+      ],
+      "merchant": [
+        "Ragged Sail",
+        "Corsair",
+        "Stormhide",
+        "Black Gull"
+      ]
+    }
+  }
+]

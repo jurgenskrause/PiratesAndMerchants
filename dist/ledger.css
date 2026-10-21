@@ -1,0 +1,1125 @@
+/*
+ * The ledger is a book placed on a captain's table.
+ * The dialog is the leather cover, the backdrop is the desk, and the
+ * content region is the open parchment. Keep this file independent from
+ * the legacy dashboard skin so the book can be tuned without side effects.
+ */
+:root {
+  --ledger-ink: #25170e;
+  --ledger-muted: #4f3822;
+  --ledger-paper: #eeddb9;
+  --ledger-paper-deep: #dfc89c;
+  --ledger-leather: #4f291b;
+  --ledger-leather-dark: #2b140d;
+  --ledger-stitch: #bd8b55;
+}
+
+dialog.port-dashboard,
+dialog.fleet-dialog {
+  display: none;
+  box-sizing: border-box;
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  flex-direction: column;
+  width: min(1380px, calc(100vw - 44px));
+  height: min(900px, calc(100dvh - 44px));
+  max-width: calc(100vw - 44px);
+  max-height: calc(100dvh - 44px);
+  margin: auto;
+  padding: 16px;
+  overflow: hidden;
+  color: var(--ledger-ink);
+  color-scheme: light;
+  background-color: var(--ledger-leather);
+  background-image: url('./ledger-oxblood-leather.png');
+  background-position: center;
+  background-size: cover;
+  border: 6px solid var(--ledger-leather-dark);
+  border-radius: 7px;
+  box-shadow: inset 0 0 0 1px #d1a66c, inset 0 0 0 5px #1e0c08, 0 24px 75px #140904;
+  font: 15px/1.58 Georgia, 'Times New Roman', serif;
+  font-weight: 500;
+  -webkit-font-smoothing: antialiased;
+  --ledger-tab-count: 6;
+  --ledger-tab-gap: 10px;
+  --ledger-mask-left: 16px;
+  --ledger-mask-right: 16px;
+  --ledger-page-top: 73px;
+}
+
+dialog.port-dashboard[open],
+dialog.fleet-dialog[open] {
+  display: flex;
+}
+
+dialog.port-dashboard::after {
+  content: '';
+  position: absolute;
+  z-index: 0;
+  top: var(--ledger-page-top);
+  right: var(--ledger-mask-right);
+  bottom: 16px;
+  left: var(--ledger-mask-left);
+  pointer-events: none;
+  background-color: var(--ledger-paper);
+  background-image: url('./ledger-chart-paper.png');
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  clip-path: polygon(0 0, 99.7% 0, 100% 12%, 99.6% 25%, 100% 39%, 99.5% 53%, 100% 67%, 99.6% 82%, 100% 100%, 0 100%, .4% 84%, 0 70%, .4% 56%, 0 42%, .4% 27%, 0 13%);
+  filter: drop-shadow(0 9px 13px #14090478);
+}
+
+dialog.port-dashboard::backdrop,
+dialog.fleet-dialog::backdrop {
+  background-color: #3c2416;
+  background-image: url('./ledger-wood-desk.png');
+  background-position: center;
+  background-size: cover;
+}
+
+/* Port identity is printed on the first facing page. */
+.port-dashboard-top {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: 0 0 auto;
+  min-height: 0;
+  margin: 0;
+  padding: 20px 4px 16px;
+  color: var(--ledger-ink);
+  background: transparent;
+  border: 0;
+  border-bottom: 1px dashed #92765088;
+  box-shadow: none;
+}
+
+/* Ship ledgers retain their leather-bound title strip. */
+.fleet-dialog > h2 {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex: 0 0 82px;
+  min-height: 82px;
+  margin: 0;
+  padding: 14px 20px;
+  color: #f3e0b3;
+  background-color: var(--ledger-leather);
+  background-image: url('./ledger-oxblood-leather.png');
+  background-position: center;
+  background-size: cover;
+  border: 1px solid #d2a56b;
+  border-bottom: 3px solid var(--ledger-leather-dark);
+  box-shadow: inset 0 1px #f9dda0, inset 0 -8px 14px #1f0d09;
+}
+
+dialog.port-dashboard > * {
+  position: relative;
+  z-index: 1;
+}
+
+.port-identity {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
+
+.port-identity .faction-icon {
+  width: 47px;
+  height: 34px;
+  object-fit: contain;
+  filter: drop-shadow(0 2px 2px #170b08);
+}
+
+.port-kicker {
+  display: block;
+  color: #e6c98d;
+  font: 700 10px/1.1 Georgia, serif;
+  letter-spacing: .2em;
+}
+
+.port-dashboard h2,
+.fleet-dialog > h2 {
+  margin: 4px 0 1px;
+  color: #f5e6bd;
+  font: 700 clamp(22px, 3vw, 32px)/1.05 Georgia, serif;
+  letter-spacing: .01em;
+  text-shadow: 0 2px #231209;
+}
+
+.port-dashboard-top h2 {
+  color: #4e321d;
+  text-shadow: none;
+}
+
+.port-dashboard-top .port-kicker {
+  color: #765331;
+}
+
+.port-dashboard-top .port-identity p {
+  color: var(--ledger-muted);
+}
+
+.port-identity p {
+  margin: 0;
+  color: #dfc99f;
+  font: italic 13px Georgia, serif;
+}
+
+.port-close,
+.fleet-dialog > button {
+  flex: 0 0 auto;
+  padding: 8px 13px;
+  color: #f5e7c5;
+  background-color: #4a2819;
+  border: 1px solid #c8a46a;
+  border-radius: 3px;
+  font: 13px Georgia, serif;
+  cursor: pointer;
+}
+
+.port-dashboard-top .port-close {
+  color: var(--ledger-ink);
+  background: transparent;
+  border-color: #a8895c;
+  box-shadow: none;
+}
+
+/* The close control belongs to the leather cover, not to a paper folio. */
+dialog.port-dashboard > .port-close {
+  position: absolute;
+  /* Keep the seal fixed to the parchment corner even while a page scrolls. */
+  top: calc(var(--ledger-page-top) + 10px);
+  right: calc(var(--ledger-mask-right) + 12px);
+  z-index: 4;
+  width: 58px;
+  height: 58px;
+  margin: 0;
+  padding: 0;
+  color: transparent;
+  background: transparent url('./gfx/ledger/wax-close-seal.png') center/contain no-repeat;
+  border: 0;
+  border-radius: 50%;
+  box-shadow: none;
+  font-size: 0;
+  line-height: 0;
+  filter: drop-shadow(0 3px 3px #14090499);
+  cursor: pointer;
+}
+
+dialog.port-dashboard > .port-close:hover {
+  background-color: transparent;
+  border: 0;
+  filter: drop-shadow(0 4px 4px #140904aa) brightness(1.08);
+  transform: rotate(-2deg) scale(1.04);
+}
+
+dialog.port-dashboard > .port-close:focus-visible {
+  outline: 2px solid #ebc978;
+  outline-offset: 3px;
+}
+
+/* This row is layout-only. The cover leather remains visible behind the tabs. */
+.port-dashboard-bar {
+  box-sizing: border-box;
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: end;
+  flex: 0 0 57px;
+  min-height: 57px;
+  margin: 0;
+  padding: 7px 18px 0 45px;
+  background-color: transparent;
+  background-image: none;
+  border: 0;
+  box-shadow: none;
+  overflow: visible;
+}
+
+.port-dashboard-bar > * {
+  position: relative;
+  z-index: auto;
+}
+
+.port-tab-side {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  container-type: inline-size;
+  --ledger-tab-font-size: clamp(7px, 2.4cqw, 12px);
+  align-items: end;
+  align-self: end;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  column-gap: var(--ledger-tab-gap);
+  overflow: hidden;
+}
+
+.port-tab-side-left {
+  padding-right: 11px;
+}
+
+.port-tab-side-right {
+  padding-left: 11px;
+}
+
+.port-live {
+  align-self: center;
+  flex: 0 0 auto;
+  margin-right: auto;
+  color: #e7d2a4;
+  font: 700 10px/1 Georgia, serif;
+  letter-spacing: .16em;
+}
+
+.port-live::before {
+  content: '•';
+  margin-right: 7px;
+  color: #95c9a7;
+}
+
+.port-dashboard-bar button {
+  box-sizing: border-box;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  width: 100%;
+  min-width: 0;
+  min-height: 47px;
+  padding: 14px 7px 10px;
+  color: #392719;
+  font-size: var(--ledger-tab-font-size, clamp(8px, .86vw, 12px));
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: clip;
+  background-color: var(--ledger-paper);
+  background-image: url('./gfx/ledger/ledger-tab-parchment.png');
+  background-position: center;
+  background-size: 220px 220px;
+  background-repeat: repeat;
+  background-blend-mode: normal;
+  border: 1px solid #a4865b;
+  border-bottom: 0;
+  border-radius: 6px 6px 0 0;
+  box-shadow: none;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-weight: 600;
+  line-height: 1.08;
+  transition: none;
+  cursor: pointer;
+}
+
+.port-tab-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 1;
+  flex: 0 0 18px;
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  opacity: .82;
+  transform: translate(-50%, -50%);
+  transition: transform .16s ease-out, opacity .12s ease-out;
+}
+
+.port-dashboard-bar button[aria-pressed='true'] .port-tab-icon,
+.port-dashboard-bar button:hover .port-tab-icon {
+  opacity: 1;
+}
+
+.port-tab-title {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  max-width: none;
+  padding: 0 8px;
+  overflow: hidden;
+  text-overflow: clip;
+  white-space: nowrap;
+  color: #392719;
+  font-size: clamp(13px, 1.15vw, 17px);
+  font-weight: 700;
+  letter-spacing: -.02em;
+  opacity: 0;
+  transform: translateY(110%);
+  transition: transform .16s ease-out, opacity .12s ease-out;
+}
+
+.port-tab-side > button {
+  grid-row: 1;
+  align-self: end;
+}
+
+.port-dashboard-bar button[aria-pressed='true'] {
+  min-height: 50px;
+  margin-bottom: 0;
+  background-color: var(--ledger-paper);
+  background-image: url('./gfx/ledger/ledger-tab-parchment.png');
+  background-position: center;
+  background-size: 220px 220px;
+  background-repeat: repeat;
+  background-blend-mode: normal;
+  border-top: 4px solid #9a5746;
+  font-weight: 700;
+}
+
+.port-dashboard-bar button:hover {
+  background-color: var(--ledger-paper);
+  background-image: url('./gfx/ledger/ledger-tab-parchment.png');
+  background-blend-mode: normal;
+  border-color: #a4865b;
+  filter: none;
+}
+
+.port-dashboard-bar button:hover .port-tab-icon,
+.port-dashboard-bar button:focus-visible .port-tab-icon {
+  opacity: 0;
+  transform: translate(-50%, -175%);
+}
+
+.port-dashboard-bar button:hover .port-tab-title,
+.port-dashboard-bar button:focus-visible .port-tab-title {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.port-dashboard-bar button:focus-visible {
+  outline: 2px solid #ebc978;
+  outline-offset: -4px;
+}
+
+.port-dashboard-content {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr);
+  column-gap: 22px;
+  flex: 1 1 auto;
+  min-height: 0;
+  margin: 0;
+  padding: 0 40px 38px 58px;
+  overflow: hidden;
+  color: var(--ledger-ink);
+  background-color: transparent;
+  background-image: none;
+  border-left: 0;
+  border-right: 1px solid #96764e;
+  box-shadow: none;
+  scrollbar-color: #99744c #d9c59b;
+  scrollbar-width: thin;
+  perspective: 1600px;
+}
+
+.port-page {
+  position: relative;
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  padding: 0 22px 32px;
+  background-color: transparent;
+  background-image: none;
+  overflow: auto;
+  scrollbar-color: #99744c #d9c59b;
+  scrollbar-width: thin;
+}
+
+.port-page-left {
+  padding-left: 0;
+  border-right: 1px solid #98754d88;
+}
+
+.port-page-right {
+  padding-right: 0;
+}
+
+.port-dashboard-content > .port-page {
+  overflow: auto;
+}
+
+/* A folio change turns the old facing page above the newly-rendered folio.
+ * The book shell and shared parchment remain stationary, so only the paper
+ * content moves and the texture never slides with the tabs. */
+.ledger-turning-page {
+  position: absolute;
+  z-index: 3;
+  top: 0;
+  bottom: 38px;
+  height: auto;
+  min-height: 0;
+  box-sizing: border-box;
+  overflow: hidden !important;
+  pointer-events: none;
+  background-color: var(--ledger-paper);
+  background-image: url('./ledger-chart-paper.png');
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  border: 0;
+  box-shadow: 0 7px 16px #1c0d0878;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  will-change: transform;
+}
+
+.ledger-turning-page-forward {
+  left: calc(50% + 11px);
+  right: 40px;
+  transform-origin: left center;
+  animation: ledger-page-turn-forward .95s cubic-bezier(.22, .65, .24, 1) forwards;
+}
+
+.ledger-turning-page-reverse {
+  left: 58px;
+  right: calc(50% + 11px);
+  transform-origin: right center;
+  animation: ledger-page-turn-reverse .95s cubic-bezier(.22, .65, .24, 1) forwards;
+}
+
+@keyframes ledger-page-turn-forward {
+  from { transform: rotateY(0deg); }
+  to { transform: rotateY(-180deg); }
+}
+
+@keyframes ledger-page-turn-reverse {
+  from { transform: rotateY(0deg); }
+  to { transform: rotateY(180deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ledger-turning-page {
+    animation-duration: 1ms;
+  }
+}
+
+.ledger-placeholder {
+  min-height: 100%;
+  padding: 22px 4px 42px;
+}
+
+.ledger-placeholder h3 {
+  margin-top: 12px;
+  font-size: clamp(25px, 3vw, 38px);
+}
+
+.ledger-placeholder p {
+  max-width: 42em;
+  color: var(--ledger-ink);
+  font: 600 16px/1.75 'Segoe Print', 'Bradley Hand', Georgia, serif;
+}
+
+.ledger-list {
+  max-width: 42em;
+  margin: 18px 0 0;
+  padding: 0 0 0 22px;
+  color: var(--ledger-ink);
+  font: 600 16px/1.75 'Segoe Print', 'Bradley Hand', Georgia, serif;
+}
+
+.ledger-list li {
+  margin: 0 0 10px;
+  padding-left: 5px;
+}
+
+.ledger-table-block {
+  margin-top: 18px;
+  overflow-x: auto;
+}
+
+.ledger-data-table {
+  min-width: 100%;
+  background: transparent !important;
+  background-image: none !important;
+}
+
+.ledger-market-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin: -4px -6px;
+  padding: 4px 6px;
+  color: var(--ledger-ink);
+  background: transparent;
+  border: 0;
+  border-bottom: 1px dotted #8f6049;
+  font: inherit;
+  font-weight: 700;
+  text-align: left;
+  cursor: pointer;
+}
+
+.ledger-market-link:hover,
+.ledger-market-link:focus-visible {
+  color: #743d2f;
+  outline: 2px solid #a06b49;
+  outline-offset: 2px;
+}
+
+.ledger-knowledge-goods {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.fleet-dialog > div::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 16px;
+  background-color: var(--ledger-leather);
+  background-image: url('./ledger-oxblood-leather.png');
+  background-position: center;
+  background-size: 170px 100%;
+  border-right: 1px solid #d0a06b;
+  pointer-events: none;
+}
+
+/* Printed content uses ink, paper and restrained rules rather than panels. */
+.port-dashboard h3,
+.fleet-dialog h3 {
+  margin: 18px 0 10px;
+  padding-bottom: 7px;
+  color: #4e321d;
+  border-bottom: 1px dashed #896c4a99;
+  font: 700 23px/1.15 'Segoe Print', 'Bradley Hand', Georgia, serif;
+}
+
+.port-section {
+  margin-top: 17px;
+}
+
+.port-section-head {
+  margin-bottom: 11px;
+  padding-bottom: 5px;
+  border-bottom: 1px dashed #896c4a99;
+}
+
+.port-section-head p,
+.port-context,
+.port-footnote {
+  color: var(--ledger-muted);
+  font: 500 14px/1.65 'Segoe Print', 'Bradley Hand', Georgia, serif;
+}
+
+.port-context {
+  padding: 12px 0;
+  border-top: 1px dashed #92765088;
+  border-bottom: 1px dashed #92765088;
+}
+
+.port-metrics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.port-metric,
+.port-industry,
+.port-chart-card,
+.market-ledger-leaf {
+  color: var(--ledger-ink);
+  background-color: transparent;
+  background-image: none;
+  border: 0;
+  border-bottom: 1px dashed #9b805b99;
+  box-shadow: none;
+}
+
+.port-metric {
+  padding: 12px 14px;
+}
+
+.port-metric > span,
+.port-metric small {
+  display: block;
+  color: var(--ledger-muted);
+  font-weight: 600;
+}
+
+.port-metric > strong {
+  display: block;
+  margin: 9px 0 7px;
+  color: #734b27;
+  font: 700 25px/1.1 Georgia, serif;
+  font-variant-numeric: tabular-nums;
+}
+
+.port-dashboard .port-metric > span,
+.port-dashboard .port-metric small {
+  color: #62492e;
+  text-shadow: 0 1px 0 #eeddb9;
+}
+
+.port-dashboard .port-metric > strong,
+.port-dashboard .port-metric:first-child strong {
+  color: var(--ledger-ink);
+  text-shadow: 0 1px 0 #eeddb9;
+}
+
+/* The legacy dashboard gives its first metric a decorative wash. The book
+ * renderer owns the port surface, so every content item must remain clear. */
+.port-dashboard .port-metric:first-child {
+  background: transparent;
+  background-image: none;
+  border-color: #9b805b99;
+}
+
+.port-table-wrap {
+  max-height: 420px;
+  overflow: auto;
+  border-bottom: 1px dashed #9b805b99;
+  scrollbar-color: #99744c #d9c59b;
+  scrollbar-width: thin;
+}
+
+.port-dashboard table,
+.fleet-dialog table {
+  width: 100%;
+  border-collapse: collapse;
+  color: var(--ledger-ink);
+  background-color: transparent;
+  background-image: none;
+  font: 500 14px/1.55 Georgia, 'Times New Roman', serif;
+}
+
+.port-dashboard th,
+.fleet-dialog th {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  padding: 10px 9px;
+  color: #59412a;
+  text-align: left;
+  background-color: transparent;
+  border-bottom: 1px solid #92765088;
+  font: 700 12px/1.3 Georgia, serif;
+}
+
+.port-dashboard td,
+.fleet-dialog td {
+  padding: 9px;
+  color: var(--ledger-ink);
+  border-top: 1px dotted #9b805b70;
+  vertical-align: top;
+}
+
+.port-dashboard tbody tr:hover,
+.fleet-dialog tbody tr:hover {
+  background-color: #b59b7040;
+}
+
+.port-industry {
+  padding: 12px 14px;
+}
+
+.port-industry h4 {
+  color: #4e321d;
+  font: 700 19px Georgia, serif;
+}
+
+.port-industry > strong {
+  color: #734b27;
+}
+
+.port-cargo-chart canvas {
+  background-color: transparent;
+  border: 0;
+}
+
+.ledger-section-header {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  margin-top: 18px;
+}
+
+.ledger-section-header h3 {
+  flex: 1 1 auto;
+  margin: 0;
+}
+
+.ledger-inline-icon {
+  flex: 0 0 20px;
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  opacity: .78;
+}
+
+.ledger-key-values {
+  margin: 14px 0 0;
+  padding: 0;
+  font: 500 15px/1.6 Georgia, 'Times New Roman', serif;
+}
+
+.ledger-key-values > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 6px 0;
+  border-bottom: 1px dotted #9b805b70;
+}
+
+.ledger-key-values dt {
+  color: var(--ledger-muted);
+}
+
+.ledger-key-values dd {
+  margin: 0;
+  color: var(--ledger-ink);
+  font-weight: 700;
+  text-align: right;
+}
+
+.ledger-resource-lines {
+  margin-top: 14px;
+}
+
+.ledger-resource-line {
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 0;
+  border-bottom: 1px dotted #9b805b70;
+}
+
+.ledger-resource-line > .ledger-inline-icon + span {
+  grid-column: 2;
+}
+
+.ledger-resource-line strong,
+.ledger-resource-line small {
+  font-variant-numeric: tabular-nums;
+}
+
+.ledger-resource-line small {
+  color: var(--ledger-muted);
+}
+
+.ledger-timeline {
+  margin: 16px 0 0 8px;
+  padding: 0 0 0 22px;
+  border-left: 1px solid #98754d88;
+  list-style: none;
+}
+
+.ledger-timeline li {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 5px 12px;
+  padding: 0 0 16px 8px;
+}
+
+.ledger-timeline li::before {
+  content: '';
+  position: absolute;
+  left: -27px;
+  top: 4px;
+  width: 7px;
+  height: 7px;
+  background: var(--ledger-paper);
+  border: 1px solid #8f6049;
+  border-radius: 50%;
+}
+
+.ledger-timeline time,
+.ledger-timeline small {
+  color: var(--ledger-muted);
+  font-size: 12px;
+}
+
+.ledger-timeline strong {
+  grid-column: 1 / -1;
+  font-weight: 600;
+}
+
+.ledger-chart {
+  margin: 15px 0 0;
+  padding: 0;
+}
+
+.ledger-chart figcaption {
+  margin-bottom: 5px;
+  color: var(--ledger-muted);
+  font: 700 12px Georgia, serif;
+}
+
+.ledger-chart canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: transparent;
+  border: 0;
+}
+
+.ledger-chart-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 8px;
+}
+
+.ledger-chart-controls button {
+  padding: 5px 10px;
+  color: var(--ledger-ink);
+  background: transparent;
+  border: 1px solid #9b805b99;
+  border-radius: 2px;
+  font: 600 12px Georgia, serif;
+  cursor: pointer;
+}
+
+.ledger-chart-controls button[aria-pressed="true"] {
+  color: #f4e5bf;
+  background: #6f3d2e;
+  border-color: #6f3d2e;
+}
+
+.ledger-source-stamp {
+  margin: 8px 0 0;
+  color: var(--ledger-muted);
+  font: 500 italic 12px/1.4 Georgia, serif;
+}
+
+.ledger-callout {
+  margin: 17px 0 0;
+  padding: 10px 0 10px 14px;
+  color: var(--ledger-ink);
+  border-left: 3px solid #985746;
+  font: 600 14px/1.65 'Segoe Print', 'Bradley Hand', Georgia, serif;
+}
+
+/* `aside` is a legacy map-sidebar selector in style.css. Keep ledger
+ * callouts as transparent printed marginalia instead of inheriting a panel. */
+.port-dashboard .ledger-callout {
+  display: block;
+  width: auto;
+  height: auto;
+  min-height: 0;
+  overflow: visible;
+  flex-shrink: 0;
+  background: transparent;
+  border-top: 0;
+  border-right: 0;
+  border-bottom: 0;
+  border-left: 3px solid #985746;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.ledger-status {
+  color: var(--ledger-muted);
+  font: 700 11px Georgia, serif;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.port-chart-tooltip {
+  color: var(--ledger-ink);
+  background-color: #f0e2c4;
+  border: 1px solid #a8895c;
+  box-shadow: 0 8px 25px #20130d66;
+}
+
+/* Ship book uses the same cover and parchment page. */
+dialog.fleet-dialog {
+  width: min(1100px, calc(100vw - 44px));
+  height: min(850px, calc(100dvh - 44px));
+  padding: 16px;
+}
+
+.fleet-dialog > h2 {
+  flex: 0 0 82px;
+}
+
+.fleet-dialog > button {
+  position: absolute;
+  top: 33px;
+  right: 29px;
+  z-index: 2;
+}
+
+.fleet-dialog > div {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  margin: 0;
+  padding: 16px 38px 38px 56px;
+  overflow: auto;
+  color: var(--ledger-ink);
+  background-color: var(--ledger-paper);
+  background-image: url('./ledger-chart-paper.png');
+  background-position: center;
+  background-size: cover;
+  border-left: 16px solid var(--ledger-leather);
+  border-right: 1px solid #96764e;
+  box-shadow: inset 0 0 28px #5f411f30;
+  scrollbar-color: #99744c #d9c59b;
+  scrollbar-width: thin;
+}
+
+.fleet-dialog > div::before {
+  top: 0;
+}
+
+.fleet-dialog textarea {
+  color: var(--ledger-ink);
+  background-color: #f1e2c2;
+  border: 1px solid #9b7b59;
+}
+
+.market-ledger {
+  display: block;
+  margin: 0;
+  padding: 0;
+  color: var(--ledger-ink);
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+
+.market-ledger > p,
+.market-ledger-leaf p {
+  color: var(--ledger-muted);
+}
+
+.market-ledger-leaf {
+  margin: 15px 0;
+  padding: 16px 17px 13px 22px;
+  border-left: 4px solid #985746;
+}
+
+.market-ledger-leaf h3,
+.market-ledger-leaf h4 {
+  color: #4e321d;
+  border-bottom: 1px dashed #896c4a99;
+}
+
+.market-ledger-leaf table {
+  background-color: transparent !important;
+  background-image: none !important;
+}
+
+@media (max-width: 700px) {
+  dialog.port-dashboard,
+  dialog.fleet-dialog {
+    width: calc(100vw - 12px);
+    height: calc(100dvh - 12px);
+    max-width: calc(100vw - 12px);
+    max-height: calc(100dvh - 12px);
+    padding: 7px;
+    border-width: 4px;
+  }
+
+  .port-dashboard-top,
+  .fleet-dialog > h2 {
+    min-height: 72px;
+    padding: 11px 13px;
+  }
+
+  .port-dashboard-bar {
+    min-height: 49px;
+    padding-left: 22px;
+    overflow-x: auto;
+  }
+
+  .port-tab-side {
+    min-height: 0;
+    gap: 5px;
+  }
+
+  .port-tab-side-left {
+    padding-right: 5px;
+  }
+
+  .port-tab-side-right {
+    padding-left: 5px;
+  }
+
+  dialog.port-dashboard::after {
+    top: var(--ledger-page-top);
+  }
+
+  dialog.port-dashboard {
+    --ledger-mask-left: 7px;
+    --ledger-mask-right: 7px;
+    --ledger-page-top: 56px;
+  }
+
+  .port-dashboard-bar button {
+    min-width: 0;
+    min-height: 41px;
+    gap: 3px;
+    padding: 12px 4px 9px;
+    font-size: var(--ledger-tab-font-size, 9px);
+  }
+
+  .port-tab-icon {
+    width: 15px;
+    height: 15px;
+  }
+
+  dialog.port-dashboard > .port-close {
+    width: 52px;
+    height: 52px;
+  }
+
+  .port-dashboard-bar button[aria-pressed='true'] {
+    min-height: 41px;
+  }
+
+  .port-dashboard-content {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: repeat(2, minmax(0, 1fr));
+    column-gap: 0;
+    padding: 0 12px 25px 31px;
+  }
+
+  .ledger-turning-page-forward,
+  .ledger-turning-page-reverse {
+    left: 31px;
+    right: 12px;
+    bottom: 25px;
+  }
+
+  .ledger-turning-page-forward {
+    transform-origin: left center;
+  }
+
+  .ledger-turning-page-reverse {
+    transform-origin: right center;
+  }
+
+  .port-page-left {
+    border-right: 0;
+    box-shadow: none;
+  }
+
+  .port-metrics {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .fleet-dialog > button {
+    top: 24px;
+    right: 20px;
+  }
+
+  .fleet-dialog > div {
+    padding: 12px 13px 28px 32px;
+  }
+}

@@ -1,0 +1,78 @@
+[
+  {
+    "id": "british",
+    "faction_id": "british",
+    "display_name": "British",
+    "runtime_id": "ENGLAND",
+    "runtime_order": 0,
+    "primary_color": "#ba4746",
+    "secondary_color": "#263b72",
+    "pennant_color": "#ff6864",
+    "flag_asset": "flag:british",
+    "naming_bank_ref": "naming_british",
+    "harbor_frame": 0,
+    "base_relations": {
+      "ENGLAND": 100,
+      "SPAIN": 0,
+      "FRANCE": 0,
+      "PIRATES": -100
+    }
+  },
+  {
+    "id": "spanish",
+    "faction_id": "spanish",
+    "display_name": "Spanish",
+    "runtime_id": "SPAIN",
+    "runtime_order": 2,
+    "primary_color": "#d4a339",
+    "secondary_color": "#e0aa32",
+    "pennant_color": "#ffe05a",
+    "flag_asset": "flag:spanish",
+    "naming_bank_ref": "naming_spanish",
+    "harbor_frame": 1,
+    "base_relations": {
+      "ENGLAND": 0,
+      "SPAIN": 100,
+      "FRANCE": 0,
+      "PIRATES": -100
+    }
+  },
+  {
+    "id": "french",
+    "faction_id": "french",
+    "display_name": "French",
+    "runtime_id": "FRANCE",
+    "runtime_order": 1,
+    "primary_color": "#5486b5",
+    "secondary_color": "#376bb2",
+    "pennant_color": "#78caff",
+    "flag_asset": "flag:french",
+    "naming_bank_ref": "naming_french",
+    "harbor_frame": 2,
+    "base_relations": {
+      "ENGLAND": 0,
+      "SPAIN": 0,
+      "FRANCE": 100,
+      "PIRATES": -100
+    }
+  },
+  {
+    "id": "pirate",
+    "faction_id": "pirate",
+    "display_name": "Pirate",
+    "runtime_id": "PIRATES",
+    "runtime_order": 3,
+    "primary_color": "#464b48",
+    "secondary_color": "#262f32",
+    "pennant_color": "#d8e9dd",
+    "flag_asset": "flag:pirate",
+    "naming_bank_ref": "naming_pirate",
+    "harbor_frame": 3,
+    "base_relations": {
+      "ENGLAND": -100,
+      "SPAIN": -100,
+      "FRANCE": -100,
+      "PIRATES": 100
+    }
+  }
+]

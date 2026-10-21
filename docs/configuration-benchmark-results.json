@@ -1,0 +1,612 @@
+{
+  "baseline_commit": "8170037780be8836528281af02b70d5716ea7a25",
+  "node": "v24.19.0",
+  "method": "Six paired baseline/current trials without concurrent test suite; first three baseline-first, next three current-first. Hull median of 30 warm runs; fleet median of six runs. Fixed 20 generator resumes per fleet update. Headless, no browser FPS.",
+  "parity": "Exact generation, economic, hull and both fleet fingerprints matched in all trials.",
+  "physics_source_identical_excluding_module_cache_tokens": true,
+  "metrics_ms": {
+    "hull100k": {
+      "before": 98.3872945,
+      "after": 104.93332050000004,
+      "change_percent": 6.653324530638494
+    },
+    "fleet30_p50": {
+      "before": 0.8871500000000196,
+      "after": 0.8950365000000602,
+      "change_percent": 0.8889702981502934
+    },
+    "fleet30_p95": {
+      "before": 7.192831000000069,
+      "after": 7.231556500000011,
+      "change_percent": 0.5383902388355954
+    },
+    "fleet30_total": {
+      "before": 693.146634499999,
+      "after": 695.1871855000006,
+      "change_percent": 0.2943895127577978
+    },
+    "fleet100_p50": {
+      "before": 5.331436499999882,
+      "after": 5.33698000000004,
+      "change_percent": 0.10397760528815247
+    },
+    "fleet100_p95": {
+      "before": 9.230222499999854,
+      "after": 8.957510499999898,
+      "change_percent": -2.954554995829839
+    },
+    "fleet100_total": {
+      "before": 1441.104640500001,
+      "after": 1411.4907915000013,
+      "change_percent": -2.054940922938475
+    }
+  },
+  "before": [
+    {
+      "node": "v24.19.0",
+      "generated": "03e0af7f832e2aa0d04911cb968124e79f58ab82df768b958532659dfbee8e43",
+      "economic": "69aae2a0e68b2cde8ddff6132c465c7e6814aee2e92a2645e44df85b16d2f596",
+      "hull": [
+        {
+          "ms": 98.29076500000002,
+          "checksum": "449c58fd1298dee5ad29fe2b0fc57b4b5e1b7d0161e9860739549aad1a2c294f"
+        },
+        {
+          "ms": 98.44081600000004,
+          "checksum": "449c58fd1298dee5ad29fe2b0fc57b4b5e1b7d0161e9860739549aad1a2c294f"
+        },
+        {
+          "ms": 96.41557599999999,
+          "checksum": "449c58fd1298dee5ad29fe2b0fc57b4b5e1b7d0161e9860739549aad1a2c294f"
+        },
+        {
+          "ms": 95.620723,
+          "checksum": "449c58fd1298dee5ad29fe2b0fc57b4b5e1b7d0161e9860739549aad1a2c294f"
+        },
+        {
+          "ms": 95.32742000000007,
+          "checksum": "449c58fd1298dee5ad29fe2b0fc57b4b5e1b7d0161e9860739549aad1a2c294f"
+        }
+      ],
+      "fleets": [
+        {
+          "requested": 30,
+          "merchants": 30,
+          "patrols": 3,
+          "p50": 0.8910960000000614,
+          "p95": 8.541741000000002,
+          "total": 780.6705390000016,
+          "checksum": "a91592ea277a6159dd279067babe378204552c32d153cc6459f216826af1a655"
+        },
+        {
+          "requested": 100,
+          "merchants": 100,
+          "patrols": 24,
+          "p50": 5.429145999999946,
+          "p95": 9.473595999999816,
+          "total": 1449.5389419999983,
+          "checksum": "636bf6a637b9e5df0d055b197519c0c5aaaf3bf5ecefca68b6c72eb663131d1b"
+        }
+      ]
+    },
+    {
+      "node": "v24.19.0",
+      "generated": "03e0af7f832e2aa0d04911cb968124e79f58ab82df768b958532659dfbee8e43",
+      "economic": "69aae2a0e68b2cde8ddff6132c465c7e6814aee2e92a2645e44df85b16d2f596",
+      "hull": [
+        {
+          "ms": 102.186914,
+          "checksum": "449c58fd1298dee5ad29fe2b0fc57b4b5e1b7d0161e9860739549aad1a2c294f"
+        },
+        {
+          "ms": 104.156342,
+          "checksum": "449c58fd1298dee5ad29fe2b0fc57b4b5e1b7d0161e9860739549aad1a2c294f"
+        },
+        {
+          "ms": 103.68105000000003,
+          "checksum": "449c58fd1298dee5ad29fe2b0fc57b4b5e1b7d0161e9860739549aad1a2c294f"
+        },
+        {
+          "ms": 105.94934799999999,
+          "checksum": "449c58fd1298dee5ad29fe2b0fc57b4b5e1b7d0161e9860739549aad1a2c294f"
+        },
+        {
+          "ms": 100.034085,
+          "checksum": "449c58fd1298dee5ad29fe2b0fc57b4b5e1b7d0161e9860739549aad1a2c294f"
+        }
+      ],
+      "fleets": [
+        {
+          "requested": 30,
+          "merchants": 30,
+          "patrols": 3,
+          "p50": 0.9091519999999491,
+          "p95": 7.723142999999936,
+          "total": 754.795144999999,
+          "checksum": "a91592ea277a6159dd279067babe378204552c32d153cc6459f216826af1a655"
+        },
+        {
+          "requested": 100,
+          "merchants": 100,
+          "patrols": 24,
+          "p50": 6.06853000000001,
+          "p95": 10.357892999999876,
+          "total": 1616.0509870000017,
+          "checksum": "636bf6a637b9e5df0d055b197519c0c5aaaf3bf5ecefca68b6c72eb663131d1b"
+        }
+      ]
+    },
+    {
+      "node": "v24.19.0",
+      "generated": "03e0af7f832e2aa0d04911cb968124e79f58ab82df768b958532659dfbee8e43",
+      "economic": "69aae2a0e68b2cde8ddff6132c465c7e6814aee2e92a2645e44df85b16d2f596",
+      "hull": [
+        {
+          "ms": 97.515825,
+          "checksum": "449c58fd1298dee5ad29fe2b0fc57b4b5e1b7d0161e9860739549aad1a2c294f"
+        },
+        {
+          "ms": 98.50747000000001,
+          "checksum": "449c58fd1298dee5ad29fe2b0fc57b4b5e1b7d0161e9860739549aad1a2c294f"
+        },
+        {
+          "ms": 102.21030700000006,
+          "checksum": "449c58fd1298dee5ad29fe2b0fc57b4b5e1b7d0161e9860739549aad1a2c294f"
+        },
+        {
+          "ms": 94.01818100000003,
+          "checksum": "449c58fd1298dee5ad29fe2b0fc57b4b5e1b7d0161e9860739549aad1a2c294f"
+        },
+        {
+          "ms": 95.08457599999997,
+          "checksum": "449c58fd1298dee5ad29fe2b0fc57b4b5e1b7d0161e9860739549aad1a2c294f"
+        }
+      ],
+      "fleets": [
+        {
+          "requested": 30,
+          "merchants": 30,
+          "patrols": 3,
+          "p50": 0.8761529999999311,
+          "p95": 7.176627000000053,
+          "total": 697.3414439999975,
+          "checksum": "a91592ea277a6159dd279067babe378204552c32d153cc6459f216826af1a655"
+        },
+        {
+          "requested": 100,
+          "merchants": 100,
+          "patrols": 24,
+          "p50": 5.243661999999858,
+          "p95": 9.677377999999862,
+          "total": 1477.4020570000007,
+          "checksum": "636bf6a637b9e5df0d055b197519c0c5aaaf3bf5ecefca68b6c72eb663131d1b"
+        }
+      ]
+    },
+    {
+      "node": "v24.19.0",
+      "generated": "03e0af7f832e2aa0d04911cb968124e79f58ab82df768b958532659dfbee8e43",
+      "economic": "69aae2a0e68b2cde8ddff6132c465c7e6814aee2e92a2645e44df85b16d2f596",
+      "hull": [
+        {
+          "ms": 113.89072600000003,
+          "checksum": "449c58fd1298dee5ad29fe2b0fc57b4b5e1b7d0161e9860739549aad1a2c294f"
+        },
+        {
+          "ms": 110.916429,
+          "checksum": "449c58fd1298dee5ad29fe2b0fc57b4b5e1b7d0161e9860739549aad1a2c294f"
+        },
+        {
+          "ms": 110.29405999999994,
+          "checksum": "449c58fd1298dee5ad29fe2b0fc57b4b5e1b7d0161e9860739549aad1a2c294f"
+        },
+        {
+          "ms": 128.765081,
+          "checksum": "449c58fd1298dee5ad29fe2b0fc57b4b5e1b7d0161e9860739549aad1a2c294f"
+        },
+        {
+          "ms": 105.47192999999993,
+          "checksum": "449c58fd1298dee5ad29fe2b0fc57b4b5e1b7d0161e9860739549aad1a2c294f"
+        }
+      ],
+      "fleets": [
+        {
+          "requested": 30,
+          "merchants": 30,
+          "patrols": 3,
+          "p50": 0.9166439999999056,
+          "p95": 7.061680000000024,
+          "total": 688.9518250000006,
+          "checksum": "a91592ea277a6159dd279067babe378204552c32d153cc6459f216826af1a655"
+        },
+        {
+          "requested": 100,
+          "merchants": 100,
+          "patrols": 24,
+          "p50": 5.419210999999905,
+          "p95": 8.523163000000295,
+          "total": 1432.6703390000039,
+          "checksum": "636bf6a637b9e5df0d055b197519c0c5aaaf3bf5ecefca68b6c72eb663131d1b"
+        }
+      ]
+    },
+    {
+      "node": "v24.19.0",
+      "generated": "03e0af7f832e2aa0d04911cb968124e79f58ab82df768b958532659dfbee8e43",
+      "economic": "69aae2a0e68b2cde8ddff6132c465c7e6814aee2e92a2645e44df85b16d2f596",
+      "hull": [
+        {
+          "ms": 97.09378200000003,
+          "checksum": "449c58fd1298dee5ad29fe2b0fc57b4b5e1b7d0161e9860739549aad1a2c294f"
+        },
+        {
+          "ms": 106.21948100000003,
+          "checksum": "449c58fd1298dee5ad29fe2b0fc57b4b5e1b7d0161e9860739549aad1a2c294f"
+        },
+        {
+          "ms": 98.33377299999995,
+          "checksum": "449c58fd1298dee5ad29fe2b0fc57b4b5e1b7d0161e9860739549aad1a2c294f"
+        },
+        {
+          "ms": 93.87598000000003,
+          "checksum": "449c58fd1298dee5ad29fe2b0fc57b4b5e1b7d0161e9860739549aad1a2c294f"
+        },
+        {
+          "ms": 94.43670900000006,
+          "checksum": "449c58fd1298dee5ad29fe2b0fc57b4b5e1b7d0161e9860739549aad1a2c294f"
+        }
+      ],
+      "fleets": [
+        {
+          "requested": 30,
+          "merchants": 30,
+          "patrols": 3,
+          "p50": 0.8832039999999779,
+          "p95": 7.209035000000085,
+          "total": 686.4464730000004,
+          "checksum": "a91592ea277a6159dd279067babe378204552c32d153cc6459f216826af1a655"
+        },
+        {
+          "requested": 100,
+          "merchants": 100,
+          "patrols": 24,
+          "p50": 5.0752440000001116,
+          "p95": 8.986848999999893,
+          "total": 1364.7363770000043,
+          "checksum": "636bf6a637b9e5df0d055b197519c0c5aaaf3bf5ecefca68b6c72eb663131d1b"
+        }
+      ]
+    },
+    {
+      "node": "v24.19.0",
+      "generated": "03e0af7f832e2aa0d04911cb968124e79f58ab82df768b958532659dfbee8e43",
+      "economic": "69aae2a0e68b2cde8ddff6132c465c7e6814aee2e92a2645e44df85b16d2f596",
+      "hull": [
+        {
+          "ms": 96.91614799999996,
+          "checksum": "449c58fd1298dee5ad29fe2b0fc57b4b5e1b7d0161e9860739549aad1a2c294f"
+        },
+        {
+          "ms": 96.51094899999998,
+          "checksum": "449c58fd1298dee5ad29fe2b0fc57b4b5e1b7d0161e9860739549aad1a2c294f"
+        },
+        {
+          "ms": 97.21070299999997,
+          "checksum": "449c58fd1298dee5ad29fe2b0fc57b4b5e1b7d0161e9860739549aad1a2c294f"
+        },
+        {
+          "ms": 97.81658700000003,
+          "checksum": "449c58fd1298dee5ad29fe2b0fc57b4b5e1b7d0161e9860739549aad1a2c294f"
+        },
+        {
+          "ms": 106.071956,
+          "checksum": "449c58fd1298dee5ad29fe2b0fc57b4b5e1b7d0161e9860739549aad1a2c294f"
+        }
+      ],
+      "fleets": [
+        {
+          "requested": 30,
+          "merchants": 30,
+          "patrols": 3,
+          "p50": 0.7860000000000582,
+          "p95": 7.143376999999873,
+          "total": 643.7032800000005,
+          "checksum": "a91592ea277a6159dd279067babe378204552c32d153cc6459f216826af1a655"
+        },
+        {
+          "requested": 100,
+          "merchants": 100,
+          "patrols": 24,
+          "p50": 5.021604999999909,
+          "p95": 8.543834999999945,
+          "total": 1350.8496119999973,
+          "checksum": "636bf6a637b9e5df0d055b197519c0c5aaaf3bf5ecefca68b6c72eb663131d1b"
+        }
+      ]
+    }
+  ],
+  "after": [
+    {
+      "node": "v24.19.0",
+      "generated": "03e0af7f832e2aa0d04911cb968124e79f58ab82df768b958532659dfbee8e43",
+      "economic": "69aae2a0e68b2cde8ddff6132c465c7e6814aee2e92a2645e44df85b16d2f596",
+      "hull": [
+        {
+          "ms": 103.59024400000004,
+          "checksum": "449c58fd1298dee5ad29fe2b0fc57b4b5e1b7d0161e9860739549aad1a2c294f"
+        },
+        {
+          "ms": 100.53610999999995,
+          "checksum": "449c58fd1298dee5ad29fe2b0fc57b4b5e1b7d0161e9860739549aad1a2c294f"
+        },
+        {
+          "ms": 100.06934100000001,
+          "checksum": "449c58fd1298dee5ad29fe2b0fc57b4b5e1b7d0161e9860739549aad1a2c294f"
+        },
+        {
+          "ms": 99.65294599999993,
+          "checksum": "449c58fd1298dee5ad29fe2b0fc57b4b5e1b7d0161e9860739549aad1a2c294f"
+        },
+        {
+          "ms": 105.90909799999997,
+          "checksum": "449c58fd1298dee5ad29fe2b0fc57b4b5e1b7d0161e9860739549aad1a2c294f"
+        }
+      ],
+      "fleets": [
+        {
+          "requested": 30,
+          "merchants": 30,
+          "patrols": 3,
+          "p50": 0.9131280000001425,
+          "p95": 7.55319099999997,
+          "total": 715.5684010000025,
+          "checksum": "a91592ea277a6159dd279067babe378204552c32d153cc6459f216826af1a655"
+        },
+        {
+          "requested": 100,
+          "merchants": 100,
+          "patrols": 24,
+          "p50": 5.535302000000229,
+          "p95": 9.333820999999716,
+          "total": 1477.6259739999996,
+          "checksum": "636bf6a637b9e5df0d055b197519c0c5aaaf3bf5ecefca68b6c72eb663131d1b"
+        }
+      ]
+    },
+    {
+      "node": "v24.19.0",
+      "generated": "03e0af7f832e2aa0d04911cb968124e79f58ab82df768b958532659dfbee8e43",
+      "economic": "69aae2a0e68b2cde8ddff6132c465c7e6814aee2e92a2645e44df85b16d2f596",
+      "hull": [
+        {
+          "ms": 115.54061999999999,
+          "checksum": "449c58fd1298dee5ad29fe2b0fc57b4b5e1b7d0161e9860739549aad1a2c294f"
+        },
+        {
+          "ms": 119.73728600000004,
+          "checksum": "449c58fd1298dee5ad29fe2b0fc57b4b5e1b7d0161e9860739549aad1a2c294f"
+        },
+        {
+          "ms": 111.87656100000004,
+          "checksum": "449c58fd1298dee5ad29fe2b0fc57b4b5e1b7d0161e9860739549aad1a2c294f"
+        },
+        {
+          "ms": 109.32397100000003,
+          "checksum": "449c58fd1298dee5ad29fe2b0fc57b4b5e1b7d0161e9860739549aad1a2c294f"
+        },
+        {
+          "ms": 109.3031410000001,
+          "checksum": "449c58fd1298dee5ad29fe2b0fc57b4b5e1b7d0161e9860739549aad1a2c294f"
+        }
+      ],
+      "fleets": [
+        {
+          "requested": 30,
+          "merchants": 30,
+          "patrols": 3,
+          "p50": 0.9328370000000632,
+          "p95": 7.805863999999929,
+          "total": 900.4248440000019,
+          "checksum": "a91592ea277a6159dd279067babe378204552c32d153cc6459f216826af1a655"
+        },
+        {
+          "requested": 100,
+          "merchants": 100,
+          "patrols": 24,
+          "p50": 5.201510000000326,
+          "p95": 9.292811000000256,
+          "total": 1405.2988349999973,
+          "checksum": "636bf6a637b9e5df0d055b197519c0c5aaaf3bf5ecefca68b6c72eb663131d1b"
+        }
+      ]
+    },
+    {
+      "node": "v24.19.0",
+      "generated": "03e0af7f832e2aa0d04911cb968124e79f58ab82df768b958532659dfbee8e43",
+      "economic": "69aae2a0e68b2cde8ddff6132c465c7e6814aee2e92a2645e44df85b16d2f596",
+      "hull": [
+        {
+          "ms": 106.48997600000001,
+          "checksum": "449c58fd1298dee5ad29fe2b0fc57b4b5e1b7d0161e9860739549aad1a2c294f"
+        },
+        {
+          "ms": 108.29681400000004,
+          "checksum": "449c58fd1298dee5ad29fe2b0fc57b4b5e1b7d0161e9860739549aad1a2c294f"
+        },
+        {
+          "ms": 110.54802800000004,
+          "checksum": "449c58fd1298dee5ad29fe2b0fc57b4b5e1b7d0161e9860739549aad1a2c294f"
+        },
+        {
+          "ms": 108.79871500000002,
+          "checksum": "449c58fd1298dee5ad29fe2b0fc57b4b5e1b7d0161e9860739549aad1a2c294f"
+        },
+        {
+          "ms": 109.85230999999999,
+          "checksum": "449c58fd1298dee5ad29fe2b0fc57b4b5e1b7d0161e9860739549aad1a2c294f"
+        }
+      ],
+      "fleets": [
+        {
+          "requested": 30,
+          "merchants": 30,
+          "patrols": 3,
+          "p50": 0.8678109999998469,
+          "p95": 6.553085999999894,
+          "total": 658.2710389999991,
+          "checksum": "a91592ea277a6159dd279067babe378204552c32d153cc6459f216826af1a655"
+        },
+        {
+          "requested": 100,
+          "merchants": 100,
+          "patrols": 24,
+          "p50": 5.641650000000027,
+          "p95": 9.226212999999916,
+          "total": 1517.094198000004,
+          "checksum": "636bf6a637b9e5df0d055b197519c0c5aaaf3bf5ecefca68b6c72eb663131d1b"
+        }
+      ]
+    },
+    {
+      "node": "v24.19.0",
+      "generated": "03e0af7f832e2aa0d04911cb968124e79f58ab82df768b958532659dfbee8e43",
+      "economic": "69aae2a0e68b2cde8ddff6132c465c7e6814aee2e92a2645e44df85b16d2f596",
+      "hull": [
+        {
+          "ms": 98.29203899999999,
+          "checksum": "449c58fd1298dee5ad29fe2b0fc57b4b5e1b7d0161e9860739549aad1a2c294f"
+        },
+        {
+          "ms": 107.18624099999994,
+          "checksum": "449c58fd1298dee5ad29fe2b0fc57b4b5e1b7d0161e9860739549aad1a2c294f"
+        },
+        {
+          "ms": 107.47665900000004,
+          "checksum": "449c58fd1298dee5ad29fe2b0fc57b4b5e1b7d0161e9860739549aad1a2c294f"
+        },
+        {
+          "ms": 111.38110300000005,
+          "checksum": "449c58fd1298dee5ad29fe2b0fc57b4b5e1b7d0161e9860739549aad1a2c294f"
+        },
+        {
+          "ms": 105.42626200000007,
+          "checksum": "449c58fd1298dee5ad29fe2b0fc57b4b5e1b7d0161e9860739549aad1a2c294f"
+        }
+      ],
+      "fleets": [
+        {
+          "requested": 30,
+          "merchants": 30,
+          "patrols": 3,
+          "p50": 0.9931970000000092,
+          "p95": 7.516808000000083,
+          "total": 729.4542769999979,
+          "checksum": "a91592ea277a6159dd279067babe378204552c32d153cc6459f216826af1a655"
+        },
+        {
+          "requested": 100,
+          "merchants": 100,
+          "patrols": 24,
+          "p50": 5.036666999999852,
+          "p95": 8.150362999999743,
+          "total": 1340.615177,
+          "checksum": "636bf6a637b9e5df0d055b197519c0c5aaaf3bf5ecefca68b6c72eb663131d1b"
+        }
+      ]
+    },
+    {
+      "node": "v24.19.0",
+      "generated": "03e0af7f832e2aa0d04911cb968124e79f58ab82df768b958532659dfbee8e43",
+      "economic": "69aae2a0e68b2cde8ddff6132c465c7e6814aee2e92a2645e44df85b16d2f596",
+      "hull": [
+        {
+          "ms": 98.77466199999998,
+          "checksum": "449c58fd1298dee5ad29fe2b0fc57b4b5e1b7d0161e9860739549aad1a2c294f"
+        },
+        {
+          "ms": 98.25187000000005,
+          "checksum": "449c58fd1298dee5ad29fe2b0fc57b4b5e1b7d0161e9860739549aad1a2c294f"
+        },
+        {
+          "ms": 100.76491099999998,
+          "checksum": "449c58fd1298dee5ad29fe2b0fc57b4b5e1b7d0161e9860739549aad1a2c294f"
+        },
+        {
+          "ms": 100.03366000000005,
+          "checksum": "449c58fd1298dee5ad29fe2b0fc57b4b5e1b7d0161e9860739549aad1a2c294f"
+        },
+        {
+          "ms": 98.716816,
+          "checksum": "449c58fd1298dee5ad29fe2b0fc57b4b5e1b7d0161e9860739549aad1a2c294f"
+        }
+      ],
+      "fleets": [
+        {
+          "requested": 30,
+          "merchants": 30,
+          "patrols": 3,
+          "p50": 0.8769449999999779,
+          "p95": 6.9463049999999384,
+          "total": 660.0731400000019,
+          "checksum": "a91592ea277a6159dd279067babe378204552c32d153cc6459f216826af1a655"
+        },
+        {
+          "requested": 100,
+          "merchants": 100,
+          "patrols": 24,
+          "p50": 5.431449000000157,
+          "p95": 8.553318000000218,
+          "total": 1417.6827480000054,
+          "checksum": "636bf6a637b9e5df0d055b197519c0c5aaaf3bf5ecefca68b6c72eb663131d1b"
+        }
+      ]
+    },
+    {
+      "node": "v24.19.0",
+      "generated": "03e0af7f832e2aa0d04911cb968124e79f58ab82df768b958532659dfbee8e43",
+      "economic": "69aae2a0e68b2cde8ddff6132c465c7e6814aee2e92a2645e44df85b16d2f596",
+      "hull": [
+        {
+          "ms": 97.38793599999997,
+          "checksum": "449c58fd1298dee5ad29fe2b0fc57b4b5e1b7d0161e9860739549aad1a2c294f"
+        },
+        {
+          "ms": 97.52134300000006,
+          "checksum": "449c58fd1298dee5ad29fe2b0fc57b4b5e1b7d0161e9860739549aad1a2c294f"
+        },
+        {
+          "ms": 99.42393200000004,
+          "checksum": "449c58fd1298dee5ad29fe2b0fc57b4b5e1b7d0161e9860739549aad1a2c294f"
+        },
+        {
+          "ms": 101.58476299999995,
+          "checksum": "449c58fd1298dee5ad29fe2b0fc57b4b5e1b7d0161e9860739549aad1a2c294f"
+        },
+        {
+          "ms": 104.44037900000001,
+          "checksum": "449c58fd1298dee5ad29fe2b0fc57b4b5e1b7d0161e9860739549aad1a2c294f"
+        }
+      ],
+      "fleets": [
+        {
+          "requested": 30,
+          "merchants": 30,
+          "patrols": 3,
+          "p50": 0.8709449999998924,
+          "p95": 6.782934999999952,
+          "total": 674.8059699999988,
+          "checksum": "a91592ea277a6159dd279067babe378204552c32d153cc6459f216826af1a655"
+        },
+        {
+          "requested": 100,
+          "merchants": 100,
+          "patrols": 24,
+          "p50": 5.242510999999922,
+          "p95": 8.68880799999988,
+          "total": 1397.3314439999951,
+          "checksum": "636bf6a637b9e5df0d055b197519c0c5aaaf3bf5ecefca68b6c72eb663131d1b"
+        }
+      ]
+    }
+  ]
+}

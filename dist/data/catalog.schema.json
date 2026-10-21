@@ -1,0 +1,2140 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": [
+    "commodities",
+    "vessels",
+    "industries",
+    "assets",
+    "factions",
+    "naming",
+    "settlements",
+    "settings",
+    "docks",
+    "town_buildings",
+    "roads",
+    "colony_presets",
+    "configuration_definitions",
+    "configuration_overrides",
+    "configuration_constraints"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "commodities": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "basePrice"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "basePrice": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "market_enabled": {
+            "type": "boolean"
+          },
+          "settlement_supply_enabled": {
+            "type": "boolean"
+          }
+        }
+      },
+      "minItems": 1
+    },
+    "vessels": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "type",
+          "baseHullMaintenance",
+          "defaultCrew",
+          "crewCapacity",
+          "militaryOnly",
+          "canTrade",
+          "assetId",
+          "ship_class_id",
+          "display_name",
+          "category",
+          "required_berth_size",
+          "cargo_capacity",
+          "base_speed",
+          "hull_points",
+          "crew_complement",
+          "base_hull_maintenance_per_day",
+          "physics",
+          "graphics",
+          "water_endurance_voyages"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "type": {
+            "type": "string",
+            "minLength": 1
+          },
+          "baseHullMaintenance": {
+            "type": "number"
+          },
+          "defaultCrew": {
+            "type": "number"
+          },
+          "crewCapacity": {
+            "type": "number"
+          },
+          "militaryOnly": {
+            "type": "boolean"
+          },
+          "canTrade": {
+            "type": "boolean"
+          },
+          "assetId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "ship_class_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "display_name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "category": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "Merchant",
+              "Military",
+              "Pirate"
+            ]
+          },
+          "required_berth_size": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "Small",
+              "Medium",
+              "Large",
+              "ExtraLarge"
+            ]
+          },
+          "cargo_capacity": {
+            "type": "number",
+            "minimum": 0
+          },
+          "base_speed": {
+            "type": "number",
+            "minimum": 0
+          },
+          "hull_points": {
+            "type": "number",
+            "minimum": 0
+          },
+          "crew_complement": {
+            "type": "object",
+            "required": [
+              "min_crew",
+              "max_crew"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "min_crew": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "max_crew": {
+                "type": "integer",
+                "minimum": 0
+              }
+            }
+          },
+          "base_hull_maintenance_per_day": {
+            "type": "number",
+            "minimum": 0
+          },
+          "physics": {
+            "type": "object",
+            "required": [
+              "name",
+              "rig",
+              "role",
+              "mainMast",
+              "length",
+              "beam",
+              "draft",
+              "mass",
+              "sailArea",
+              "maxSpeed",
+              "turnRate",
+              "noGo",
+              "bestAngle",
+              "leeway",
+              "cargoCapacity",
+              "armamentCapacity",
+              "armorCapacity",
+              "seaStability",
+              "required_berth_size"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 1
+              },
+              "rig": {
+                "type": "string",
+                "minLength": 1
+              },
+              "role": {
+                "type": "string",
+                "minLength": 1
+              },
+              "mainMast": {
+                "type": "object",
+                "required": [
+                  "x",
+                  "y"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "x": {
+                    "type": "number"
+                  },
+                  "y": {
+                    "type": "number"
+                  }
+                }
+              },
+              "length": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              "beam": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              "draft": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              "mass": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              "sailArea": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              "maxSpeed": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              "turnRate": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              "noGo": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 0.7853981633974483
+              },
+              "bestAngle": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 3.141592653589793
+              },
+              "leeway": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              },
+              "cargoCapacity": {
+                "type": "number"
+              },
+              "armamentCapacity": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 5
+              },
+              "armorCapacity": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 5
+              },
+              "seaStability": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              },
+              "berthsRequired": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 2
+              },
+              "required_berth_size": {
+                "type": "string",
+                "minLength": 1,
+                "enum": [
+                  "Small",
+                  "Medium",
+                  "Large",
+                  "ExtraLarge"
+                ]
+              }
+            }
+          },
+          "graphics": {
+            "type": "object",
+            "required": [
+              "sprite_asset",
+              "icon_asset",
+              "url",
+              "frames",
+              "anchors",
+              "heightFraction",
+              "sail_frame_weights"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "sprite_asset": {
+                "type": "string",
+                "minLength": 1
+              },
+              "icon_asset": {
+                "type": "string",
+                "minLength": 1
+              },
+              "url": {
+                "type": "string",
+                "minLength": 1
+              },
+              "frames": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "anchors": {
+                "type": "array",
+                "items": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                }
+              },
+              "heightFraction": {
+                "type": "number"
+              },
+              "sail_frame_weights": {
+                "type": "array",
+                "items": {
+                  "type": "array",
+                  "items": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1
+                  }
+                }
+              }
+            }
+          },
+          "water_endurance_voyages": {
+            "type": "number",
+            "minimum": 0.1,
+            "maximum": 20
+          }
+        }
+      },
+      "minItems": 1
+    },
+    "industries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "industry_id",
+          "display_name",
+          "type",
+          "required_terrain",
+          "base_build_cost",
+          "inputs",
+          "outputs",
+          "placement",
+          "graphics"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "commodityId": {
+            "type": "string",
+            "minLength": 1
+          },
+          "productionPerTick": {
+            "type": "number"
+          },
+          "industry_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "display_name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "type": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "PrimaryProduction",
+              "SecondaryManufacturing"
+            ]
+          },
+          "required_terrain": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "base_build_cost": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "number",
+              "minimum": 0
+            }
+          },
+          "inputs": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "commodity_id",
+                "quantity_per_tick"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "commodity_id": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "quantity_per_tick": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                }
+              }
+            }
+          },
+          "outputs": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": [
+                "commodity_id",
+                "quantity_per_tick"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "commodity_id": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "quantity_per_tick": {
+                  "type": "number",
+                  "exclusiveMinimum": 0
+                }
+              }
+            }
+          },
+          "placement": {
+            "type": "object",
+            "required": [
+              "enabled",
+              "code",
+              "min_height",
+              "biomes",
+              "suitability"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "enabled": {
+                "type": "boolean"
+              },
+              "code": {
+                "type": "number"
+              },
+              "min_height": {
+                "type": "number"
+              },
+              "biomes": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 5
+                }
+              },
+              "suitability": {
+                "type": "string",
+                "minLength": 1,
+                "enum": [
+                  "rock",
+                  "moisture",
+                  "temperate"
+                ]
+              },
+              "regional_balance_weight": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "maximum": 100
+              }
+            }
+          },
+          "graphics": {
+            "type": "object",
+            "required": [
+              "tile_asset",
+              "atlas_frame",
+              "icon_asset",
+              "icon_frame"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "tile_asset": {
+                "type": "string",
+                "minLength": 1
+              },
+              "atlas_frame": {
+                "type": "number"
+              },
+              "icon_asset": {
+                "type": "string",
+                "minLength": 1
+              },
+              "icon_frame": {
+                "type": "integer",
+                "minimum": 0
+              }
+            }
+          },
+          "manufacturing": {
+            "type": "object",
+            "required": [
+              "version",
+              "tuning_status",
+              "runtime_enabled",
+              "production_duration_seconds",
+              "input_buffer_targets",
+              "input_storage_capacities",
+              "output_storage_capacities",
+              "construction_duration_seconds",
+              "working_capital_microgold",
+              "procurement",
+              "selling",
+              "output_cost_weights"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "version": {
+                "type": "integer",
+                "enum": [
+                  1
+                ]
+              },
+              "tuning_status": {
+                "type": "string",
+                "enum": [
+                  "provisional"
+                ]
+              },
+              "runtime_enabled": {
+                "type": "boolean"
+              },
+              "production_duration_seconds": {
+                "type": "number",
+                "minimum": 0.001,
+                "maximum": 31536000
+              },
+              "input_buffer_targets": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "number",
+                  "minimum": 1e-09,
+                  "maximum": 1000000
+                }
+              },
+              "input_storage_capacities": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "number",
+                  "minimum": 1e-09,
+                  "maximum": 1000000
+                }
+              },
+              "output_storage_capacities": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "number",
+                  "minimum": 1e-09,
+                  "maximum": 1000000
+                }
+              },
+              "construction_duration_seconds": {
+                "type": "number",
+                "minimum": 0.001,
+                "maximum": 31536000
+              },
+              "working_capital_microgold": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              },
+              "procurement": {
+                "type": "object",
+                "required": [
+                  "review_interval_seconds",
+                  "bid_multiplier",
+                  "maximum_bid_multiplier",
+                  "input_priority"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "review_interval_seconds": {
+                    "type": "number",
+                    "minimum": 0.001,
+                    "maximum": 31536000
+                  },
+                  "bid_multiplier": {
+                    "type": "number",
+                    "minimum": 0.01,
+                    "maximum": 100
+                  },
+                  "maximum_bid_multiplier": {
+                    "type": "number",
+                    "minimum": 0.01,
+                    "maximum": 100
+                  },
+                  "input_priority": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  }
+                }
+              },
+              "selling": {
+                "type": "object",
+                "required": [
+                  "review_interval_seconds",
+                  "ask_multiplier",
+                  "minimum_markup_fraction",
+                  "enforce_cost_floor"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "review_interval_seconds": {
+                    "type": "number",
+                    "minimum": 0.001,
+                    "maximum": 31536000
+                  },
+                  "ask_multiplier": {
+                    "type": "number",
+                    "minimum": 0.01,
+                    "maximum": 100
+                  },
+                  "minimum_markup_fraction": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 10
+                  },
+                  "enforce_cost_floor": {
+                    "type": "boolean"
+                  }
+                }
+              },
+              "output_cost_weights": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "number",
+                  "minimum": 1e-09,
+                  "maximum": 1000000
+                }
+              }
+            }
+          }
+        }
+      },
+      "minItems": 1
+    },
+    "assets": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "url",
+          "kind"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "url": {
+            "type": "string",
+            "minLength": 1
+          },
+          "kind": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "image",
+              "texture",
+              "atlas"
+            ]
+          },
+          "columns": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "rows": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "atlas_frame": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "tint": {
+            "type": "string",
+            "pattern": "^#[0-9A-Fa-f]{6}$"
+          },
+          "hex_geometry": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "vertices",
+              "edge_centers"
+            ],
+            "properties": {
+              "vertices": {
+                "type": "array",
+                "minItems": 6,
+                "maxItems": 6,
+                "items": {
+                  "type": "array",
+                  "minItems": 2,
+                  "maxItems": 2,
+                  "items": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1
+                  }
+                }
+              },
+              "edge_centers": {
+                "type": "array",
+                "minItems": 6,
+                "maxItems": 6,
+                "items": {
+                  "type": "array",
+                  "minItems": 2,
+                  "maxItems": 2,
+                  "items": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 1
+                  }
+                }
+              }
+            }
+          },
+          "tile_radius": {
+            "type": "number",
+            "exclusiveMinimum": 0,
+            "maximum": 0.5
+          },
+          "flag_policy": {
+            "type": "string",
+            "enum": [
+              "none",
+              "faction"
+            ]
+          }
+        }
+      },
+      "minItems": 1
+    },
+    "factions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "faction_id",
+          "display_name",
+          "runtime_id",
+          "runtime_order",
+          "primary_color",
+          "secondary_color",
+          "pennant_color",
+          "flag_asset",
+          "naming_bank_ref",
+          "harbor_frame",
+          "base_relations"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "faction_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "display_name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "runtime_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "runtime_order": {
+            "type": "number"
+          },
+          "primary_color": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^#[0-9a-fA-F]{6}$"
+          },
+          "secondary_color": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^#[0-9a-fA-F]{6}$"
+          },
+          "pennant_color": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^#[0-9a-fA-F]{6}$"
+          },
+          "flag_asset": {
+            "type": "string",
+            "minLength": 1
+          },
+          "naming_bank_ref": {
+            "type": "string",
+            "minLength": 1
+          },
+          "harbor_frame": {
+            "type": "number"
+          },
+          "base_relations": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "number",
+              "minimum": -100,
+              "maximum": 100
+            }
+          }
+        }
+      },
+      "minItems": 1
+    },
+    "naming": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "bank_id",
+          "captains",
+          "governors",
+          "ports",
+          "islands",
+          "ships"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "bank_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "captains": {
+            "type": "object",
+            "required": [
+              "first_names",
+              "last_names"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "first_names": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "minItems": 1
+              },
+              "last_names": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "minItems": 1
+              }
+            }
+          },
+          "governors": {
+            "type": "object",
+            "required": [
+              "first_names",
+              "last_names"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "first_names": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "minItems": 1
+              },
+              "last_names": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "minItems": 1
+              }
+            }
+          },
+          "ports": {
+            "type": "object",
+            "required": [
+              "prefixes",
+              "roots"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "prefixes": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "minItems": 1
+              },
+              "roots": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "minItems": 1
+              }
+            }
+          },
+          "islands": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "minItems": 1
+          },
+          "ships": {
+            "type": "object",
+            "required": [
+              "military",
+              "merchant"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "military": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "minItems": 1
+              },
+              "merchant": {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "minItems": 1
+              }
+            }
+          }
+        }
+      },
+      "minItems": 1
+    },
+    "settlements": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "display_name",
+          "min_island_tiles",
+          "tax_rate",
+          "consumption_stock",
+          "consumption_target",
+          "trade_capacity",
+          "base_consumption_rate",
+          "specialty_stock",
+          "ordinary_stock",
+          "ordinary_stock_step",
+          "ordinary_stock_variants",
+          "treasury_balance",
+          "graphics",
+          "initial_dock_type",
+          "dock_growth",
+          "urban_growth"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "display_name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "min_island_tiles": {
+            "type": "number",
+            "minimum": 0
+          },
+          "tax_rate": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 0.35
+          },
+          "consumption_stock": {
+            "type": "number",
+            "minimum": 0
+          },
+          "consumption_target": {
+            "type": "number",
+            "minimum": 0
+          },
+          "trade_capacity": {
+            "type": "number",
+            "minimum": 0,
+            "exclusiveMinimum": 0
+          },
+          "base_consumption_rate": {
+            "type": "number",
+            "minimum": 0
+          },
+          "specialty_stock": {
+            "type": "number",
+            "minimum": 0
+          },
+          "ordinary_stock": {
+            "type": "number",
+            "minimum": 0
+          },
+          "ordinary_stock_step": {
+            "type": "number",
+            "minimum": 0
+          },
+          "ordinary_stock_variants": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "treasury_balance": {
+            "type": "number",
+            "minimum": 0
+          },
+          "graphics": {
+            "type": "object",
+            "required": [
+              "dock_asset",
+              "harbor_asset"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "dock_asset": {
+                "type": "string",
+                "minLength": 1
+              },
+              "harbor_asset": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
+          "initial_dock_type": {
+            "type": "string",
+            "minLength": 1
+          },
+          "dock_growth": {
+            "type": "object",
+            "required": [
+              "max_queue_wait_ticks",
+              "review_interval_ticks",
+              "build_cooldown_ticks",
+              "max_docks",
+              "wait_sample_window_ticks",
+              "min_anchor_coast_distance",
+              "preferred_anchor_coast_distance"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "max_queue_wait_ticks": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "review_interval_ticks": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "build_cooldown_ticks": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "max_docks": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "wait_sample_window_ticks": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "min_anchor_coast_distance": {
+                "type": "integer",
+                "minimum": 1
+              },
+              "preferred_anchor_coast_distance": {
+                "type": "integer",
+                "minimum": 1
+              }
+            }
+          },
+          "extra_ports": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "min_island_tiles",
+              "max_ports",
+              "min_hex_spacing",
+              "spawn_chance"
+            ],
+            "properties": {
+              "min_island_tiles": {
+                "type": "integer",
+                "minimum": 50
+              },
+              "max_ports": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 8
+              },
+              "min_hex_spacing": {
+                "type": "integer",
+                "minimum": 2
+              },
+              "spawn_chance": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 1
+              }
+            }
+          },
+          "initial_dock_mix": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "urban_growth": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "initial_population",
+              "initial_capacity",
+              "review_interval_ticks",
+              "housing_type",
+              "base_weight",
+              "coastal_bonus",
+              "road_weight",
+              "selection"
+            ],
+            "properties": {
+              "initial_population": {
+                "type": "number",
+                "minimum": 0
+              },
+              "initial_capacity": {
+                "type": "number",
+                "minimum": 0
+              },
+              "review_interval_ticks": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              "housing_type": {
+                "type": "string",
+                "minLength": 1
+              },
+              "base_weight": {
+                "type": "number",
+                "exclusiveMinimum": 0
+              },
+              "coastal_bonus": {
+                "type": "number",
+                "minimum": 0
+              },
+              "road_weight": {
+                "type": "number",
+                "minimum": 0
+              },
+              "selection": {
+                "type": "string",
+                "enum": [
+                  "weighted",
+                  "maximum"
+                ]
+              }
+            }
+          }
+        }
+      },
+      "minItems": 1
+    },
+    "settings": {
+      "type": "object",
+      "required": [
+        "id"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "enum": [
+            "global"
+          ]
+        }
+      }
+    },
+    "docks": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "dock_type_id",
+          "display_name",
+          "required_min_berth_size",
+          "max_simultaneous_ships",
+          "min_water_depth",
+          "build_cost",
+          "layout",
+          "graphics"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "dock_type_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "display_name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "required_min_berth_size": {
+            "type": "string",
+            "minLength": 1,
+            "enum": [
+              "Small",
+              "Medium",
+              "Large",
+              "ExtraLarge"
+            ]
+          },
+          "max_simultaneous_ships": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 3
+          },
+          "min_water_depth": {
+            "type": "number",
+            "minimum": 0
+          },
+          "build_cost": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "number",
+              "minimum": 0
+            }
+          },
+          "layout": {
+            "type": "object",
+            "required": [
+              "side_slots",
+              "pier_end_occupies_all",
+              "length_tiles",
+              "adjacent_tip_only",
+              "large_ship_exclusive"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "side_slots": {
+                "type": "number",
+                "minimum": 0
+              },
+              "pier_end_occupies_all": {
+                "type": "boolean"
+              },
+              "length_tiles": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 3
+              },
+              "adjacent_tip_only": {
+                "type": "boolean"
+              },
+              "large_ship_exclusive": {
+                "type": "boolean"
+              }
+            }
+          },
+          "graphics": {
+            "type": "object",
+            "required": [
+              "rotations",
+              "tint"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "rotations": {
+                "type": "object",
+                "required": [
+                  "0",
+                  "60",
+                  "120",
+                  "180",
+                  "240",
+                  "300"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "0": {
+                    "type": "object",
+                    "required": [
+                      "asset_id",
+                      "atlas_frame"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                      "asset_id": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "atlas_frame": {
+                        "type": "number",
+                        "minimum": 0
+                      },
+                      "center_offset": {
+                        "type": "array",
+                        "minItems": 2,
+                        "maxItems": 2,
+                        "items": {
+                          "type": "number",
+                          "minimum": -0.1,
+                          "maximum": 0.1
+                        }
+                      }
+                    }
+                  },
+                  "60": {
+                    "type": "object",
+                    "required": [
+                      "asset_id",
+                      "atlas_frame"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                      "asset_id": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "atlas_frame": {
+                        "type": "number",
+                        "minimum": 0
+                      },
+                      "center_offset": {
+                        "type": "array",
+                        "minItems": 2,
+                        "maxItems": 2,
+                        "items": {
+                          "type": "number",
+                          "minimum": -0.1,
+                          "maximum": 0.1
+                        }
+                      }
+                    }
+                  },
+                  "120": {
+                    "type": "object",
+                    "required": [
+                      "asset_id",
+                      "atlas_frame"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                      "asset_id": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "atlas_frame": {
+                        "type": "number",
+                        "minimum": 0
+                      },
+                      "center_offset": {
+                        "type": "array",
+                        "minItems": 2,
+                        "maxItems": 2,
+                        "items": {
+                          "type": "number",
+                          "minimum": -0.1,
+                          "maximum": 0.1
+                        }
+                      }
+                    }
+                  },
+                  "180": {
+                    "type": "object",
+                    "required": [
+                      "asset_id",
+                      "atlas_frame"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                      "asset_id": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "atlas_frame": {
+                        "type": "number",
+                        "minimum": 0
+                      },
+                      "center_offset": {
+                        "type": "array",
+                        "minItems": 2,
+                        "maxItems": 2,
+                        "items": {
+                          "type": "number",
+                          "minimum": -0.1,
+                          "maximum": 0.1
+                        }
+                      }
+                    }
+                  },
+                  "240": {
+                    "type": "object",
+                    "required": [
+                      "asset_id",
+                      "atlas_frame"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                      "asset_id": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "atlas_frame": {
+                        "type": "number",
+                        "minimum": 0
+                      },
+                      "center_offset": {
+                        "type": "array",
+                        "minItems": 2,
+                        "maxItems": 2,
+                        "items": {
+                          "type": "number",
+                          "minimum": -0.1,
+                          "maximum": 0.1
+                        }
+                      }
+                    }
+                  },
+                  "300": {
+                    "type": "object",
+                    "required": [
+                      "asset_id",
+                      "atlas_frame"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                      "asset_id": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "atlas_frame": {
+                        "type": "number",
+                        "minimum": 0
+                      },
+                      "center_offset": {
+                        "type": "array",
+                        "minItems": 2,
+                        "maxItems": 2,
+                        "items": {
+                          "type": "number",
+                          "minimum": -0.1,
+                          "maximum": 0.1
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "tint": {
+                "type": "string",
+                "minLength": 1,
+                "pattern": "^#[0-9a-fA-F]{6}$"
+              },
+              "tiles": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "root",
+                  "middle",
+                  "tip"
+                ],
+                "properties": {
+                  "root": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "middle": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "tip": {
+                    "type": "string",
+                    "minLength": 1
+                  }
+                }
+              },
+              "tip_rotations": {
+                "type": "object",
+                "required": [
+                  "0",
+                  "60",
+                  "120",
+                  "180",
+                  "240",
+                  "300"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "0": {
+                    "type": "object",
+                    "required": [
+                      "asset_id",
+                      "atlas_frame"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                      "asset_id": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "atlas_frame": {
+                        "type": "number",
+                        "minimum": 0
+                      },
+                      "center_offset": {
+                        "type": "array",
+                        "minItems": 2,
+                        "maxItems": 2,
+                        "items": {
+                          "type": "number",
+                          "minimum": -0.1,
+                          "maximum": 0.1
+                        }
+                      }
+                    }
+                  },
+                  "60": {
+                    "type": "object",
+                    "required": [
+                      "asset_id",
+                      "atlas_frame"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                      "asset_id": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "atlas_frame": {
+                        "type": "number",
+                        "minimum": 0
+                      },
+                      "center_offset": {
+                        "type": "array",
+                        "minItems": 2,
+                        "maxItems": 2,
+                        "items": {
+                          "type": "number",
+                          "minimum": -0.1,
+                          "maximum": 0.1
+                        }
+                      }
+                    }
+                  },
+                  "120": {
+                    "type": "object",
+                    "required": [
+                      "asset_id",
+                      "atlas_frame"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                      "asset_id": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "atlas_frame": {
+                        "type": "number",
+                        "minimum": 0
+                      },
+                      "center_offset": {
+                        "type": "array",
+                        "minItems": 2,
+                        "maxItems": 2,
+                        "items": {
+                          "type": "number",
+                          "minimum": -0.1,
+                          "maximum": 0.1
+                        }
+                      }
+                    }
+                  },
+                  "180": {
+                    "type": "object",
+                    "required": [
+                      "asset_id",
+                      "atlas_frame"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                      "asset_id": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "atlas_frame": {
+                        "type": "number",
+                        "minimum": 0
+                      },
+                      "center_offset": {
+                        "type": "array",
+                        "minItems": 2,
+                        "maxItems": 2,
+                        "items": {
+                          "type": "number",
+                          "minimum": -0.1,
+                          "maximum": 0.1
+                        }
+                      }
+                    }
+                  },
+                  "240": {
+                    "type": "object",
+                    "required": [
+                      "asset_id",
+                      "atlas_frame"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                      "asset_id": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "atlas_frame": {
+                        "type": "number",
+                        "minimum": 0
+                      },
+                      "center_offset": {
+                        "type": "array",
+                        "minItems": 2,
+                        "maxItems": 2,
+                        "items": {
+                          "type": "number",
+                          "minimum": -0.1,
+                          "maximum": 0.1
+                        }
+                      }
+                    }
+                  },
+                  "300": {
+                    "type": "object",
+                    "required": [
+                      "asset_id",
+                      "atlas_frame"
+                    ],
+                    "additionalProperties": false,
+                    "properties": {
+                      "asset_id": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "atlas_frame": {
+                        "type": "number",
+                        "minimum": 0
+                      },
+                      "center_offset": {
+                        "type": "array",
+                        "minItems": 2,
+                        "maxItems": 2,
+                        "items": {
+                          "type": "number",
+                          "minimum": -0.1,
+                          "maximum": 0.1
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "town_buildings": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "building_type_id",
+          "display_name",
+          "prosperity_tier_required",
+          "housing_capacity",
+          "variants",
+          "derelict_variant",
+          "build_cost"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "building_type_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "display_name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "prosperity_tier_required": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "housing_capacity": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "variants": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "derelict_variant": {
+            "type": "string",
+            "minLength": 1
+          },
+          "build_cost": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "number",
+              "minimum": 0
+            }
+          },
+          "renovation_multiplier": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          }
+        }
+      }
+    },
+    "roads": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "kind",
+          "mask",
+          "asset_id"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "endpoint",
+              "straight",
+              "curve",
+              "junction",
+              "urban_infill"
+            ]
+          },
+          "mask": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 63
+          },
+          "asset_id": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "colony_presets": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "colony_preset_id",
+          "settlement_type",
+          "tier",
+          "initial_population",
+          "initial_prosperity",
+          "min_island_tiles",
+          "trade_stock_multiplier",
+          "consumption_stock_multiplier",
+          "tile_layout"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "colony_preset_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "settlement_type": {
+            "type": "string",
+            "minLength": 1
+          },
+          "tier": {
+            "type": "string",
+            "enum": [
+              "large",
+              "medium",
+              "small"
+            ]
+          },
+          "initial_population": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "initial_prosperity": {
+            "type": "number",
+            "minimum": 0
+          },
+          "min_island_tiles": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "trade_stock_multiplier": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "consumption_stock_multiplier": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "tile_layout": {
+            "type": "object",
+            "required": [
+              "core_port",
+              "docks",
+              "town_tiles",
+              "feeder_roads"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "core_port": {
+                "type": "object",
+                "required": [
+                  "q",
+                  "r"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "q": {
+                    "type": "integer"
+                  },
+                  "r": {
+                    "type": "integer"
+                  }
+                }
+              },
+              "docks": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "q",
+                    "r",
+                    "type"
+                  ],
+                  "additionalProperties": false,
+                  "properties": {
+                    "q": {
+                      "type": "integer"
+                    },
+                    "r": {
+                      "type": "integer"
+                    },
+                    "type": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  }
+                }
+              },
+              "town_tiles": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "q",
+                    "r",
+                    "building"
+                  ],
+                  "additionalProperties": false,
+                  "properties": {
+                    "q": {
+                      "type": "integer"
+                    },
+                    "r": {
+                      "type": "integer"
+                    },
+                    "building": {
+                      "type": "string",
+                      "minLength": 1
+                    }
+                  }
+                }
+              },
+              "feeder_roads": {
+                "type": "boolean"
+              }
+            }
+          }
+        }
+      }
+    },
+    "configuration_definitions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "type",
+          "default",
+          "label",
+          "description",
+          "category",
+          "unit",
+          "user_settable",
+          "scope",
+          "apply_mode",
+          "permission"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_]*(\\.[a-z][a-z0-9_]*)+$"
+          },
+          "type": {
+            "enum": [
+              "boolean",
+              "integer",
+              "number",
+              "enum"
+            ]
+          },
+          "default": {},
+          "min": {
+            "type": "number"
+          },
+          "max": {
+            "type": "number"
+          },
+          "step": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "options": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "label": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1
+          },
+          "category": {
+            "type": "string",
+            "minLength": 1
+          },
+          "unit": {
+            "type": "string"
+          },
+          "user_settable": {
+            "type": "boolean"
+          },
+          "scope": {
+            "enum": [
+              "application",
+              "world"
+            ]
+          },
+          "apply_mode": {
+            "enum": [
+              "next_frame",
+              "next_tick",
+              "simulation_restart",
+              "new_world"
+            ]
+          },
+          "permission": {
+            "enum": [
+              "local_user",
+              "world_owner",
+              "host",
+              "developer"
+            ]
+          }
+        }
+      }
+    },
+    "configuration_overrides": {
+      "type": "object"
+    },
+    "configuration_constraints": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "operator",
+          "setting_ids",
+          "severity",
+          "message",
+          "args"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_]*(\\.[a-z][a-z0-9_]*)+$"
+          },
+          "operator": {
+            "enum": [
+              "less_than_or_equal",
+              "required_when",
+              "mutually_exclusive",
+              "integer_multiple",
+              "compatible_timing_intervals"
+            ]
+          },
+          "setting_ids": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "severity": {
+            "enum": [
+              "error",
+              "warning"
+            ]
+          },
+          "message": {
+            "type": "string",
+            "minLength": 1
+          },
+          "args": {
+            "type": "object"
+          }
+        }
+      }
+    }
+  }
+}

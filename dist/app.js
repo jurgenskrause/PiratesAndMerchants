@@ -33,7 +33,7 @@ import {TownRenderer} from './town-renderer.js?v=babbc3d3950e';
 import {createPortEconomy} from './port-supplies.js?v=babbc3d3950e';
 import {ShipInspector} from './ship-inspector.js?v=babbc3d3950e';
 import {BridgeUI} from './bridge-ui.js?v=babbc3d3950e';
-import {vertex,fragment,validateTerrainProgram} from './terrain-shader.js?v=babbc3d3950e';
+import {vertex,fragment,validateTerrainProgram} from './terrain-shader.js?v=opt-phase1-20261021';
 const $=id=>document.getElementById(id),map=$('map');
 const fields=['density','scale','roughness','moisture','mountains','industryDensity'];
 const renderBudget=new RenderBudget();

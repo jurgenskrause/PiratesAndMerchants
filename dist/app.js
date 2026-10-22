@@ -90,14 +90,27 @@ async function benchmarkFrames(label,size,view,speed,endTime,onProgress){
 }
 async function runBenchmark(){
  if(benchmarkRunning||!ready)return;benchmarkRunning=true;benchmarkReport=null;$('dev-benchmark-button').disabled=true;$('benchmark-copy').disabled=true;$('benchmark-download').disabled=true;
- const previousSettings={seed:$('seed').value,size:$('size').value},previousAnimate=$('animate').checked;
+ const previousSettings={seed:$('seed').value,size:$('size').value,fields:Object.fromEntries(fields.map(k=>[k,$(k).value])),layer:$('layer').value,grid:$('grid').checked,windDegrees:wind.angle*180/Math.PI,windStrength:wind.strength},previousAnimate=$('animate').checked;
  const gl=app.renderer.gl,debug=gl.getExtension('WEBGL_debug_renderer_info');
- const report={schema:'pirates-merchants-benchmark-v3',build:'phase2+benchmark-60s-20261022',capturedAt:new Date().toISOString(),userAgent:navigator.userAgent,platform:navigator.platform,deviceMemoryGiB:navigator.deviceMemory??null,hardwareConcurrency:navigator.hardwareConcurrency??null,devicePixelRatio:devicePixelRatio,screen:[screen.width,screen.height],glVendor:debug?gl.getParameter(debug.UNMASKED_VENDOR_WEBGL):gl.getParameter(gl.VENDOR),glRenderer:debug?gl.getParameter(debug.UNMASKED_RENDERER_WEBGL):gl.getParameter(gl.RENDERER),gpuTimeMs:null,requestedMerchants:50,simulationDurationTargetMs:60000,notes:['The 60-second window starts when the simulation worker first reports ready; each speed gets 30 seconds including 1.5 seconds of warmup.','Frame intervals include browser scheduling and rendering; they are not GPU time.','Ticker time measures the app update callback, not total main-thread work. Long-task time includes tasks longer than 50 ms only.','Message byte size samples one in five state messages using JSON serialization on the main thread.'],scenes:[]};
+ const report={schema:'pirates-merchants-benchmark-v4',build:'phase3-baseline-20261022',capturedAt:new Date().toISOString(),userAgent:navigator.userAgent,platform:navigator.platform,deviceMemoryGiB:navigator.deviceMemory??null,hardwareConcurrency:navigator.hardwareConcurrency??null,devicePixelRatio:devicePixelRatio,screen:[screen.width,screen.height],glVendor:debug?gl.getParameter(debug.UNMASKED_VENDOR_WEBGL):gl.getParameter(gl.VENDOR),glRenderer:debug?gl.getParameter(debug.UNMASKED_RENDERER_WEBGL):gl.getParameter(gl.RENDERER),gpuTimeMs:null,requestedMerchants:50,simulationDurationTargetMs:60000,notes:['Fixed seed, map settings, viewport, and render resolution; terrain scenes cover overview, land, water, and coast at 32, 128, and 512 hexes without simulation.','The 60-second fleet window starts when the simulation worker first reports ready; each speed gets 30 seconds including 1.5 seconds of warmup.','Frame intervals include browser scheduling and rendering; they are not GPU time.','Ticker time measures the app update callback, not total main-thread work. Long-task time includes tasks longer than 50 ms only.','Message byte size samples one in five state messages using JSON serialization on the main thread.'],scenes:[]};
  const progress=message=>{benchmarkProgress.textContent=message;benchmarkProgress.hidden=false;benchmarkStatus.textContent=message;};
  try{
-  $('seed').value='BENCHMARK-COAST-01';$('size').value='512';$('tile-count').textContent='262,144 hexes';$('animate').checked=true;
-  progress('Generating the 512 × 512 benchmark world…');await generate();
+  $('seed').value='BENCHMARK-COAST-01';$('animate').checked=false;
+  for(const [key,value] of Object.entries({density:48,scale:50,roughness:55,moisture:60,mountains:35,industryDensity:50})){$(key).value=value;$(key+'-out').value=value+'%';}
+  $('layer').value='0';$('layer').onchange();$('grid').checked=false;$('grid').onchange();wind.set(90,.5);windUI();
+  report.mapSettings=settings();report.worldConfigurationRevision=devConfiguration.revision;
+  for(const size of [32,128,512]){
+   $('size').value=String(size);$('tile-count').textContent=(size*size).toLocaleString()+' hexes';
+   progress(`Generating the ${size} × ${size} benchmark world…`);await generate();
+   mode('simulation');filter.resolution=1;cloudFilter.resolution=.5;
+   for(const view of ['overview','land','water','coast']){
+    if(view==='overview')fit();else{camera=benchmarkPoint(view);scale=BUILDING_SCALE;sync();}
+    progress(`Measuring ${size} × ${size} ${view} terrain…`);
+    report.scenes.push(await benchmarkFrames('terrain',size,view,0,performance.now()+3500));
+   }
+  }
   if(world.ports.length<2)throw Error('Benchmark seed has fewer than two trading ports.');
+  $('animate').checked=true;
   mode('simulation');camera=benchmarkPoint('coast');scale=BUILDING_SCALE;sync();filter.resolution=1;cloudFilter.resolution=.5;
   progress('Launching 50 merchants…');merchantTraffic.setDensity(50);merchantTraffic.setSimulationSpeed(1);merchantTraffic.start();
   const deadline=performance.now()+90000;while(!merchantTraffic.sessionId&&performance.now()<deadline)await new Promise(resolve=>setTimeout(resolve,100));
@@ -113,7 +126,7 @@ async function runBenchmark(){
   progress(`Finished. ${actual} merchants active. Copy or download the JSON report.`);
  }catch(error){report.error=error.message;progress(`Stopped: ${error.message} Partial report is available.`);}
  finally{
-  benchmarkRunning=false;merchantTraffic.benchmarkObserver=null;merchantTraffic.stop();$('seed').value=previousSettings.seed;$('size').value=previousSettings.size;$('tile-count').textContent=(Number(previousSettings.size)**2).toLocaleString()+' hexes';$('animate').checked=previousAnimate;$('dev-benchmark-button').disabled=false;benchmarkReport=report;$('benchmark-copy').disabled=false;$('benchmark-download').disabled=false;
+  benchmarkRunning=false;merchantTraffic.benchmarkObserver=null;merchantTraffic.stop();$('seed').value=previousSettings.seed;$('size').value=previousSettings.size;$('tile-count').textContent=(Number(previousSettings.size)**2).toLocaleString()+' hexes';for(const [key,value] of Object.entries(previousSettings.fields)){$(key).value=value;$(key+'-out').value=value+'%';}$('layer').value=previousSettings.layer;$('layer').onchange();$('grid').checked=previousSettings.grid;$('grid').onchange();wind.set(previousSettings.windDegrees,previousSettings.windStrength);windUI();$('animate').checked=previousAnimate;$('dev-benchmark-button').disabled=false;benchmarkReport=report;$('benchmark-copy').disabled=false;$('benchmark-download').disabled=false;
   $('benchmark-result').textContent=JSON.stringify(report,null,2);$('benchmark-result').hidden=false;benchmarkProgress.hidden=true;mode('home');$('dev-benchmark').showModal();
  }
 }

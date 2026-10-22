@@ -17,6 +17,8 @@ in vec2 vTextureCoord;
 out vec4 finalColor;
 uniform sampler2D uMap;
 uniform sampler2D uDepth;
+uniform sampler2D uCoastEdges;
+uniform float uUseCoastEdges;
 uniform sampler2D uShore;
 uniform float uShoreSpacing;
 uniform vec3 uWavePhases;
@@ -101,7 +103,14 @@ void main(){
  // Interior land never uses neighbor samples. Beaches still need their exact edge mask.
  if(!landPixel||isBeach>.5){
   float seaSum=min(h,.345)*2.,seaWeight=2.;
-  for(int i=0;i<6;i++){
+  if(landPixel&&uUseCoastEdges>.5){
+   vec2 p=vec2(cell.x+floor(cell.y*.5),cell.y);
+   float mask=floor(texture(uCoastEdges,(p+.5)/uN).r*255.+.5);
+   for(int i=0;i<6;i++)if(mod(floor(mask/exp2(float(i))),2.)>.5){
+    float edgeDistance=max(0.,.8660254-dot(delta,normals[i]));
+    coastDistance=min(coastDistance,edgeDistance);
+   }
+  }else for(int i=0;i<6;i++){
    vec3 neighbor=tileAt(cell+neighbors[i]);
    float edgeDistance=max(0.,.8660254-dot(delta,normals[i]));
    if(abs(step(.35,neighbor.r)-isLand)>.5)coastDistance=min(coastDistance,edgeDistance);

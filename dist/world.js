@@ -90,7 +90,19 @@ export function generateWorld(config){
   }
   biomes[i]=type;counts[type]++;data[i*4]=height;data[i*4+1]=wet;data[i*4+2]=stone;data[i*4+3]=1;
  }
- return{config,n,terrainN,bounds,depth,oceanLevels,h,moisture,rock,biomes,data,islands,removedIslands,land,counts,generationMs:performance.now()-start};
+ const coastStarted=performance.now(),coastEdges=new Uint8Array(n*n);
+ // Bit i marks an opposite-surface neighbor in the shader's DIRECTIONS order.
+ // Only beach pixels consume this mask; water still needs neighbor heights for sea color.
+ for(let row=0;row<n;row++)for(let col=0;col<n;col++){
+  const index=row*n+col,landTile=h[index]>=SEA_LEVEL,q=col-Math.floor(row/2);
+  if(!landTile||h[index]>=.4)continue;
+  for(let bit=0;bit<6;bit++){
+   const[dq,dr]=DIRECTIONS[bit],r=row+dr,c=q+dq+Math.floor(r/2);
+   if(c<0||r<0||c>=n||r>=n||h[r*n+c]<SEA_LEVEL)coastEdges[index]|=1<<bit;
+  }
+ }
+ const coastEdgesGenerationMs=performance.now()-coastStarted;
+ return{config,n,terrainN,bounds,depth,oceanLevels,h,moisture,rock,biomes,data,coastEdges,coastEdgesGenerationMs,islands,removedIslands,land,counts,generationMs:performance.now()-start};
 }
 // Inspect unmasked geography first: deleting only the rim would leave chopped islands.
 export function removeEdgeIslands(h,n){

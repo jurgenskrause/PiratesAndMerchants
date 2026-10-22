@@ -33,7 +33,7 @@ import {TownRenderer} from './town-renderer.js?v=babbc3d3950e';
 import {createPortEconomy} from './port-supplies.js?v=babbc3d3950e';
 import {ShipInspector} from './ship-inspector.js?v=babbc3d3950e';
 import {BridgeUI} from './bridge-ui.js?v=babbc3d3950e';
-import {vertex,fragment,validateTerrainProgram} from './terrain-shader.js?v=babbc3d3950e';
+import {vertex,fragment,validateTerrainProgram} from './terrain-shader.js?v=opt-phase1-20261021';
 const $=id=>document.getElementById(id),map=$('map');
 const fields=['density','scale','roughness','moisture','mountains','industryDensity'];
 const renderBudget=new RenderBudget();
@@ -106,7 +106,7 @@ async function runBenchmark(kind){
  const previousSettings={seed:$('seed').value,size:$('size').value,fields:Object.fromEntries(fields.map(k=>[k,$(k).value])),layer:$('layer').value,grid:$('grid').checked,windDegrees:wind.angle*180/Math.PI,windStrength:wind.strength},previousAnimate=$('animate').checked;
  const gl=app.renderer.gl,debug=gl.getExtension('WEBGL_debug_renderer_info');
  const report={
-  schema:'pirates-merchants-benchmark-v7',build:'benchmark-main-20261022',benchmarkType:kind,capturedAt:new Date().toISOString(),
+  schema:'pirates-merchants-benchmark-v7',build:'phase1-merge-20261022',benchmarkType:kind,capturedAt:new Date().toISOString(),
   userAgent:navigator.userAgent,platform:navigator.platform,deviceMemoryGiB:navigator.deviceMemory??null,
   hardwareConcurrency:navigator.hardwareConcurrency??null,devicePixelRatio:devicePixelRatio,screen:[screen.width,screen.height],
   glVendor:debug?gl.getParameter(debug.UNMASKED_VENDOR_WEBGL):gl.getParameter(gl.VENDOR),

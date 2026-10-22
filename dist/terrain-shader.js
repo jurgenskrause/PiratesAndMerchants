@@ -94,27 +94,31 @@ void main(){
  vec2 cell=roundHex(axial);
  vec2 delta=w-vec2(1.7320508*(cell.x+cell.y*.5),1.5*cell.y);
  vec3 f=tileAt(cell);
- float isLand=step(.35,f.r),coastDistance=2.;
-
- float seaSum=min(f.r,.345)*2.,seaWeight=2.;
- for(int i=0;i<6;i++){
-  vec3 neighbor=tileAt(cell+neighbors[i]);
-  float edgeDistance=max(0.,.8660254-dot(delta,normals[i]));
-  if(abs(step(.35,neighbor.r)-isLand)>.5)coastDistance=min(coastDistance,edgeDistance);
-
-  float weight=1./(1.+6.*edgeDistance*edgeDistance);
-  seaSum+=min(neighbor.r,.345)*weight;seaWeight+=weight;
+ float h=f.r,isLand=step(.35,h);
+ bool landPixel=isLand>.5;
+ float isBeach=isLand*(1.-step(.40,h));
+ float coastDistance=2.,seaHeight=0.;
+ // Interior land never uses neighbor samples. Beaches still need their exact edge mask.
+ if(!landPixel||isBeach>.5){
+  float seaSum=min(h,.345)*2.,seaWeight=2.;
+  for(int i=0;i<6;i++){
+   vec3 neighbor=tileAt(cell+neighbors[i]);
+   float edgeDistance=max(0.,.8660254-dot(delta,normals[i]));
+   if(abs(step(.35,neighbor.r)-isLand)>.5)coastDistance=min(coastDistance,edgeDistance);
+   if(!landPixel){float weight=1./(1.+6.*edgeDistance*edgeDistance);seaSum+=min(neighbor.r,.345)*weight;seaWeight+=weight;}
+  }
+  if(!landPixel)seaHeight=seaSum/seaWeight;
  }
- float seaHeight=seaSum/seaWeight;
  float aa=clamp(.75/uScale,.006,.06);
- float isBeach=isLand*(1.-step(.40,f.r));
  float landMask=isBeach>.5?smoothstep(-aa,aa,coastDistance):isLand;
  float tilePixels=1.7320508*uScale;
  float detail=smoothstep(10.,36.,tilePixels);
- float n=noise(w*1.7),fine=noise(w*5.2),wash=noise(w*.37);
- float h=f.r;
  float paper=texture(uPaper,fract(w*.009)).r;
  float gran=texture(uPaper,fract(w*.061+vec2(.41,.17))).r;
+ vec3 sand=vec3(.84,.76,.54),grass=vec3(.66,.71,.40),forest=vec3(.28,.46,.29),rocks=vec3(.56,.57,.50);
+ vec3 col=vec3(0.);
+ // Ocean work is needed only for water and the antialiasing band on beaches.
+ if(!landPixel||landMask<1.){
  float oceanDepth=depthAt(cell);
  vec3 sea=oceanDepth<12.?vec3(.25,.48,.55):oceanDepth<22.?vec3(.19,.40,.49):oceanDepth<36.?vec3(.13,.32,.43):vec3(.085,.25,.36);
  // Four generated open-ocean bands; coastal shallows retain their turquoise edge.
@@ -148,7 +152,15 @@ void main(){
  // Exact hex edge distance keeps foam visible on sub-mask-width beaches.
  shoreFoam=max(shoreFoam,exp(-coastDistance*18.)*localAmplitude*(.10+.15*breaking));
  sea=mix(sea,vec3(.84,.90,.83),clamp(foam+shoreFoam,0.,.85));
- vec3 sand=vec3(.84,.76,.54),grass=vec3(.66,.71,.40),forest=vec3(.28,.46,.29),rocks=vec3(.56,.57,.50);
+ col=sea;
+ }
+ float road=0.;
+ // The biome overlay also reads road tags over water and beyond the map edge.
+ if(landPixel||(uLayer>1.5&&uLayer<2.5)){
+  vec2 mapCell=vec2(cell.x+floor(cell.y*.5),cell.y);
+  road=1.-step(.5,abs(texture(uMap,(mapCell+.5)/uN).a-5.));
+ }
+ if(landPixel){
  // Five atlas rows: beach, grass, woodland, desert, rock; three painted variants each.
  float biome=h<.40?0.:f.b>.52?4.:f.g<.34?3.:f.g>.62?2.:1.;
  float variant=floor(hash(cell+vec2(41.,17.))*3.);
@@ -162,8 +174,6 @@ void main(){
  vec3 overview=biome<.5?vec3(.89,.77,.51):biome<1.5?vec3(.57,.63,.27):biome<2.5?vec3(.34,.43,.21):biome<3.5?vec3(.80,.56,.29):vec3(.51,.51,.42);
  // A small pigment wash calms close-up detail; distant hexes become broad color shapes.
  vec3 land=mix(overview,painted,.88*detail);
- vec2 mapCell=vec2(cell.x+floor(cell.y*.5),cell.y);
- float road=1.-step(.5,abs(texture(uMap,(mapCell+.5)/uN).a-5.));
  if(road>.5)land=vec3(.65,.58,.39);
  float industry=industryAt(cell);
  if(industry>.5&&isLand>.5){
@@ -182,11 +192,13 @@ void main(){
   float wetSand=1.-smoothstep(.025,.18,coastDistance);
   land=mix(land,land*vec3(.83,.86,.87),wetSand*.40);
  }
- vec3 col=landMask>=1.?land:mix(sea,land,landMask);
+ col=landMask>=1.?land:mix(col,land,landMask);
+ }
  col*=.91+paper*.11;col+=(gran-.78)*.035*detail;
  if(uLayer>.5&&uLayer<1.5){col=mix(vec3(.12,.27,.39),vec3(.89,.83,.57),smoothstep(.05,.6,h));col+=vec3(.06)*step(.35,h);col-=.065*(1.-smoothstep(.03,.10,abs(fract(h*30.)-.5)));}
  if(uLayer>1.5&&uLayer<2.5){vec3 b=h<.35?(h>.26?vec3(.47,.70,.68):vec3(.15,.34,.42)):h<.4?sand:f.b>.52?rocks:f.g<.34?sand:f.g>.62?forest:grass;col=road>.5?vec3(.65,.58,.39):b;}
  // Inset wooden trim belongs to the tile surface, not an overlapping sprite.
+ if(landPixel){
  vec2 rimDelta=abs(delta);
  float rimEdge=max(rimDelta.x,dot(rimDelta,vec2(.5,.8660254)));
  float rimAA=min(.012,.5/uScale);
@@ -198,8 +210,10 @@ void main(){
  float inMap=step(0.,rimColumn)*step(0.,cell.y)*step(rimColumn,uN-1.)*step(cell.y,uN-1.);
  // Fine trim recedes at overview scale, avoiding a dense mesh of dark lines.
  col=mix(col,wood,rimMask*inMap*isLand*smoothstep(7.,25.,tilePixels)*.90);
+ }
  if(uGrid>.5){vec2 c=roundHex(axial),delta=w-vec2(1.7320508*(c.x+c.y*.5),1.5*c.y);vec2 d=abs(delta);float edge=max(d.x,dot(d,vec2(.5,.8660254)));float width=max(.012,.75/uScale);float line=smoothstep(.8660254-width,.8660254,edge);float colIndex=c.x+floor(c.y*.5);float inside=step(0.,colIndex)*step(0.,c.y)*step(colIndex,uN-1.)*step(c.y,uN-1.);col=mix(col,vec3(.82,.89,.74),line*.35*inside);}
  if(uLayer>2.5){
+  vec4 localWind=fieldSample(uWindField,w/uFieldSpacing);
   float speed=length(localWind.xy);
   col=mix(vec3(.08,.23,.34),vec3(.92,.73,.32),clamp(speed,0.,1.));
   vec2 dir=speed>.001?localWind.xy/speed:vec2(1.,0.);

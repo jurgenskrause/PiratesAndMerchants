@@ -262,9 +262,14 @@ Buyer-owned purchase orders commit available funds; owner-attributed offers pres
 
 ## Browser benchmark
 
-Click **Run benchmark** on the development main menu. It measures fixed-seed terrain on 32², 128², and 512² maps in overview, land, water, and coast views with the simulation off. The settings and map size sequence are fixed; use the same viewport and browser zoom when comparing runs. It then starts a 50-merchant simulation on the 512² map. After the fleet worker reports ready, the fleet benchmark runs for 60 seconds: 30 seconds in the coast view at 1× and 30 seconds at 20×. Each fleet interval includes 1.5 seconds of warmup. Each terrain view runs for about 3.5 seconds including 1.5 seconds of warmup. World generation and fleet startup happen before that minute. Keep the tab visible at one viewport size. At the end, copy or download the JSON report. The report includes the actual merchant count and elapsed durations, device/browser details, frame median/p95, app ticker time, long tasks, worker tick and message samples, generation time, and available JS heap. Browser frame intervals are not GPU timer measurements.
+The development main menu has two one-click benchmarks with separate JSON reports:
 
-Where supported, the benchmark also collects per-scene GPU render time with `EXT_disjoint_timer_query_webgl2`. It measures the complete app render rather than only the terrain shader. The `mapSettings.sizeSequence` field records the fixed map sizes; earlier v4 reports mistakenly showed the menu's previous size in `mapSettings.size`, while each scene's `mapSize` was correct.
+- **Benchmark world gen** generates fixed-seed 32², 128², and 512² maps. It measures overview, land, water, and coast views with the simulation off, for about 3.5 seconds each including 1.5 seconds of warmup. It does not start a fleet.
+- **Benchmark simulation** generates only the fixed-seed 512² map and starts 50 merchants. Once the fleet worker reports ready, it runs for 60 seconds: 30 seconds in the coast view at 1× and 30 seconds at 20×, each including 1.5 seconds of warmup. World generation and fleet startup happen before that minute. It does not run the smaller terrain scenes.
+
+Both use fixed map settings. Keep the tab visible at one viewport size and browser zoom, then copy or download the JSON report. The report identifies `benchmarkType` (`world` or `simulation`) and includes device/browser details, frame median/p95, app ticker time, long tasks, generation time, and available JS heap. Simulation reports also include actual merchant count, worker tick time, and message samples. Browser frame intervals are not GPU timer measurements.
+
+Where supported, both benchmarks collect per-scene GPU render time with `EXT_disjoint_timer_query_webgl2`. It measures the complete app render rather than only the terrain shader. World reports record `mapSettings.sizeSequence`; simulation reports record `mapSettings.size`. Earlier v4 reports mistakenly showed the menu's previous size in `mapSettings.size`, while each scene's `mapSize` was correct.
 
 ### Phase 3 coast-mask experiment, reverted
 

@@ -101,52 +101,74 @@ async function benchmarkFrames(label,size,view,speed,endTime,onProgress){
   return{kind:label,mapSize:size,view,simulationSpeed:speed,seed:world.config.seed,zoom:roundMetric(scale),hexPixels:roundMetric(scale*1.7320508),viewport:[width,height],outputPixels:[app.canvas.width,app.canvas.height],filterResolution:filter.resolution,ships:merchantTraffic.fleetSnapshots?.length??0,sceneElapsedMs:roundMetric(ended-sceneBegan),sampleElapsedMs:roundMetric(ended-started),frameCount:intervals.length,frameMedianMs:percentile(intervals,.5),frameP95Ms:percentile(intervals,.95),gpuFrameCount:gpuSamples.length,gpuFrameMedianMs:percentile(gpuSamples,.5),gpuFrameP95Ms:percentile(gpuSamples,.95),tickerMedianMs:percentile(benchmarkMainSamples,.5),tickerP95Ms:percentile(benchmarkMainSamples,.95),longTaskMs:roundMetric(longTaskMs),workerTickMedianMs:percentile(ticks,.5),workerTickP95Ms:percentile(ticks,.95),messageRateHz:roundMetric(messages/((ended-started)/1000)),sampledMessageBytesMedian:percentile(sizes,.5),jsHeapMiB:performance.memory?.usedJSHeapSize?roundMetric(performance.memory.usedJSHeapSize/1048576):null,generationMs:roundMetric(world.generationMs),workerGenerationMs:roundMetric(world.workerGenerationMs)};
  }finally{gpuTimer?.stop();merchantTraffic.benchmarkObserver=null;observer?.disconnect();}
 }
-async function runBenchmark(){
- if(benchmarkRunning||!ready)return;benchmarkRunning=true;benchmarkReport=null;$('dev-benchmark-button').disabled=true;$('benchmark-copy').disabled=true;$('benchmark-download').disabled=true;
+async function runBenchmark(kind){
+ if(benchmarkRunning||!ready||!['world','simulation'].includes(kind))return;benchmarkRunning=true;benchmarkReport=null;$('dev-world-benchmark').disabled=true;$('dev-simulation-benchmark').disabled=true;$('benchmark-copy').disabled=true;$('benchmark-download').disabled=true;
  const previousSettings={seed:$('seed').value,size:$('size').value,fields:Object.fromEntries(fields.map(k=>[k,$(k).value])),layer:$('layer').value,grid:$('grid').checked,windDegrees:wind.angle*180/Math.PI,windStrength:wind.strength},previousAnimate=$('animate').checked;
  const gl=app.renderer.gl,debug=gl.getExtension('WEBGL_debug_renderer_info');
- const report={schema:'pirates-merchants-benchmark-v6',build:'phase3-reference-20261022',capturedAt:new Date().toISOString(),userAgent:navigator.userAgent,platform:navigator.platform,deviceMemoryGiB:navigator.deviceMemory??null,hardwareConcurrency:navigator.hardwareConcurrency??null,devicePixelRatio:devicePixelRatio,screen:[screen.width,screen.height],glVendor:debug?gl.getParameter(debug.UNMASKED_VENDOR_WEBGL):gl.getParameter(gl.VENDOR),glRenderer:debug?gl.getParameter(debug.UNMASKED_RENDERER_WEBGL):gl.getParameter(gl.RENDERER),gpuTimeMs:null,requestedMerchants:50,simulationDurationTargetMs:60000,notes:['Fixed seed, map settings, viewport, and render resolution; terrain scenes cover overview, land, water, and coast at 32, 128, and 512 hexes without simulation.','The 60-second fleet window starts when the simulation worker first reports ready; each speed gets 30 seconds including 1.5 seconds of warmup.','Frame intervals include browser scheduling and rendering; they are not GPU time. Per-scene GPU frame times use a WebGL timer query when supported and measure the complete app render.','Ticker time measures the app update callback, not total main-thread work. Long-task time includes tasks longer than 50 ms only.','Message byte size samples one in five state messages using JSON serialization on the main thread.'],scenes:[]};
+ const report={
+  schema:'pirates-merchants-benchmark-v7',build:'split-benchmarks-20261022',benchmarkType:kind,capturedAt:new Date().toISOString(),
+  userAgent:navigator.userAgent,platform:navigator.platform,deviceMemoryGiB:navigator.deviceMemory??null,
+  hardwareConcurrency:navigator.hardwareConcurrency??null,devicePixelRatio:devicePixelRatio,screen:[screen.width,screen.height],
+  glVendor:debug?gl.getParameter(debug.UNMASKED_VENDOR_WEBGL):gl.getParameter(gl.VENDOR),
+  glRenderer:debug?gl.getParameter(debug.UNMASKED_RENDERER_WEBGL):gl.getParameter(gl.RENDERER),
+  notes:[
+   'The fixed seed, map settings, viewport and render resolution make repeat runs comparable.',
+   'Frame intervals include browser scheduling and rendering; they are not GPU time. Per-scene GPU frame times use a WebGL timer query when supported and measure the complete app render.',
+   'Ticker time measures the app update callback, not total main-thread work. Long-task time includes tasks longer than 50 ms only.',
+   ...(kind==='simulation'?['Message byte size samples one in five state messages using JSON serialization on the main thread.']:[]),
+   kind==='world'?'Terrain scenes cover overview, land, water and coast on 32, 128 and 512 hex maps with simulation off. Each scene includes 1.5 seconds of warmup.':'Only the 512 hex world is generated. The 60-second fleet window starts when its worker first reports ready; each speed gets 30 seconds including 1.5 seconds of warmup.'
+  ],scenes:[],
+  ...(kind==='simulation'?{requestedMerchants:50,simulationDurationTargetMs:60000}:{})
+ };
  const progress=message=>{benchmarkProgress.textContent=message;benchmarkProgress.hidden=false;benchmarkStatus.textContent=message;};
  try{
   $('seed').value='BENCHMARK-COAST-01';$('animate').checked=false;
   for(const [key,value] of Object.entries({density:48,scale:50,roughness:55,moisture:60,mountains:35,industryDensity:50})){$(key).value=value;$(key+'-out').value=value+'%';}
   $('layer').value='0';$('layer').onchange();$('grid').checked=false;$('grid').onchange();wind.set(90,.5);windUI();
-  const {size:unusedSize,...fixedSettings}=settings();report.mapSettings={...fixedSettings,sizeSequence:[32,128,512]};report.worldConfigurationRevision=devConfiguration.revision;
-  for(const size of [32,128,512]){
+  const {size:unusedSize,...fixedSettings}=settings();report.mapSettings={...fixedSettings,...(kind==='world'?{sizeSequence:[32,128,512]}:{size:512})};report.worldConfigurationRevision=devConfiguration.revision;
+  for(const size of kind==='world'?[32,128,512]:[512]){
    $('size').value=String(size);$('tile-count').textContent=(size*size).toLocaleString()+' hexes';
    progress(`Generating the ${size} × ${size} benchmark world…`);await generate();
-   mode('simulation');filter.resolution=1;cloudFilter.resolution=.5;
-   for(const view of ['overview','land','water','coast']){
-    if(view==='overview')fit();else{camera=benchmarkPoint(view);scale=BUILDING_SCALE;sync();}
-    progress(`Measuring ${size} × ${size} ${view} terrain…`);
-    report.scenes.push(await benchmarkFrames('terrain',size,view,0,performance.now()+3500));
+   if(kind==='world'){
+    mode('simulation');filter.resolution=1;cloudFilter.resolution=.5;
+    for(const view of ['overview','land','water','coast']){
+     if(view==='overview')fit();else{camera=benchmarkPoint(view);scale=BUILDING_SCALE;sync();}
+     progress(`Measuring ${size} × ${size} ${view} terrain…`);
+     report.scenes.push(await benchmarkFrames('terrain',size,view,0,performance.now()+3500));
+    }
    }
   }
-  if(world.ports.length<2)throw Error('Benchmark seed has fewer than two trading ports.');
-  $('animate').checked=true;
-  mode('simulation');camera=benchmarkPoint('coast');scale=BUILDING_SCALE;sync();filter.resolution=1;cloudFilter.resolution=.5;
-  progress('Launching 50 merchants…');merchantTraffic.setDensity(50);merchantTraffic.setSimulationSpeed(1);merchantTraffic.start();
-  const deadline=performance.now()+90000;while(!merchantTraffic.sessionId&&performance.now()<deadline)await new Promise(resolve=>setTimeout(resolve,100));
-  if(!merchantTraffic.sessionId)throw Error('Fleet worker did not start. See browser console for the worker error.');
-  const simulationStarted=performance.now();
-  for(const speed of [1,20]){
-   progress(`Measuring 50 merchants at ${speed}×…`);merchantTraffic.setSimulationSpeed(speed);
-   report.scenes.push(await benchmarkFrames('fleet',512,'coast',speed,simulationStarted+(speed===1?30000:60000),remaining=>progress(`Measuring 50 merchants at ${speed}× · ${remaining}s remaining in this phase…`)));
+  if(kind==='world'){
+   progress('World benchmark finished. Copy or download the JSON report.');
+  }else{
+   if(world.ports.length<2)throw Error('Benchmark seed has fewer than two trading ports.');
+   $('animate').checked=true;
+   mode('simulation');camera=benchmarkPoint('coast');scale=BUILDING_SCALE;sync();filter.resolution=1;cloudFilter.resolution=.5;
+   progress('Launching 50 merchants…');merchantTraffic.setDensity(50);merchantTraffic.setSimulationSpeed(1);merchantTraffic.start();
+   const deadline=performance.now()+90000;while(!merchantTraffic.sessionId&&performance.now()<deadline)await new Promise(resolve=>setTimeout(resolve,100));
+   if(!merchantTraffic.sessionId)throw Error('Fleet worker did not start. See browser console for the worker error.');
+   const simulationStarted=performance.now();
+   for(const speed of [1,20]){
+    progress(`Measuring 50 merchants at ${speed}×…`);merchantTraffic.setSimulationSpeed(speed);
+    report.scenes.push(await benchmarkFrames('fleet',512,'coast',speed,simulationStarted+(speed===1?30000:60000),remaining=>progress(`Measuring 50 merchants at ${speed}× · ${remaining}s remaining in this phase…`)));
+   }
+   report.simulationElapsedMs=roundMetric(performance.now()-simulationStarted);
+   const actual=merchantTraffic.fleetSnapshots.filter(ship=>!ship.military).length;report.actualMerchants=actual;
+   if(actual<50)report.notes.push(`Only ${actual} of 50 merchants could launch in this world; measurements use the actual fleet.`);
+   progress(`Finished. ${actual} merchants active. Copy or download the JSON report.`);
   }
-  report.simulationElapsedMs=roundMetric(performance.now()-simulationStarted);
-  const actual=merchantTraffic.fleetSnapshots.filter(ship=>!ship.military).length;report.actualMerchants=actual;
-  if(actual<50)report.notes.push(`Only ${actual} of 50 merchants could launch in this world; measurements use the actual fleet.`);
-  progress(`Finished. ${actual} merchants active. Copy or download the JSON report.`);
  }catch(error){report.error=error.message;progress(`Stopped: ${error.message} Partial report is available.`);}
  finally{
-  benchmarkRunning=false;merchantTraffic.benchmarkObserver=null;merchantTraffic.stop();$('seed').value=previousSettings.seed;$('size').value=previousSettings.size;$('tile-count').textContent=(Number(previousSettings.size)**2).toLocaleString()+' hexes';for(const [key,value] of Object.entries(previousSettings.fields)){$(key).value=value;$(key+'-out').value=value+'%';}$('layer').value=previousSettings.layer;$('layer').onchange();$('grid').checked=previousSettings.grid;$('grid').onchange();wind.set(previousSettings.windDegrees,previousSettings.windStrength);windUI();$('animate').checked=previousAnimate;$('dev-benchmark-button').disabled=false;benchmarkReport=report;$('benchmark-copy').disabled=false;$('benchmark-download').disabled=false;
+  benchmarkRunning=false;merchantTraffic.benchmarkObserver=null;merchantTraffic.stop();$('seed').value=previousSettings.seed;$('size').value=previousSettings.size;$('tile-count').textContent=(Number(previousSettings.size)**2).toLocaleString()+' hexes';for(const [key,value] of Object.entries(previousSettings.fields)){$(key).value=value;$(key+'-out').value=value+'%';}$('layer').value=previousSettings.layer;$('layer').onchange();$('grid').checked=previousSettings.grid;$('grid').onchange();wind.set(previousSettings.windDegrees,previousSettings.windStrength);windUI();$('animate').checked=previousAnimate;$('dev-world-benchmark').disabled=false;$('dev-simulation-benchmark').disabled=false;benchmarkReport=report;$('benchmark-copy').disabled=false;$('benchmark-download').disabled=false;
+  $('dev-benchmark-title').textContent=kind==='world'?'World generation benchmark':'50-merchant simulation benchmark';$('benchmark-description').textContent=kind==='world'?'Fixed-seed 32, 128 and 512 hex maps, each measured in overview, land, water and coast views with simulation off. Keep the tab visible and avoid resizing.':'A fixed-seed 512 hex world starts 50 merchants automatically. The fleet runs for one minute: 30 seconds at 1× and 30 seconds at 20×. Keep the tab visible and avoid resizing.';
   $('benchmark-result').textContent=JSON.stringify(report,null,2);$('benchmark-result').hidden=false;benchmarkProgress.hidden=true;mode('home');$('dev-benchmark').showModal();
  }
 }
-$('dev-benchmark-button').onclick=runBenchmark;
+$('dev-world-benchmark').onclick=()=>runBenchmark('world');
+$('dev-simulation-benchmark').onclick=()=>runBenchmark('simulation');
 $('benchmark-close').onclick=()=>$('dev-benchmark').close();
 $('benchmark-copy').onclick=async()=>{if(!benchmarkReport)return;try{await navigator.clipboard.writeText(JSON.stringify(benchmarkReport,null,2));benchmarkStatus.textContent='JSON copied. Paste it in our chat.';}catch{benchmarkStatus.textContent='Copy failed. Use Download JSON instead.';}};
-$('benchmark-download').onclick=()=>{if(!benchmarkReport)return;const blob=new Blob([JSON.stringify(benchmarkReport,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='pirates-merchants-benchmark-'+new Date().toISOString().slice(0,10)+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};
+$('benchmark-download').onclick=()=>{if(!benchmarkReport)return;const blob=new Blob([JSON.stringify(benchmarkReport,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='pirates-merchants-'+benchmarkReport.benchmarkType+'-benchmark-'+new Date().toISOString().slice(0,10)+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};
 const previewButton=$('dev-ledger-preview')??(()=>{const actions=document.querySelector('.dev-menu-actions');if(!actions)return null;const button=document.createElement('button');button.id='dev-ledger-preview';button.type='button';button.textContent='Preview ledger';actions.append(button);return button;})();
 if(previewButton)previewButton.onclick=()=>ledgerPreview.open(ledgerPreviewPort);
 new DevRuntimeConfigurationPanel({requestApplication,requestWorld:(edits,callback)=>merchantTraffic?.requestConfiguration(edits,callback),restart:callback=>merchantTraffic?.restartConfiguration(callback),cancel:(scope,callback)=>{if(scope==='world')merchantTraffic?.cancelConfiguration(callback);else{applicationController.cancel('Developer cancelled batch');callback(applicationController.response({requestId:++applicationRequestId},'accepted',{revision:applicationController.active.revision,activationBoundary:'unchanged',snapshot:applicationController.active}));}},regenerate:()=>generate().catch(error=>{$('runtime-config-status').textContent=error.message;})});
@@ -295,7 +317,7 @@ async function init(){try{
  windUIElapsed+=t.deltaMS;if(windUIElapsed>250){windUIElapsed=0;windUI();refreshShipTooltip();refreshPortTooltip();bridgeUI.refresh();shipInspector.refresh();economicOverview.refresh();if(portDashboard?.dialog?.open&&portDashboard.port)requestPortLedger(portDashboard.port);portDashboard.refresh();$('simulation-clock').textContent=merchantTraffic.worker?'Tick '+(merchantTraffic.bridgeState?.tick??0)+' · '+(merchantTraffic.effectiveSpeed??simulationSpeed).toFixed(1)+'× actual':'Simulation not started';}
  elapsed+=t.elapsedMS;frames++;if(elapsed>1000){$('performance').textContent=`${Math.round(frames*1000/elapsed)} FPS · WebGL2`;elapsed=0;frames=0;}if(benchmarkRunning&&benchmarkTickStart)benchmarkMainSamples.push(performance.now()-benchmarkTickStart);});
  app.canvas.addEventListener('webglcontextlost',e=>{e.preventDefault();$('loading').textContent='Graphics connection lost. Reload to restore the chart.';$('loading').hidden=false;});
- ready=true;busy(false);$('dev-ready-status').textContent='Ready for testing. Configure options, then generate a world.';$('dev-world-button').disabled=false;$('dev-start-world').disabled=false;$('dev-benchmark-button').disabled=false;mode('home');registerTools();
+ ready=true;busy(false);$('dev-ready-status').textContent='Ready for testing. Configure options, then generate a world.';$('dev-world-button').disabled=false;$('dev-start-world').disabled=false;$('dev-world-benchmark').disabled=false;$('dev-simulation-benchmark').disabled=false;mode('home');registerTools();
 }catch(e){console.error(e);fail('Unable to start the map. '+e.message);}}
 function registerTools(){if(!document.modelContext?.registerTool)return;const lifecycle=new AbortController();window.addEventListener('pagehide',()=>lifecycle.abort(),{once:true});const properties={seed:{type:'string',minLength:1,maxLength:64},size:{type:'integer',enum:[32,64,128,256,512]},...Object.fromEntries(fields.map(k=>[k,{type:'number',minimum:k==='density'?10:0,maximum:k==='density'?90:100}]))};try{Promise.resolve(document.modelContext.registerTool({name:'generate_terrain',title:'Generate terrain',description:'Apply terrain settings and generate a new seeded archipelago in the workshop.',inputSchema:{type:'object',properties,additionalProperties:false},annotations:{readOnlyHint:false},async execute(input){if(!input||typeof input!=='object'||Array.isArray(input))throw Error('Expected terrain settings');for(const[k,v]of Object.entries(input)){const p=properties[k];if(!p)throw Error('Unknown setting: '+k);if(k==='seed'){if(typeof v!=='string'||!v.trim()||v.length>64)throw Error('Invalid seed');}else if(typeof v!=='number'||!Number.isFinite(v)||(p.enum?!p.enum.includes(v):v<p.minimum||v>p.maximum))throw Error('Invalid '+k);}if(generating||!ready)throw Error('Map is busy');for(const[k,v]of Object.entries(input))$(k).value=v;for(const k of fields)$(k+'-out').value=$(k).value+'%';$('tile-count').textContent=(Number($('size').value)**2).toLocaleString()+' hexes';return await generate();}},{signal:lifecycle.signal})).catch(console.warn);}catch(e){console.warn(e);}}
 init();

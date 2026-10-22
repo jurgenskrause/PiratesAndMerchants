@@ -25,7 +25,7 @@ import {centralPort} from './ports.js?v=babbc3d3950e';
 import {cloudFragment} from './atmosphere.js?v=babbc3d3950e';
 import {SailingTest} from './sailing-test.js?v=babbc3d3950e';
 import {Ocean} from './ocean.js?v=babbc3d3950e';
-import {axialToWorld,offsetToAxial,sampleWorld,BUILDING_SCALE} from './world.js?v=phase3-coast-candidate-20261022';
+import {axialToWorld,offsetToAxial,sampleWorld,BUILDING_SCALE} from './world.js?v=babbc3d3950e';
 import {Wind} from './wind.js?v=babbc3d3950e';
 import {WindField} from './wind-field.js?v=babbc3d3950e';
 import {PortRenderer} from './port-renderer.js?v=babbc3d3950e';
@@ -33,13 +33,13 @@ import {TownRenderer} from './town-renderer.js?v=babbc3d3950e';
 import {createPortEconomy} from './port-supplies.js?v=babbc3d3950e';
 import {ShipInspector} from './ship-inspector.js?v=babbc3d3950e';
 import {BridgeUI} from './bridge-ui.js?v=babbc3d3950e';
-import {vertex,fragment,validateTerrainProgram} from './terrain-shader.js?v=phase3-coast-candidate-20261022';
+import {vertex,fragment,validateTerrainProgram} from './terrain-shader.js?v=opt-phase2-20261021';
 const $=id=>document.getElementById(id),map=$('map');
 const fields=['density','scale','roughness','moisture','mountains','industryDensity'];
 const renderBudget=new RenderBudget();
-const worker=new Worker(new URL('./generator.worker.js?v=phase3-coast-candidate-20261022',import.meta.url),{type:'module'});
+const worker=new Worker(new URL('./generator.worker.js?v=benchmark-20261021',import.meta.url),{type:'module'});
 let world,app,filter,mapSource,plane,camera={x:0,y:0},scale=1,fitScale=1,id=0,activeId=0,generating=false,ready=false,generationTimer=null;
-let resolveGeneration,rejectGeneration,townRenderer,portRenderer,industryIconRenderer,windField,windSource,shoreSource,sailingTest,merchantTraffic,cloudFilter,cloudPlane,depthSource,coastEdgesSource;
+let resolveGeneration,rejectGeneration,townRenderer,portRenderer,industryIconRenderer,windField,windSource,shoreSource,sailingTest,merchantTraffic,cloudFilter,cloudPlane,depthSource;
 const portByTile=new Map(),industryByTile=new Map();
 let shipHoverPointer=null,shipTooltipVisible=false,playerRegistrationPort=null;
 let previewEconomy=null,portHoverInfo=null;
@@ -71,18 +71,6 @@ function benchmarkGpuTimer(samples){
  };
  return{poll,stop(){renderer.render=render;poll();for(const q of pending)gl.deleteQuery(q);}};
 }
-function compareCoastPixels(){
- const gl=app.renderer.gl,width=app.canvas.width,height=app.canvas.height,cache=new Uint8Array(width*height*4),reference=new Uint8Array(width*height*4),uniforms=filter.resources.worldUniforms.uniforms;
- let readError=0;
- try{
-  uniforms.uUseCoastEdges=1;app.render();gl.readPixels(0,0,width,height,gl.RGBA,gl.UNSIGNED_BYTE,cache);readError=gl.getError();
-  uniforms.uUseCoastEdges=0;app.render();gl.readPixels(0,0,width,height,gl.RGBA,gl.UNSIGNED_BYTE,reference);readError||=gl.getError();
- }finally{uniforms.uUseCoastEdges=1;}
- if(readError)return{error:`WebGL readPixels error ${readError}`};
- let differingPixels=0,maxChannelDifference=0;
- for(let i=0;i<cache.length;i+=4){let different=false;for(let c=0;c<4;c++){const delta=Math.abs(cache[i+c]-reference[i+c]);if(delta)different=true;maxChannelDifference=Math.max(maxChannelDifference,delta);}if(different)differingPixels++;}
- return{differingPixels,maxChannelDifference,pixels:width*height};
-}
 function benchmarkPoint(kind){
  const n=world.n,h=world.h,at=i=>{const row=Math.floor(i/n),col=i%n,{q,r}=offsetToAxial(col,row);return axialToWorld(q,r);};
  let land=-1,water=-1,coast=-1;
@@ -109,15 +97,15 @@ async function benchmarkFrames(label,size,view,speed,endTime,onProgress){
     if(now-lastProgress>=1000){lastProgress=now;onProgress?.(Math.max(0,Math.ceil((endTime-now)/1000)));}
     if(now<endTime)requestAnimationFrame(frame);else resolve();};requestAnimationFrame(frame);
   });
-   ended=performance.now();sampling=false;await new Promise(resolve=>setTimeout(resolve,0));gpuTimer?.stop();gpuTimer=null;
-  return{kind:label,mapSize:size,view,simulationSpeed:speed,seed:world.config.seed,zoom:roundMetric(scale),hexPixels:roundMetric(scale*1.7320508),viewport:[width,height],outputPixels:[app.canvas.width,app.canvas.height],filterResolution:filter.resolution,ships:merchantTraffic.fleetSnapshots?.length??0,coastMaskEnabled:filter.resources.worldUniforms.uniforms.uUseCoastEdges>.5,sceneElapsedMs:roundMetric(ended-sceneBegan),sampleElapsedMs:roundMetric(ended-started),frameCount:intervals.length,frameMedianMs:percentile(intervals,.5),frameP95Ms:percentile(intervals,.95),gpuFrameCount:gpuSamples.length,gpuFrameMedianMs:percentile(gpuSamples,.5),gpuFrameP95Ms:percentile(gpuSamples,.95),tickerMedianMs:percentile(benchmarkMainSamples,.5),tickerP95Ms:percentile(benchmarkMainSamples,.95),longTaskMs:roundMetric(longTaskMs),workerTickMedianMs:percentile(ticks,.5),workerTickP95Ms:percentile(ticks,.95),messageRateHz:roundMetric(messages/((ended-started)/1000)),sampledMessageBytesMedian:percentile(sizes,.5),jsHeapMiB:performance.memory?.usedJSHeapSize?roundMetric(performance.memory.usedJSHeapSize/1048576):null,generationMs:roundMetric(world.generationMs),workerGenerationMs:roundMetric(world.workerGenerationMs),coastEdgesBytes:world.coastEdges?.byteLength??0,coastEdgesGenerationMs:roundMetric(world.coastEdgesGenerationMs)};
+  ended=performance.now();sampling=false;await new Promise(resolve=>setTimeout(resolve,0));gpuTimer?.stop();gpuTimer=null;
+  return{kind:label,mapSize:size,view,simulationSpeed:speed,seed:world.config.seed,zoom:roundMetric(scale),hexPixels:roundMetric(scale*1.7320508),viewport:[width,height],outputPixels:[app.canvas.width,app.canvas.height],filterResolution:filter.resolution,ships:merchantTraffic.fleetSnapshots?.length??0,sceneElapsedMs:roundMetric(ended-sceneBegan),sampleElapsedMs:roundMetric(ended-started),frameCount:intervals.length,frameMedianMs:percentile(intervals,.5),frameP95Ms:percentile(intervals,.95),gpuFrameCount:gpuSamples.length,gpuFrameMedianMs:percentile(gpuSamples,.5),gpuFrameP95Ms:percentile(gpuSamples,.95),tickerMedianMs:percentile(benchmarkMainSamples,.5),tickerP95Ms:percentile(benchmarkMainSamples,.95),longTaskMs:roundMetric(longTaskMs),workerTickMedianMs:percentile(ticks,.5),workerTickP95Ms:percentile(ticks,.95),messageRateHz:roundMetric(messages/((ended-started)/1000)),sampledMessageBytesMedian:percentile(sizes,.5),jsHeapMiB:performance.memory?.usedJSHeapSize?roundMetric(performance.memory.usedJSHeapSize/1048576):null,generationMs:roundMetric(world.generationMs),workerGenerationMs:roundMetric(world.workerGenerationMs)};
  }finally{gpuTimer?.stop();merchantTraffic.benchmarkObserver=null;observer?.disconnect();}
 }
 async function runBenchmark(){
  if(benchmarkRunning||!ready)return;benchmarkRunning=true;benchmarkReport=null;$('dev-benchmark-button').disabled=true;$('benchmark-copy').disabled=true;$('benchmark-download').disabled=true;
  const previousSettings={seed:$('seed').value,size:$('size').value,fields:Object.fromEntries(fields.map(k=>[k,$(k).value])),layer:$('layer').value,grid:$('grid').checked,windDegrees:wind.angle*180/Math.PI,windStrength:wind.strength},previousAnimate=$('animate').checked;
  const gl=app.renderer.gl,debug=gl.getExtension('WEBGL_debug_renderer_info');
- const report={schema:'pirates-merchants-benchmark-v5',build:'phase3-coast-candidate-20261022',capturedAt:new Date().toISOString(),userAgent:navigator.userAgent,platform:navigator.platform,deviceMemoryGiB:navigator.deviceMemory??null,hardwareConcurrency:navigator.hardwareConcurrency??null,devicePixelRatio:devicePixelRatio,screen:[screen.width,screen.height],glVendor:debug?gl.getParameter(debug.UNMASKED_VENDOR_WEBGL):gl.getParameter(gl.VENDOR),glRenderer:debug?gl.getParameter(debug.UNMASKED_RENDERER_WEBGL):gl.getParameter(gl.RENDERER),gpuTimeMs:null,requestedMerchants:50,simulationDurationTargetMs:60000,notes:['Fixed seed, map settings, viewport, and render resolution; terrain scenes cover overview, land, water, and coast at 32, 128, and 512 hexes without simulation. Each coast scene also measures the original neighbor path in the same run.','The 60-second fleet window starts when the simulation worker first reports ready; each speed gets 30 seconds including 1.5 seconds of warmup.','Frame intervals include browser scheduling and rendering; they are not GPU time. Per-scene GPU frame times use a WebGL timer query when supported and measure the complete app render.','Ticker time measures the app update callback, not total main-thread work. Long-task time includes tasks longer than 50 ms only.','Message byte size samples one in five state messages using JSON serialization on the main thread.'],scenes:[],pixelComparisons:[]};
+ const report={schema:'pirates-merchants-benchmark-v6',build:'phase3-reference-20261022',capturedAt:new Date().toISOString(),userAgent:navigator.userAgent,platform:navigator.platform,deviceMemoryGiB:navigator.deviceMemory??null,hardwareConcurrency:navigator.hardwareConcurrency??null,devicePixelRatio:devicePixelRatio,screen:[screen.width,screen.height],glVendor:debug?gl.getParameter(debug.UNMASKED_VENDOR_WEBGL):gl.getParameter(gl.VENDOR),glRenderer:debug?gl.getParameter(debug.UNMASKED_RENDERER_WEBGL):gl.getParameter(gl.RENDERER),gpuTimeMs:null,requestedMerchants:50,simulationDurationTargetMs:60000,notes:['Fixed seed, map settings, viewport, and render resolution; terrain scenes cover overview, land, water, and coast at 32, 128, and 512 hexes without simulation.','The 60-second fleet window starts when the simulation worker first reports ready; each speed gets 30 seconds including 1.5 seconds of warmup.','Frame intervals include browser scheduling and rendering; they are not GPU time. Per-scene GPU frame times use a WebGL timer query when supported and measure the complete app render.','Ticker time measures the app update callback, not total main-thread work. Long-task time includes tasks longer than 50 ms only.','Message byte size samples one in five state messages using JSON serialization on the main thread.'],scenes:[]};
  const progress=message=>{benchmarkProgress.textContent=message;benchmarkProgress.hidden=false;benchmarkStatus.textContent=message;};
  try{
   $('seed').value='BENCHMARK-COAST-01';$('animate').checked=false;
@@ -132,13 +120,6 @@ async function runBenchmark(){
     if(view==='overview')fit();else{camera=benchmarkPoint(view);scale=BUILDING_SCALE;sync();}
     progress(`Measuring ${size} × ${size} ${view} terrain…`);
     report.scenes.push(await benchmarkFrames('terrain',size,view,0,performance.now()+3500));
-    if(view==='coast'){
-     filter.resources.worldUniforms.uniforms.uUseCoastEdges=0;
-     try{progress(`Measuring ${size} × ${size} coast reference…`);report.scenes.push(await benchmarkFrames('terrain',size,view,0,performance.now()+3500));}
-     finally{filter.resources.worldUniforms.uniforms.uUseCoastEdges=1;}
-     try{report.pixelComparisons.push({mapSize:size,view,...compareCoastPixels()});}
-     catch(error){report.pixelComparisons.push({mapSize:size,view,error:error.message});}
-    }
    }
   }
   if(world.ports.length<2)throw Error('Benchmark seed has fewer than two trading ports.');
@@ -229,7 +210,6 @@ worker.onmessage=({data})=>{if(data.id!==activeId)return;if(data.error)return fa
  const oldWind=windSource;windSource=new PIXI.BufferImageSource({resource:windField.data,width:windField.width,height:windField.height,format:'rgba32float',scaleMode:'nearest',alphaMode:'no-premultiply-alpha',autoGenerateMipmaps:false});
  filter.resources.uWindField=windSource;filter.resources.worldUniforms.uniforms.uFieldSpacing=windField.spacing;filter.resources.worldUniforms.uniforms.uFieldAge=0;if(oldWind)oldWind.destroy();
  const oldDepth=depthSource;depthSource=new PIXI.BufferImageSource({resource:world.depth,width:world.n,height:world.n,format:'r32float',scaleMode:'nearest',alphaMode:'no-premultiply-alpha',autoGenerateMipmaps:false});filter.resources.uDepth=depthSource;if(oldDepth)oldDepth.destroy();
- const oldCoast=coastEdgesSource;coastEdgesSource=new PIXI.BufferImageSource({resource:world.coastEdges,width:world.n,height:world.n,format:'r8unorm',scaleMode:'nearest',alphaMode:'no-premultiply-alpha',autoGenerateMipmaps:false});filter.resources.uCoastEdges=coastEdgesSource;filter.resources.worldUniforms.uniforms.uUseCoastEdges=1;if(oldCoast)oldCoast.destroy();
  portDashboard?.reset();portLedgerReports.clear();portLedgerHistories.clear();portLedgerSelections.clear();portLedgerRanges.clear();portLedgerNextRequest.clear();townRenderer.setWorld(world);portRenderer.setWorld(world);industryIconRenderer.setSettings(applicationSettings.rendering);townRenderer.setSettings(applicationSettings.rendering);industryIconRenderer.setWorld(world);portByTile.clear();industryByTile.clear();previewEconomy=createPortEconomy(world);portHoverInfo=null;
  for(const industry of world.industries)industryByTile.set(industry.tileIndex,industry);
  $('industry-summary').textContent=industryRegistry.values().filter(d=>d.placement.enabled||d.manufacturing?.runtime_enabled).map(d=>d.id).map(type=>`${world.industries.filter(i=>i.type===type).length} ${type}`).join(' · ')+(world.industryGeneration?.secondary?.unmet?' · Factory target shortfall: '+world.industryGeneration.secondary.unmet+' ('+world.industryGeneration.secondary.reason+')':'');
@@ -279,7 +259,7 @@ async function init(){try{
  terrainAtlas.source.mipmapFilter='linear';
  terrainAtlas.source.update();
  const blank=new PIXI.BufferImageSource({resource:new Float32Array([0,0,0,1]),width:1,height:1,format:'rgba32float',scaleMode:'nearest'});mapSource=blank;
- filter=new PIXI.Filter({glProgram:PIXI.GlProgram.from({vertex,fragment,preferredFragmentPrecision:'highp'}),resources:{uMap:blank,uDepth:blank,uCoastEdges:blank,uWindField:blank,uShore:blank,uPaper:paper.source,uTerrainAtlas:terrainAtlas.source,uIndustryAtlas:industryAtlas.source,worldUniforms:{uIndustryColumns:{value:assetRegistry.get('industries').columns,type:'f32'},uResolution:{value:new Float32Array([map.clientWidth,map.clientHeight]),type:'vec2<f32>'},uCamera:{value:new Float32Array([0,0]),type:'vec2<f32>'},uScale:{value:1,type:'f32'},uN:{value:64,type:'f32'},uTime:{value:0,type:'f32'},uWind:{value:new Float32Array([wind.vector.x,wind.vector.y]),type:'vec2<f32>'},uShoreSpacing:{value:1,type:'f32'},uWavePhases:{value:new Float32Array(3),type:'vec3<f32>'},uWaveHeadings:{value:new Float32Array([ocean.previous,ocean.heading]),type:'vec2<f32>'},uWaveCycle:{value:0,type:'f32'},uWaveBlend:{value:1,type:'f32'},uWaveStrength:{value:0,type:'f32'},uFieldSpacing:{value:5,type:'f32'},uFieldAge:{value:0,type:'f32'},uWaveOffset:{value:new Float32Array(2),type:'vec2<f32>'},uGrid:{value:0,type:'f32'},uLayer:{value:0,type:'f32'},uUseCoastEdges:{value:0,type:'f32'}}},padding:0,resolution:1});
+ filter=new PIXI.Filter({glProgram:PIXI.GlProgram.from({vertex,fragment,preferredFragmentPrecision:'highp'}),resources:{uMap:blank,uDepth:blank,uWindField:blank,uShore:blank,uPaper:paper.source,uTerrainAtlas:terrainAtlas.source,uIndustryAtlas:industryAtlas.source,worldUniforms:{uIndustryColumns:{value:assetRegistry.get('industries').columns,type:'f32'},uResolution:{value:new Float32Array([map.clientWidth,map.clientHeight]),type:'vec2<f32>'},uCamera:{value:new Float32Array([0,0]),type:'vec2<f32>'},uScale:{value:1,type:'f32'},uN:{value:64,type:'f32'},uTime:{value:0,type:'f32'},uWind:{value:new Float32Array([wind.vector.x,wind.vector.y]),type:'vec2<f32>'},uShoreSpacing:{value:1,type:'f32'},uWavePhases:{value:new Float32Array(3),type:'vec3<f32>'},uWaveHeadings:{value:new Float32Array([ocean.previous,ocean.heading]),type:'vec2<f32>'},uWaveCycle:{value:0,type:'f32'},uWaveBlend:{value:1,type:'f32'},uWaveStrength:{value:0,type:'f32'},uFieldSpacing:{value:5,type:'f32'},uFieldAge:{value:0,type:'f32'},uWaveOffset:{value:new Float32Array(2),type:'vec2<f32>'},uGrid:{value:0,type:'f32'},uLayer:{value:0,type:'f32'}}},padding:0,resolution:1});
  plane=new PIXI.Sprite(PIXI.Texture.WHITE);plane.width=map.clientWidth;plane.height=map.clientHeight;plane.filters=[filter];plane.filterArea=new PIXI.Rectangle(0,0,map.clientWidth,map.clientHeight);app.stage.addChild(plane);
  townRenderer=new TownRenderer(app);
  portRenderer=new PortRenderer(app,dockAtlas,harborAtlas);

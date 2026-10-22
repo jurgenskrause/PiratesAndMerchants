@@ -16,7 +16,7 @@ import {createAssetLoader,industryRegistry,dockRegistry,assetRegistry} from './s
 function startupTimeout(promise,label,ms=25000){return new Promise((resolve,reject)=>{const timer=setTimeout(()=>reject(Error(label+' did not finish loading. Please reload this page.')),ms);Promise.resolve(promise).then(value=>{clearTimeout(timer);resolve(value);},error=>{clearTimeout(timer);reject(error);});});}
 const loadAsset=createAssetLoader(url=>startupTimeout(PIXI.Assets.load(url),'Artwork '+url));
 import {SHIP_ART} from './fleet.js?v=babbc3d3950e';
-import {MerchantTraffic} from './merchant-traffic.js?v=babbc3d3950e';
+import {MerchantTraffic} from './merchant-traffic.js?v=benchmark-20261021';
 import {RenderBudget} from './render-budget.js?v=babbc3d3950e';
 import {shipHitTest,writeShipTooltip} from './ship-tooltip.js?v=babbc3d3950e';
 import {writePortTooltip} from './port-tooltip.js?v=babbc3d3950e';
@@ -25,7 +25,7 @@ import {centralPort} from './ports.js?v=babbc3d3950e';
 import {cloudFragment} from './atmosphere.js?v=babbc3d3950e';
 import {SailingTest} from './sailing-test.js?v=babbc3d3950e';
 import {Ocean} from './ocean.js?v=babbc3d3950e';
-import {axialToWorld,sampleWorld,BUILDING_SCALE} from './world.js?v=babbc3d3950e';
+import {axialToWorld,offsetToAxial,sampleWorld,BUILDING_SCALE} from './world.js?v=babbc3d3950e';
 import {Wind} from './wind.js?v=babbc3d3950e';
 import {WindField} from './wind-field.js?v=babbc3d3950e';
 import {PortRenderer} from './port-renderer.js?v=babbc3d3950e';
@@ -37,7 +37,7 @@ import {vertex,fragment,validateTerrainProgram} from './terrain-shader.js?v=opt-
 const $=id=>document.getElementById(id),map=$('map');
 const fields=['density','scale','roughness','moisture','mountains','industryDensity'];
 const renderBudget=new RenderBudget();
-const worker=new Worker(new URL('./generator.worker.js?v=babbc3d3950e',import.meta.url),{type:'module'});
+const worker=new Worker(new URL('./generator.worker.js?v=benchmark-20261021',import.meta.url),{type:'module'});
 let world,app,filter,mapSource,plane,camera={x:0,y:0},scale=1,fitScale=1,id=0,activeId=0,generating=false,ready=false,generationTimer=null;
 let resolveGeneration,rejectGeneration,townRenderer,portRenderer,industryIconRenderer,windField,windSource,shoreSource,sailingTest,merchantTraffic,cloudFilter,cloudPlane,depthSource;
 const portByTile=new Map(),industryByTile=new Map();
@@ -55,6 +55,120 @@ function requestApplication(edits,callback=()=>{}){const requestId=++application
 function worldConfigurationResult(m){if(m.selectedSnapshot){rememberDeveloperSelection(m);devConfiguration.revision=m.selectedSnapshot.revision;$('simulate').disabled=generating||!world||world.configuration?.revision!==devConfiguration.revision;}if(m.status==='accepted'&&m.activationBoundary==='simulation_restart'){sailingTest?.stop(false);shipInspector?.reset();previewEconomy=createPortEconomy(world);}}
 const devConfiguration=new DevConfigurationPanel({onApply:(session,warnings=[])=>{requestApplication(session.application.values);$('simulate').disabled=!world||world.configuration?.revision!==devConfiguration.revision;$('seed-note').textContent=($('simulate').disabled?'World configuration changed. Generate a new world to apply.':'Display preferences queued for the next frame.')+(warnings.length?' Warnings: '+warnings.map(w=>w.message).join(' '):'');}});
 ledgerPreview=new PortDashboard({getWorld:()=>({ports:[ledgerPreviewPort]})});
+let benchmarkRunning=false,benchmarkReport=null,benchmarkMainSamples=[];
+const benchmarkStatus=$('benchmark-status'),benchmarkProgress=$('benchmark-progress');
+const roundMetric=value=>Number.isFinite(value)?Math.round(value*100)/100:null;
+function percentile(values,p){if(!values.length)return null;const sorted=[...values].sort((a,b)=>a-b),position=(sorted.length-1)*p,low=Math.floor(position);return roundMetric(sorted[low]+(sorted[Math.ceil(position)]-sorted[low])*(position-low));}
+function benchmarkGpuTimer(samples){
+ const gl=app.renderer.gl,ext=gl.getExtension('EXT_disjoint_timer_query_webgl2');
+ if(!ext)return null;
+ const renderer=app.renderer,render=renderer.render,pending=[];
+ const poll=()=>{if(gl.getParameter(ext.GPU_DISJOINT_EXT)){for(const q of pending)gl.deleteQuery(q);pending.length=0;return;}
+  for(let i=0;i<pending.length;){const q=pending[i];if(!gl.getQueryParameter(q,gl.QUERY_RESULT_AVAILABLE)){i++;continue;}samples.push(gl.getQueryParameter(q,gl.QUERY_RESULT)/1e6);gl.deleteQuery(q);pending.splice(i,1);}
+ };
+ renderer.render=function(...args){const q=gl.createQuery();if(!q)return render.apply(this,args);
+  gl.beginQuery(ext.TIME_ELAPSED_EXT,q);try{return render.apply(this,args);}finally{gl.endQuery(ext.TIME_ELAPSED_EXT);pending.push(q);}
+ };
+ return{poll,stop(){renderer.render=render;poll();for(const q of pending)gl.deleteQuery(q);}};
+}
+function benchmarkPoint(kind){
+ const n=world.n,h=world.h,at=i=>{const row=Math.floor(i/n),col=i%n,{q,r}=offsetToAxial(col,row);return axialToWorld(q,r);};
+ let land=-1,water=-1,coast=-1;
+ for(let i=0;i<h.length;i++){
+  if(land<0&&h[i]>.48)land=i;
+  if(water<0&&h[i]<.1&&world.depth[i]>=28)water=i;
+  if(coast<0&&h[i]>=.35&&h[i]<.4)coast=i;
+ }
+ return at(kind==='land'?(land>=0?land:Math.max(0,coast)):kind==='water'?(water>=0?water:0):coast>=0?coast:land>=0?land:0);
+}
+async function benchmarkFrames(label,size,view,speed,endTime,onProgress){
+ const width=map.clientWidth,height=map.clientHeight,intervals=[],ticks=[],sizes=[],gpuSamples=[];
+ const sceneBegan=performance.now(),warmupEnd=sceneBegan+1500;
+ let messages=0,longTaskMs=0,started=Infinity,ended=Infinity,sampling=false,lastProgress=0,gpuTimer=null;
+ const observer=typeof PerformanceObserver==='function'&&PerformanceObserver.supportedEntryTypes?.includes('longtask')?new PerformanceObserver(list=>{for(const entry of list.getEntries())if(entry.startTime>=started&&entry.startTime<ended)longTaskMs+=entry.duration;}):null;
+ observer?.observe({entryTypes:['longtask']});
+ merchantTraffic.benchmarkObserver=data=>{if(data.type!=='state'||!sampling)return;messages++;if(Number.isFinite(data.benchmarkTickMs))ticks.push(data.benchmarkTickMs);if(messages%5===1)sizes.push(new TextEncoder().encode(JSON.stringify(data)).byteLength);};
+ try{
+  let previous=null;await new Promise((resolve,reject)=>{
+   const frame=now=>{if(document.hidden||map.clientWidth!==width||map.clientHeight!==height){reject(Error('Tab was hidden or viewport changed. Run again without resizing.'));return;}
+    if(!sampling&&now>=warmupEnd){started=now;sampling=true;benchmarkMainSamples=[];gpuTimer=benchmarkGpuTimer(gpuSamples);}
+    gpuTimer?.poll();
+    if(previous!==null&&sampling&&now>started)intervals.push(now-previous);previous=now;
+    if(now-lastProgress>=1000){lastProgress=now;onProgress?.(Math.max(0,Math.ceil((endTime-now)/1000)));}
+    if(now<endTime)requestAnimationFrame(frame);else resolve();};requestAnimationFrame(frame);
+  });
+  ended=performance.now();sampling=false;await new Promise(resolve=>setTimeout(resolve,0));gpuTimer?.stop();gpuTimer=null;
+  return{kind:label,mapSize:size,view,simulationSpeed:speed,seed:world.config.seed,zoom:roundMetric(scale),hexPixels:roundMetric(scale*1.7320508),viewport:[width,height],outputPixels:[app.canvas.width,app.canvas.height],filterResolution:filter.resolution,ships:merchantTraffic.fleetSnapshots?.length??0,sceneElapsedMs:roundMetric(ended-sceneBegan),sampleElapsedMs:roundMetric(ended-started),frameCount:intervals.length,frameMedianMs:percentile(intervals,.5),frameP95Ms:percentile(intervals,.95),gpuFrameCount:gpuSamples.length,gpuFrameMedianMs:percentile(gpuSamples,.5),gpuFrameP95Ms:percentile(gpuSamples,.95),tickerMedianMs:percentile(benchmarkMainSamples,.5),tickerP95Ms:percentile(benchmarkMainSamples,.95),longTaskMs:roundMetric(longTaskMs),workerTickMedianMs:percentile(ticks,.5),workerTickP95Ms:percentile(ticks,.95),messageRateHz:roundMetric(messages/((ended-started)/1000)),sampledMessageBytesMedian:percentile(sizes,.5),jsHeapMiB:performance.memory?.usedJSHeapSize?roundMetric(performance.memory.usedJSHeapSize/1048576):null,generationMs:roundMetric(world.generationMs),workerGenerationMs:roundMetric(world.workerGenerationMs)};
+ }finally{gpuTimer?.stop();merchantTraffic.benchmarkObserver=null;observer?.disconnect();}
+}
+async function runBenchmark(kind){
+ if(benchmarkRunning||!ready||!['world','simulation'].includes(kind))return;benchmarkRunning=true;benchmarkReport=null;$('dev-world-benchmark').disabled=true;$('dev-simulation-benchmark').disabled=true;$('benchmark-copy').disabled=true;$('benchmark-download').disabled=true;
+ const previousSettings={seed:$('seed').value,size:$('size').value,fields:Object.fromEntries(fields.map(k=>[k,$(k).value])),layer:$('layer').value,grid:$('grid').checked,windDegrees:wind.angle*180/Math.PI,windStrength:wind.strength},previousAnimate=$('animate').checked;
+ const gl=app.renderer.gl,debug=gl.getExtension('WEBGL_debug_renderer_info');
+ const report={
+  schema:'pirates-merchants-benchmark-v7',build:'phase2-merge-20261022',benchmarkType:kind,capturedAt:new Date().toISOString(),
+  userAgent:navigator.userAgent,platform:navigator.platform,deviceMemoryGiB:navigator.deviceMemory??null,
+  hardwareConcurrency:navigator.hardwareConcurrency??null,devicePixelRatio:devicePixelRatio,screen:[screen.width,screen.height],
+  glVendor:debug?gl.getParameter(debug.UNMASKED_VENDOR_WEBGL):gl.getParameter(gl.VENDOR),
+  glRenderer:debug?gl.getParameter(debug.UNMASKED_RENDERER_WEBGL):gl.getParameter(gl.RENDERER),
+  notes:[
+   'The fixed seed, map settings, viewport and render resolution make repeat runs comparable.',
+   'Frame intervals include browser scheduling and rendering; they are not GPU time. Per-scene GPU frame times use a WebGL timer query when supported and measure the complete app render.',
+   'Ticker time measures the app update callback, not total main-thread work. Long-task time includes tasks longer than 50 ms only.',
+   ...(kind==='simulation'?['Message byte size samples one in five state messages using JSON serialization on the main thread.']:[]),
+   kind==='world'?'Terrain scenes cover overview, land, water and coast on 32, 128 and 512 hex maps with simulation off. Each scene includes 1.5 seconds of warmup.':'Only the 512 hex world is generated. The 60-second fleet window starts when its worker first reports ready; each speed gets 30 seconds including 1.5 seconds of warmup.'
+  ],scenes:[],
+  ...(kind==='simulation'?{requestedMerchants:50,simulationDurationTargetMs:60000}:{})
+ };
+ const progress=message=>{benchmarkProgress.textContent=message;benchmarkProgress.hidden=false;benchmarkStatus.textContent=message;};
+ try{
+  $('seed').value='BENCHMARK-COAST-01';$('animate').checked=false;
+  for(const [key,value] of Object.entries({density:48,scale:50,roughness:55,moisture:60,mountains:35,industryDensity:50})){$(key).value=value;$(key+'-out').value=value+'%';}
+  $('layer').value='0';$('layer').onchange();$('grid').checked=false;$('grid').onchange();wind.set(90,.5);windUI();
+  const {size:unusedSize,...fixedSettings}=settings();report.mapSettings={...fixedSettings,...(kind==='world'?{sizeSequence:[32,128,512]}:{size:512})};report.worldConfigurationRevision=devConfiguration.revision;
+  for(const size of kind==='world'?[32,128,512]:[512]){
+   $('size').value=String(size);$('tile-count').textContent=(size*size).toLocaleString()+' hexes';
+   progress(`Generating the ${size} × ${size} benchmark world…`);await generate();
+   if(kind==='world'){
+    mode('simulation');filter.resolution=1;cloudFilter.resolution=.5;
+    for(const view of ['overview','land','water','coast']){
+     if(view==='overview')fit();else{camera=benchmarkPoint(view);scale=BUILDING_SCALE;sync();}
+     progress(`Measuring ${size} × ${size} ${view} terrain…`);
+     report.scenes.push(await benchmarkFrames('terrain',size,view,0,performance.now()+3500));
+    }
+   }
+  }
+  if(kind==='world'){
+   progress('World benchmark finished. Copy or download the JSON report.');
+  }else{
+   if(world.ports.length<2)throw Error('Benchmark seed has fewer than two trading ports.');
+   $('animate').checked=true;
+   mode('simulation');camera=benchmarkPoint('coast');scale=BUILDING_SCALE;sync();filter.resolution=1;cloudFilter.resolution=.5;
+   progress('Launching 50 merchants…');merchantTraffic.setDensity(50);merchantTraffic.setSimulationSpeed(1);merchantTraffic.start();
+   const deadline=performance.now()+90000;while(!merchantTraffic.sessionId&&performance.now()<deadline)await new Promise(resolve=>setTimeout(resolve,100));
+   if(!merchantTraffic.sessionId)throw Error('Fleet worker did not start. See browser console for the worker error.');
+   const simulationStarted=performance.now();
+   for(const speed of [1,20]){
+    progress(`Measuring 50 merchants at ${speed}×…`);merchantTraffic.setSimulationSpeed(speed);
+    report.scenes.push(await benchmarkFrames('fleet',512,'coast',speed,simulationStarted+(speed===1?30000:60000),remaining=>progress(`Measuring 50 merchants at ${speed}× · ${remaining}s remaining in this phase…`)));
+   }
+   report.simulationElapsedMs=roundMetric(performance.now()-simulationStarted);
+   const actual=merchantTraffic.fleetSnapshots.filter(ship=>!ship.military).length;report.actualMerchants=actual;
+   if(actual<50)report.notes.push(`Only ${actual} of 50 merchants could launch in this world; measurements use the actual fleet.`);
+   progress(`Finished. ${actual} merchants active. Copy or download the JSON report.`);
+  }
+ }catch(error){report.error=error.message;progress(`Stopped: ${error.message} Partial report is available.`);}
+ finally{
+  benchmarkRunning=false;merchantTraffic.benchmarkObserver=null;merchantTraffic.stop();$('seed').value=previousSettings.seed;$('size').value=previousSettings.size;$('tile-count').textContent=(Number(previousSettings.size)**2).toLocaleString()+' hexes';for(const [key,value] of Object.entries(previousSettings.fields)){$(key).value=value;$(key+'-out').value=value+'%';}$('layer').value=previousSettings.layer;$('layer').onchange();$('grid').checked=previousSettings.grid;$('grid').onchange();wind.set(previousSettings.windDegrees,previousSettings.windStrength);windUI();$('animate').checked=previousAnimate;$('dev-world-benchmark').disabled=false;$('dev-simulation-benchmark').disabled=false;benchmarkReport=report;$('benchmark-copy').disabled=false;$('benchmark-download').disabled=false;
+  $('dev-benchmark-title').textContent=kind==='world'?'World generation benchmark':'50-merchant simulation benchmark';$('benchmark-description').textContent=kind==='world'?'Fixed-seed 32, 128 and 512 hex maps, each measured in overview, land, water and coast views with simulation off. Keep the tab visible and avoid resizing.':'A fixed-seed 512 hex world starts 50 merchants automatically. The fleet runs for one minute: 30 seconds at 1× and 30 seconds at 20×. Keep the tab visible and avoid resizing.';
+  $('benchmark-result').textContent=JSON.stringify(report,null,2);$('benchmark-result').hidden=false;benchmarkProgress.hidden=true;mode('home');$('dev-benchmark').showModal();
+ }
+}
+$('dev-world-benchmark').onclick=()=>runBenchmark('world');
+$('dev-simulation-benchmark').onclick=()=>runBenchmark('simulation');
+$('benchmark-close').onclick=()=>$('dev-benchmark').close();
+$('benchmark-copy').onclick=async()=>{if(!benchmarkReport)return;try{await navigator.clipboard.writeText(JSON.stringify(benchmarkReport,null,2));benchmarkStatus.textContent='JSON copied. Paste it in our chat.';}catch{benchmarkStatus.textContent='Copy failed. Use Download JSON instead.';}};
+$('benchmark-download').onclick=()=>{if(!benchmarkReport)return;const blob=new Blob([JSON.stringify(benchmarkReport,null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='pirates-merchants-'+benchmarkReport.benchmarkType+'-benchmark-'+new Date().toISOString().slice(0,10)+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};
 const previewButton=$('dev-ledger-preview')??(()=>{const actions=document.querySelector('.dev-menu-actions');if(!actions)return null;const button=document.createElement('button');button.id='dev-ledger-preview';button.type='button';button.textContent='Preview ledger';actions.append(button);return button;})();
 if(previewButton)previewButton.onclick=()=>ledgerPreview.open(ledgerPreviewPort);
 new DevRuntimeConfigurationPanel({requestApplication,requestWorld:(edits,callback)=>merchantTraffic?.requestConfiguration(edits,callback),restart:callback=>merchantTraffic?.restartConfiguration(callback),cancel:(scope,callback)=>{if(scope==='world')merchantTraffic?.cancelConfiguration(callback);else{applicationController.cancel('Developer cancelled batch');callback(applicationController.response({requestId:++applicationRequestId},'accepted',{revision:applicationController.active.revision,activationBoundary:'unchanged',snapshot:applicationController.active}));}},regenerate:()=>generate().catch(error=>{$('runtime-config-status').textContent=error.message;})});
@@ -193,17 +307,17 @@ async function init(){try{
  app.stage.addChild(bridgeUI.heat);
  new ResizeObserver(entries=>{for(const entry of entries)map.parentElement.style.setProperty('--map-hud-height',`${entry.contentRect.height}px`);}).observe(document.querySelector('.map-hud'));
  new ResizeObserver(()=>{const w=map.clientWidth,h=map.clientHeight;app.renderer.resize(w,h);plane.width=w;plane.height=h;cloudPlane.width=w;cloudPlane.height=h;cloudPlane.filterArea=new PIXI.Rectangle(0,0,w,h);plane.filterArea=new PIXI.Rectangle(0,0,w,h);sync();}).observe(map);
- let elapsed=0,frames=0,windUIElapsed=0;const windUniform=new Float32Array(2),waveOffset=new Float32Array(2),waveHeadings=new Float32Array(2);app.ticker.maxFPS=60;app.ticker.add(t=>{const applied=applicationController.activate('next_frame',{frame:++frameNumber});if(applied?.status==='accepted'){applicationSettings=applicationHolder.settings;sync();}const uniforms=filter.resources.worldUniforms.uniforms;
+ let elapsed=0,frames=0,windUIElapsed=0;const windUniform=new Float32Array(2),waveOffset=new Float32Array(2),waveHeadings=new Float32Array(2);app.ticker.maxFPS=60;app.ticker.add(t=>{const benchmarkTickStart=benchmarkRunning?performance.now():0;const applied=applicationController.activate('next_frame',{frame:++frameNumber});if(applied?.status==='accepted'){applicationSettings=applicationHolder.settings;sync();}const uniforms=filter.resources.worldUniforms.uniforms;
  if($('animate').checked&&!document.hidden){const speed=merchantTraffic.worker?(merchantTraffic.effectiveSpeed??simulationSpeed):1,steps=Math.ceil(speed),dt=Math.min(t.deltaMS/1000,.1)*speed/steps;for(let i=0;i<steps;i++){uniforms.uTime+=dt;wind.update(dt,$('wind-drift').checked);ocean.update(dt,wind);uniforms.uWavePhases=ocean.phases;uniforms.uWaveCycle=ocean.cycle;waveHeadings[0]=ocean.previous;waveHeadings[1]=ocean.heading;uniforms.uWaveHeadings=waveHeadings;uniforms.uWaveBlend=ocean.blend;uniforms.uWaveStrength=ocean.speed;if(windField){if(windField.update(dt,wind.vector))windSource.update();uniforms.uFieldAge=windField.age;}}}
  const vector=wind.vector;windUniform[0]=vector.x;windUniform[1]=vector.y;uniforms.uWind=windUniform;waveOffset[0]=wind.offset.x;waveOffset[1]=wind.offset.y;uniforms.uWaveOffset=waveOffset;cloudFilter.resources.cloudUniforms.uniforms.uFlow=waveOffset;cloudFilter.resources.cloudUniforms.uniforms.uTime=uniforms.uTime;cloudPlane.visible=$('layer').value==='0';
- if(!document.hidden&&!generating){const resolution=renderBudget.update(t.elapsedMS/1000);if(resolution!==null){filter.resolution=resolution;cloudFilter.resolution=resolution*.5;}}
+ if(!document.hidden&&!generating&&!benchmarkRunning){const resolution=renderBudget.update(t.elapsedMS/1000);if(resolution!==null){filter.resolution=resolution;cloudFilter.resolution=resolution*.5;}}
  const sailingRate=merchantTraffic.worker?(merchantTraffic.effectiveSpeed??simulationSpeed):1,sailingSteps=Math.ceil(sailingRate);for(let i=0;i<sailingSteps;i++)sailingTest.update(Math.min(t.deltaMS/1000,.1)*sailingRate/sailingSteps);sailingTest.render(camera,scale,map.clientWidth,map.clientHeight);
  merchantTraffic.update(t.deltaMS/1000);merchantTraffic.render(camera,scale,map.clientWidth,map.clientHeight);
  bridgeUI.render(camera,scale,map.clientWidth,map.clientHeight);
  windUIElapsed+=t.deltaMS;if(windUIElapsed>250){windUIElapsed=0;windUI();refreshShipTooltip();refreshPortTooltip();bridgeUI.refresh();shipInspector.refresh();economicOverview.refresh();if(portDashboard?.dialog?.open&&portDashboard.port)requestPortLedger(portDashboard.port);portDashboard.refresh();$('simulation-clock').textContent=merchantTraffic.worker?'Tick '+(merchantTraffic.bridgeState?.tick??0)+' · '+(merchantTraffic.effectiveSpeed??simulationSpeed).toFixed(1)+'× actual':'Simulation not started';}
- elapsed+=t.elapsedMS;frames++;if(elapsed>1000){$('performance').textContent=`${Math.round(frames*1000/elapsed)} FPS · WebGL2`;elapsed=0;frames=0;}});
+ elapsed+=t.elapsedMS;frames++;if(elapsed>1000){$('performance').textContent=`${Math.round(frames*1000/elapsed)} FPS · WebGL2`;elapsed=0;frames=0;}if(benchmarkRunning&&benchmarkTickStart)benchmarkMainSamples.push(performance.now()-benchmarkTickStart);});
  app.canvas.addEventListener('webglcontextlost',e=>{e.preventDefault();$('loading').textContent='Graphics connection lost. Reload to restore the chart.';$('loading').hidden=false;});
- ready=true;busy(false);$('dev-ready-status').textContent='Ready for testing. Configure options, then generate a world.';$('dev-world-button').disabled=false;$('dev-start-world').disabled=false;mode('home');registerTools();
+ ready=true;busy(false);$('dev-ready-status').textContent='Ready for testing. Configure options, then generate a world.';$('dev-world-button').disabled=false;$('dev-start-world').disabled=false;$('dev-world-benchmark').disabled=false;$('dev-simulation-benchmark').disabled=false;mode('home');registerTools();
 }catch(e){console.error(e);fail('Unable to start the map. '+e.message);}}
 function registerTools(){if(!document.modelContext?.registerTool)return;const lifecycle=new AbortController();window.addEventListener('pagehide',()=>lifecycle.abort(),{once:true});const properties={seed:{type:'string',minLength:1,maxLength:64},size:{type:'integer',enum:[32,64,128,256,512]},...Object.fromEntries(fields.map(k=>[k,{type:'number',minimum:k==='density'?10:0,maximum:k==='density'?90:100}]))};try{Promise.resolve(document.modelContext.registerTool({name:'generate_terrain',title:'Generate terrain',description:'Apply terrain settings and generate a new seeded archipelago in the workshop.',inputSchema:{type:'object',properties,additionalProperties:false},annotations:{readOnlyHint:false},async execute(input){if(!input||typeof input!=='object'||Array.isArray(input))throw Error('Expected terrain settings');for(const[k,v]of Object.entries(input)){const p=properties[k];if(!p)throw Error('Unknown setting: '+k);if(k==='seed'){if(typeof v!=='string'||!v.trim()||v.length>64)throw Error('Invalid seed');}else if(typeof v!=='number'||!Number.isFinite(v)||(p.enum?!p.enum.includes(v):v<p.minimum||v>p.maximum))throw Error('Invalid '+k);}if(generating||!ready)throw Error('Map is busy');for(const[k,v]of Object.entries(input))$(k).value=v;for(const k of fields)$(k+'-out').value=$(k).value+'%';$('tile-count').textContent=(Number($('size').value)**2).toLocaleString()+' hexes';return await generate();}},{signal:lifecycle.signal})).catch(console.warn);}catch(e){console.warn(e);}}
 init();

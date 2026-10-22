@@ -259,3 +259,9 @@ Phase 2A adds size-compatible berth allocation across dynamic docks and per-port
 ## Funded economy: Phase 2
 
 Buyer-owned purchase orders commit available funds; owner-attributed offers preserve seller identity. Dockside acceptance settles payment and ownership immediately, while timed handling keeps paid goods unavailable until physically delivered. Whole-unit pickups, partial sales, retained cargo and explicit dumping preserve ownership and conservation. See [the Phase 2 contract and compatibility inventory](docs/funded-markets-phase2.md) and [integrated conservation report](docs/phase2-conservation-results.json). Run the funded-market, funded-market-priority, funded-handling and phase2-conservation tests.
+
+## Browser benchmarks
+
+The development main menu has two one-click, fixed-seed benchmarks. **Benchmark world gen** generates 32², 128², and 512² maps and measures overview, land, water, and coast views without simulation. **Benchmark simulation** generates only the 512² map, starts 50 merchants automatically, and measures the coast view for 30 seconds at 1× and 30 seconds at 20×. World generation and fleet startup happen before the simulation's 60-second measurement window.
+
+Keep the tab visible at a fixed viewport and browser zoom. Each button produces its own JSON report (`benchmarkType: "world"` or `"simulation"`) and a distinct download filename. Reports include device, browser, frame median/p95, app ticker and long-task time, generation time, and available JS heap. Simulation reports also include actual merchant count, worker tick time, and sampled message size/rate. Browser frame intervals include scheduling and are not GPU time; `EXT_disjoint_timer_query_webgl2`, where available, measures the complete app render. World reports record `mapSettings.sizeSequence`, while simulation reports record `mapSettings.size`.

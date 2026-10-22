@@ -69,27 +69,30 @@ function benchmarkPoint(kind){
  }
  return at(kind==='land'?(land>=0?land:Math.max(0,coast)):kind==='water'?(water>=0?water:0):coast>=0?coast:land>=0?land:0);
 }
-async function benchmarkFrames(label,size,view,speed=0){
+async function benchmarkFrames(label,size,view,speed,endTime,onProgress){
  const width=map.clientWidth,height=map.clientHeight,intervals=[],ticks=[],sizes=[];
- let messages=0,longTaskMs=0,started=Infinity,ended=Infinity,sampling=false;
+ const sceneBegan=performance.now(),warmupEnd=sceneBegan+1500;
+ let messages=0,longTaskMs=0,started=Infinity,ended=Infinity,sampling=false,lastProgress=0;
  const observer=typeof PerformanceObserver==='function'&&PerformanceObserver.supportedEntryTypes?.includes('longtask')?new PerformanceObserver(list=>{for(const entry of list.getEntries())if(entry.startTime>=started&&entry.startTime<ended)longTaskMs+=entry.duration;}):null;
  observer?.observe({entryTypes:['longtask']});
  merchantTraffic.benchmarkObserver=data=>{if(data.type!=='state'||!sampling)return;messages++;if(Number.isFinite(data.benchmarkTickMs))ticks.push(data.benchmarkTickMs);if(messages%5===1)sizes.push(new TextEncoder().encode(JSON.stringify(data)).byteLength);};
  try{
-  let previous=null,frames=0;await new Promise((resolve,reject)=>{
+  let previous=null;await new Promise((resolve,reject)=>{
    const frame=now=>{if(document.hidden||map.clientWidth!==width||map.clientHeight!==height){reject(Error('Tab was hidden or viewport changed. Run again without resizing.'));return;}
-    if(frames===30){started=now;sampling=true;benchmarkMainSamples=[];}if(previous!==null&&frames>30)intervals.push(now-previous);previous=now;frames++;
-    if(frames<150)requestAnimationFrame(frame);else resolve();};requestAnimationFrame(frame);
+    if(!sampling&&now>=warmupEnd){started=now;sampling=true;benchmarkMainSamples=[];}
+    if(previous!==null&&sampling&&now>started)intervals.push(now-previous);previous=now;
+    if(now-lastProgress>=1000){lastProgress=now;onProgress?.(Math.max(0,Math.ceil((endTime-now)/1000)));}
+    if(now<endTime)requestAnimationFrame(frame);else resolve();};requestAnimationFrame(frame);
   });
   ended=performance.now();sampling=false;await new Promise(resolve=>setTimeout(resolve,0));
-  return{kind:label,mapSize:size,view,simulationSpeed:speed,seed:world.config.seed,zoom:roundMetric(scale),hexPixels:roundMetric(scale*1.7320508),viewport:[width,height],outputPixels:[app.canvas.width,app.canvas.height],filterResolution:filter.resolution,ships:merchantTraffic.fleetSnapshots?.length??0,frameCount:intervals.length,frameMedianMs:percentile(intervals,.5),frameP95Ms:percentile(intervals,.95),tickerMedianMs:percentile(benchmarkMainSamples,.5),tickerP95Ms:percentile(benchmarkMainSamples,.95),longTaskMs:roundMetric(longTaskMs),workerTickMedianMs:percentile(ticks,.5),workerTickP95Ms:percentile(ticks,.95),messageRateHz:roundMetric(messages/((ended-started)/1000)),sampledMessageBytesMedian:percentile(sizes,.5),jsHeapMiB:performance.memory?.usedJSHeapSize?roundMetric(performance.memory.usedJSHeapSize/1048576):null,generationMs:roundMetric(world.generationMs),workerGenerationMs:roundMetric(world.workerGenerationMs)};
+  return{kind:label,mapSize:size,view,simulationSpeed:speed,seed:world.config.seed,zoom:roundMetric(scale),hexPixels:roundMetric(scale*1.7320508),viewport:[width,height],outputPixels:[app.canvas.width,app.canvas.height],filterResolution:filter.resolution,ships:merchantTraffic.fleetSnapshots?.length??0,sceneElapsedMs:roundMetric(ended-sceneBegan),sampleElapsedMs:roundMetric(ended-started),frameCount:intervals.length,frameMedianMs:percentile(intervals,.5),frameP95Ms:percentile(intervals,.95),tickerMedianMs:percentile(benchmarkMainSamples,.5),tickerP95Ms:percentile(benchmarkMainSamples,.95),longTaskMs:roundMetric(longTaskMs),workerTickMedianMs:percentile(ticks,.5),workerTickP95Ms:percentile(ticks,.95),messageRateHz:roundMetric(messages/((ended-started)/1000)),sampledMessageBytesMedian:percentile(sizes,.5),jsHeapMiB:performance.memory?.usedJSHeapSize?roundMetric(performance.memory.usedJSHeapSize/1048576):null,generationMs:roundMetric(world.generationMs),workerGenerationMs:roundMetric(world.workerGenerationMs)};
  }finally{merchantTraffic.benchmarkObserver=null;observer?.disconnect();}
 }
 async function runBenchmark(){
  if(benchmarkRunning||!ready)return;benchmarkRunning=true;benchmarkReport=null;$('dev-benchmark-button').disabled=true;$('benchmark-copy').disabled=true;$('benchmark-download').disabled=true;
  const previousSettings={seed:$('seed').value,size:$('size').value},previousAnimate=$('animate').checked;
  const gl=app.renderer.gl,debug=gl.getExtension('WEBGL_debug_renderer_info');
- const report={schema:'pirates-merchants-benchmark-v2',build:'phase2+benchmark-50-20261021',capturedAt:new Date().toISOString(),userAgent:navigator.userAgent,platform:navigator.platform,deviceMemoryGiB:navigator.deviceMemory??null,hardwareConcurrency:navigator.hardwareConcurrency??null,devicePixelRatio:devicePixelRatio,screen:[screen.width,screen.height],glVendor:debug?gl.getParameter(debug.UNMASKED_VENDOR_WEBGL):gl.getParameter(gl.VENDOR),glRenderer:debug?gl.getParameter(debug.UNMASKED_RENDERER_WEBGL):gl.getParameter(gl.RENDERER),gpuTimeMs:null,requestedMerchants:50,notes:['Frame intervals include browser scheduling and rendering; they are not GPU time.','Ticker time measures the app update callback, not total main-thread work. Long-task time includes tasks longer than 50 ms only.','Message byte size samples one in five state messages using JSON serialization on the main thread.'],scenes:[]};
+ const report={schema:'pirates-merchants-benchmark-v3',build:'phase2+benchmark-60s-20261022',capturedAt:new Date().toISOString(),userAgent:navigator.userAgent,platform:navigator.platform,deviceMemoryGiB:navigator.deviceMemory??null,hardwareConcurrency:navigator.hardwareConcurrency??null,devicePixelRatio:devicePixelRatio,screen:[screen.width,screen.height],glVendor:debug?gl.getParameter(debug.UNMASKED_VENDOR_WEBGL):gl.getParameter(gl.VENDOR),glRenderer:debug?gl.getParameter(debug.UNMASKED_RENDERER_WEBGL):gl.getParameter(gl.RENDERER),gpuTimeMs:null,requestedMerchants:50,simulationDurationTargetMs:60000,notes:['The 60-second window starts when the simulation worker first reports ready; each speed gets 30 seconds including 1.5 seconds of warmup.','Frame intervals include browser scheduling and rendering; they are not GPU time.','Ticker time measures the app update callback, not total main-thread work. Long-task time includes tasks longer than 50 ms only.','Message byte size samples one in five state messages using JSON serialization on the main thread.'],scenes:[]};
  const progress=message=>{benchmarkProgress.textContent=message;benchmarkProgress.hidden=false;benchmarkStatus.textContent=message;};
  try{
   $('seed').value='BENCHMARK-COAST-01';$('size').value='512';$('tile-count').textContent='262,144 hexes';$('animate').checked=true;
@@ -99,10 +102,12 @@ async function runBenchmark(){
   progress('Launching 50 merchants…');merchantTraffic.setDensity(50);merchantTraffic.setSimulationSpeed(1);merchantTraffic.start();
   const deadline=performance.now()+90000;while(!merchantTraffic.sessionId&&performance.now()<deadline)await new Promise(resolve=>setTimeout(resolve,100));
   if(!merchantTraffic.sessionId)throw Error('Fleet worker did not start. See browser console for the worker error.');
+  const simulationStarted=performance.now();
   for(const speed of [1,20]){
-   progress(`Measuring 50 merchants at ${speed}×…`);merchantTraffic.setSimulationSpeed(speed);await new Promise(resolve=>setTimeout(resolve,1500));
-   report.scenes.push(await benchmarkFrames('fleet',512,'coast',speed));
+   progress(`Measuring 50 merchants at ${speed}×…`);merchantTraffic.setSimulationSpeed(speed);
+   report.scenes.push(await benchmarkFrames('fleet',512,'coast',speed,simulationStarted+(speed===1?30000:60000),remaining=>progress(`Measuring 50 merchants at ${speed}× · ${remaining}s remaining in this phase…`)));
   }
+  report.simulationElapsedMs=roundMetric(performance.now()-simulationStarted);
   const actual=merchantTraffic.fleetSnapshots.filter(ship=>!ship.military).length;report.actualMerchants=actual;
   if(actual<50)report.notes.push(`Only ${actual} of 50 merchants could launch in this world; measurements use the actual fleet.`);
   progress(`Finished. ${actual} merchants active. Copy or download the JSON report.`);

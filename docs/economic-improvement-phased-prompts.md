@@ -2,14 +2,14 @@
 
 **Update:** Economic Improvement
 
-**Integration branch:** `feature/economic-improvement`
+**Integration branch:** `economic-improvement`
 
 **Source design:** [Organic growth playbook](organic-growth-playbook.md)
 **Status:** implementation prompts; no gameplay implementation is claimed by this document.
 
 ## Delivery contract for the whole update
 
-Use one reviewable phase PR per top-level phase, targeting `feature/economic-improvement`. A phase is complete after its acceptance checks pass and its PR merges into that branch. The update is complete only after the integration PR merges into `main`. Keep the integration branch buildable after each phase. Make new behavior opt-in behind a validated world configuration/profile until the complete normal start works. Do not change the fixed world-generation and 50-merchant simulation benchmark recipes; explicitly route benchmark startup through its existing profile. Remove the normal-play merchant count only after the new funded fleet path works.
+Use one reviewable phase PR per top-level phase, targeting `economic-improvement`. A phase is complete after its acceptance checks pass and its PR merges into that branch. The update is complete only after the integration PR merges into `main`. Keep the integration branch buildable after each phase. Make new behavior opt-in behind a validated world configuration/profile until the complete normal start works. Do not change the fixed world-generation and 50-merchant simulation benchmark recipes; explicitly route benchmark startup through its existing profile. Remove the normal-play merchant count only after the new funded fleet path works.
 
 The currently agreed rules are: two or three selected national factions (British, Spanish, French), optional Pirates who do not count toward the two-national minimum, two islands per faction and at most one colony per island, all-AI snake selection in forward then reverse seeded order including Pirates, national crown plus small colonies, Pirate two small colonies, one starter industry per colony, and tick-zero funding/founding. Each national crown has a Large Deep-Water Dock, Man-of-War, Brigantine, and Schooner; each national small colony has a Small Dock and Schooner. Each Pirate small colony has a Small Dock and one pirate-only Corsair. The exact national merchant mix and Corsair name remain proposed defaults, exposed through validated configuration as appropriate. Combat and player-run faction controls are outside this update. Shipyards and later funded vessel construction are in scope.
 
@@ -29,7 +29,7 @@ Identify the actual source catalog files, generated `dist/data/catalog-bundle.js
 
 Record seeded 32, 128, and 512 maps, each with island counts, eligible harbor sites, generated port/industry counts, generation and worker setup time, and memory where available. Record the existing fixed simulation benchmark output on one target browser, plus the exact seed, resolution, viewport, fleet, and duration. Keep these reports in `docs/economic-improvement/` without changing benchmark code merely to chase a metric.
 
-**Developer prompt:** Prepare the `feature/economic-improvement` integration branch and a repeatable baseline. Inventory code and art sources; establish focused automated checks for world generation, money/goods conservation, dock safety, ship start, and benchmark routing. Record actual commands, environment, and known missing tests. Avoid claiming the new economy works yet.
+**Developer prompt:** Prepare the `economic-improvement` integration branch and a repeatable baseline. Inventory code and art sources; establish focused automated checks for world generation, money/goods conservation, dock safety, ship start, and benchmark routing. Record actual commands, environment, and known missing tests. Avoid claiming the new economy works yet.
 
 **Done when:** Baseline artifacts, test commands, and a clean build are reviewable; every later phase can compare against them. No changed gameplay or benchmark recipe.
 
@@ -191,7 +191,7 @@ Run the focused configuration, draft, terrain, dock, water, finance/goods, visua
 
 ### 10.2 Fixed benchmark comparison and release
 
-Run the unchanged world-generation and simulation benchmark buttons on the same device, browser, viewport, and resolution as Phase 0. Compare output schema/scene/ship count, generation time, frame and worker timing, messages, and memory; report both gains and regressions. Separate normal-mode measurements because its world and fleet are intentionally different. Review documentation, source assets, generated catalog consistency, and any migration/legacy behavior. Open the final integration PR from `feature/economic-improvement` to `main` with test evidence and limitations; merge when reviewed.
+Run the unchanged world-generation and simulation benchmark buttons on the same device, browser, viewport, and resolution as Phase 0. Compare output schema/scene/ship count, generation time, frame and worker timing, messages, and memory; report both gains and regressions. Separate normal-mode measurements because its world and fleet are intentionally different. Review documentation, source assets, generated catalog consistency, and any migration/legacy behavior. Open the final integration PR from `economic-improvement` to `main` with test evidence and limitations; merge when reviewed.
 
 **Developer prompt:** Validate the complete Economic Improvement feature as a real economy, not a collection of isolated starts. Demonstrate deterministic supported and unsupported maps, the full seeded industry-to-shipyard path, correct AI and Pirate opening, water-only anchorage, exact conservation, complete art, and unchanged fixed benchmarks. Produce a concise before/after report and a reviewable PR. Mark the update complete only once the final PR is merged to `main`.
 

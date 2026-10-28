@@ -10,6 +10,7 @@ import {DevRuntimeConfigurationPanel} from './dev-runtime-configuration.js?v=bab
 import {DEFAULT_APPLICATION_SETTINGS} from './compiled-configuration.js?v=babbc3d3950e';
 let applicationSettings=DEFAULT_APPLICATION_SETTINGS;
 import {configurationRegistry,createConfigurationSession,persistDeveloperSelections} from './configuration-registry.js?v=babbc3d3950e';
+import {WORLD_SCENARIOS,configurationForScenario,validateWorldScenario} from './world-scenario.js';
 import {DevConfigurationPanel} from './dev-configuration.js?v=babbc3d3950e';
 import {IndustryIconRenderer} from './industry-icons.js?v=babbc3d3950e';
 import {createAssetLoader,industryRegistry,dockRegistry,assetRegistry} from './simulation-registry.js?v=babbc3d3950e';
@@ -37,8 +38,9 @@ import {vertex,fragment,validateTerrainProgram} from './terrain-shader.js?v=opt-
 const $=id=>document.getElementById(id),map=$('map');
 const fields=['density','scale','roughness','moisture','mountains','industryDensity'];
 const renderBudget=new RenderBudget();
-const worker=new Worker(new URL('./generator.worker.js?v=benchmark-20261021',import.meta.url),{type:'module'});
+const worker=new Worker(new URL('./generator.worker.js?v=economic-improvement-phase1-20261028',import.meta.url),{type:'module'});
 let world,app,filter,mapSource,plane,camera={x:0,y:0},scale=1,fitScale=1,id=0,activeId=0,generating=false,ready=false,generationTimer=null;
+let activeGeneration=null;
 let resolveGeneration,rejectGeneration,townRenderer,portRenderer,industryIconRenderer,windField,windSource,shoreSource,sailingTest,merchantTraffic,cloudFilter,cloudPlane,depthSource;
 const portByTile=new Map(),industryByTile=new Map();
 let shipHoverPointer=null,shipTooltipVisible=false,playerRegistrationPort=null;
@@ -46,14 +48,15 @@ let previewEconomy=null,portHoverInfo=null;
 const portLedgerReports=new Map();
 const portLedgerHistories=new Map(),portLedgerSelections=new Map(),portLedgerRanges=new Map(),portLedgerNextRequest=new Map();
 let portDashboard=null,ledgerPreview=null,economicOverview=null,bridgeUI=null,shipInspector=null,simulationSpeed=1,simulationRunning=false;
+const canSimulateWorld=()=>!!world&&!generating&&world.scenario!==WORLD_SCENARIOS.LEGACY_BENCHMARK&&world.configuration?.revision===devConfiguration.revision;
 const ledgerPreviewPort=Object.freeze({id:'ledger-preview-port',name:'Port Aurelia',faction:'british',factionName:'British'});
 const applicationHolder={snapshot:configurationRegistry.resolve({}, {scope:'application'}),settings:applicationSettings};
 let applicationRequestId=0,frameNumber=0;const applicationCallbacks=new Map();
 function rememberDeveloperSelection(m){if(!m.selectedSnapshot||typeof devConfiguration==='undefined')return;const selected=Object.freeze({...devConfiguration.selected,...m.selectedSnapshot.values});devConfiguration.selected=selected;if(m.status==='accepted')persistDeveloperSelections(selected);}
 const applicationController=new ConfigurationTransaction({snapshot:applicationHolder.snapshot,sessionId:'application-tab',prepare:p=>prepareRenderingActivation({holder:applicationHolder,industry:industryIconRenderer,town:townRenderer},p),notify:m=>{rememberDeveloperSelection(m);const callback=applicationCallbacks.get(m.requestId);if(m.status!=='pending')applicationCallbacks.delete(m.requestId);callback?.(m);}});
 function requestApplication(edits,callback=()=>{}){const requestId=++applicationRequestId;applicationCallbacks.set(requestId,callback);applicationController.request({requestId,sessionId:applicationController.sessionId,baseRevision:applicationController.active.revision,edits});}
-function worldConfigurationResult(m){if(m.selectedSnapshot){rememberDeveloperSelection(m);devConfiguration.revision=m.selectedSnapshot.revision;$('simulate').disabled=generating||!world||world.configuration?.revision!==devConfiguration.revision;}if(m.status==='accepted'&&m.activationBoundary==='simulation_restart'){sailingTest?.stop(false);shipInspector?.reset();previewEconomy=createPortEconomy(world);}}
-const devConfiguration=new DevConfigurationPanel({onApply:(session,warnings=[])=>{requestApplication(session.application.values);$('simulate').disabled=!world||world.configuration?.revision!==devConfiguration.revision;$('seed-note').textContent=($('simulate').disabled?'World configuration changed. Generate a new world to apply.':'Display preferences queued for the next frame.')+(warnings.length?' Warnings: '+warnings.map(w=>w.message).join(' '):'');}});
+function worldConfigurationResult(m){if(m.selectedSnapshot){rememberDeveloperSelection(m);devConfiguration.revision=m.selectedSnapshot.revision;$('simulate').disabled=!canSimulateWorld();}if(m.status==='accepted'&&m.activationBoundary==='simulation_restart'){sailingTest?.stop(false);shipInspector?.reset();previewEconomy=createPortEconomy(world);}}
+const devConfiguration=new DevConfigurationPanel({onApply:(session,warnings=[])=>{requestApplication(session.application.values);$('simulate').disabled=!canSimulateWorld();$('seed-note').textContent=($('simulate').disabled?'World configuration changed. Generate a new world to apply.':'Display preferences queued for the next frame.')+(warnings.length?' Warnings: '+warnings.map(w=>w.message).join(' '):'');}});
 ledgerPreview=new PortDashboard({getWorld:()=>({ports:[ledgerPreviewPort]})});
 let benchmarkRunning=false,benchmarkReport=null,benchmarkMainSamples=[];
 const benchmarkStatus=$('benchmark-status'),benchmarkProgress=$('benchmark-progress');
@@ -106,7 +109,7 @@ async function runBenchmark(kind){
  const previousSettings={seed:$('seed').value,size:$('size').value,fields:Object.fromEntries(fields.map(k=>[k,$(k).value])),layer:$('layer').value,grid:$('grid').checked,windDegrees:wind.angle*180/Math.PI,windStrength:wind.strength},previousAnimate=$('animate').checked;
  const gl=app.renderer.gl,debug=gl.getExtension('WEBGL_debug_renderer_info');
  const report={
-  schema:'pirates-merchants-benchmark-v7',build:'phase2-merge-20261022',benchmarkType:kind,capturedAt:new Date().toISOString(),
+  schema:'pirates-merchants-benchmark-v7',build:'economic-improvement-phase1-20261028',benchmarkType:kind,capturedAt:new Date().toISOString(),
   userAgent:navigator.userAgent,platform:navigator.platform,deviceMemoryGiB:navigator.deviceMemory??null,
   hardwareConcurrency:navigator.hardwareConcurrency??null,devicePixelRatio:devicePixelRatio,screen:[screen.width,screen.height],
   glVendor:debug?gl.getParameter(debug.UNMASKED_VENDOR_WEBGL):gl.getParameter(gl.VENDOR),
@@ -125,10 +128,10 @@ async function runBenchmark(kind){
   $('seed').value='BENCHMARK-COAST-01';$('animate').checked=false;
   for(const [key,value] of Object.entries({density:48,scale:50,roughness:55,moisture:60,mountains:35,industryDensity:50})){$(key).value=value;$(key+'-out').value=value+'%';}
   $('layer').value='0';$('layer').onchange();$('grid').checked=false;$('grid').onchange();wind.set(90,.5);windUI();
-  const {size:unusedSize,...fixedSettings}=settings();report.mapSettings={...fixedSettings,...(kind==='world'?{sizeSequence:[32,128,512]}:{size:512})};report.worldConfigurationRevision=devConfiguration.revision;
+  const {size:unusedSize,...fixedSettings}=settings();report.mapSettings={...fixedSettings,...(kind==='world'?{sizeSequence:[32,128,512]}:{size:512})};report.worldConfigurationRevision=0;
   for(const size of kind==='world'?[32,128,512]:[512]){
    $('size').value=String(size);$('tile-count').textContent=(size*size).toLocaleString()+' hexes';
-   progress(`Generating the ${size} × ${size} benchmark world…`);await generate();
+   progress(`Generating the ${size} × ${size} benchmark world…`);await generate(WORLD_SCENARIOS.LEGACY_BENCHMARK);
    if(kind==='world'){
     mode('simulation');filter.resolution=1;cloudFilter.resolution=.5;
     for(const view of ['overview','land','water','coast']){
@@ -185,7 +188,7 @@ function showWorldGeneration(){if(!ready)return;stopSimulation();mode('world');$
 $('dev-home-button').onclick=()=>{stopSimulation();mode('home');};
 $('dev-world-button').onclick=showWorldGeneration;$('dev-start-world').onclick=showWorldGeneration;
 $('adjust-simulation').onclick=()=>{sailingTest?.clear();$('dev-adjust').showModal();};$('dev-adjust-close').onclick=()=>{$('dev-adjust').close();map.focus();};
-$('simulate').onclick=()=>{if(!world||generating||!ready||world.configuration?.revision!==devConfiguration.revision)return;simulationRunning=true;mode('simulation');merchantTraffic.setDensity(Number($('merchant-density').value));merchantTraffic.start();$('fleet-list').disabled=!merchantTraffic.worker;$('test-ship').disabled=!merchantTraffic.worker;};
+$('simulate').onclick=()=>{if(!canSimulateWorld()||!ready)return;simulationRunning=true;mode('simulation');merchantTraffic.setDensity(Number($('merchant-density').value));merchantTraffic.start();$('fleet-list').disabled=!merchantTraffic.worker;$('test-ship').disabled=!merchantTraffic.worker;};
 
 function refreshPortTooltip(){if(portHoverInfo&&shipHoverPointer&&!shipTooltipVisible)writePortTooltip($('inspect'),portHoverInfo,shipHoverPointer,map.clientWidth,map.clientHeight,openPortLedgerFromTooltip);}
 function ledgerDataForPort(port){const report=portLedgerReports.get(port?.id),options={histories:portLedgerHistories.get(port?.id)??[],selectedCommodity:portLedgerSelections.get(port?.id)??null,rangeSeconds:portLedgerRanges.get(port?.id)??0};if(report)return createPortLedgerData(port,report,options);if(!merchantTraffic?.worker&&previewEconomy&&port?.id)return createPortLedgerData(port,portEconomicInfo(previewEconomy,port.id,{world}),options);return createPortLedgerData(port,null,options);}
@@ -215,15 +218,15 @@ $('wind-direction').oninput=setWind;$('wind-strength').oninput=setWind;$('wind-r
 const names=['Deep sea','Shore & shallows','Grassland','Forest','Desert','Rock','Road'];
 const launchPort=()=>world?.ports.find(p=>p.id===$('port-selector').value)||centralPort(world);
 const settings=()=>({seed:$('seed').value.trim()||'TRADEWINDS',size:Number($('size').value),...Object.fromEntries(fields.map(k=>[k,Number($(k).value)]))});
-function busy(value){if(!value){clearTimeout(generationTimer);generationTimer=null;}if(value)$('loading').textContent='Charting the archipelago…';generating=value;$('simulate').disabled=value||!world||world.configuration?.revision!==devConfiguration.revision;$('dev-world-button').disabled=value||!ready;$('dev-start-world').disabled=value||!ready;$('test-ship').disabled=value||!sailingTest;$('generate').disabled=value;$('loading').hidden=!value;}
+function busy(value){if(!value){clearTimeout(generationTimer);generationTimer=null;}if(value)$('loading').textContent='Charting the archipelago…';generating=value;$('simulate').disabled=!canSimulateWorld();$('dev-world-button').disabled=value||!ready;$('dev-start-world').disabled=value||!ready;$('test-ship').disabled=value||!sailingTest;$('generate').disabled=value;$('loading').hidden=!value;}
 function fail(message){$('dev-ready-status').textContent=message;busy(false);$('loading').textContent=message;$('loading').hidden=false;$('seed-note').textContent='Could not generate this world. Try again.';if(rejectGeneration)rejectGeneration(Error(message));resolveGeneration=rejectGeneration=null;}
-function generate(){if(!ready||generating)return Promise.reject(Error('The map is busy. Try again shortly.'));stopSimulation();mode('world');busy(true);const config=settings();$('seed').value=config.seed;activeId=++id;generationTimer=setTimeout(()=>{activeId=++id;fail('The terrain generator did not respond. Please reload this page.');},45000);worker.postMessage({id:activeId,config,configuration:createConfigurationSession(devConfiguration.selected,{revision:devConfiguration.revision}).world});return new Promise((resolve,reject)=>{resolveGeneration=resolve;rejectGeneration=reject;});}
+function generate(scenario=WORLD_SCENARIOS.NORMAL){if(!ready||generating)return Promise.reject(Error('The map is busy. Try again shortly.'));const snapshot=configurationForScenario(scenario,devConfiguration.selected,devConfiguration.revision);stopSimulation();mode('world');busy(true);const config=settings();$('seed').value=config.seed;activeId=++id;activeGeneration={scenario,snapshot};generationTimer=setTimeout(()=>{activeId=++id;fail('The terrain generator did not respond. Please reload this page.');},45000);worker.postMessage({id:activeId,config,configuration:snapshot,scenario});return new Promise((resolve,reject)=>{resolveGeneration=resolve;rejectGeneration=reject;});}
 function sync(){if(!filter)return;const u=filter.resources.worldUniforms.uniforms;u.uCamera=new Float32Array([camera.x,camera.y]);u.uScale=scale;u.uResolution=new Float32Array([map.clientWidth,map.clientHeight]);if(cloudFilter){const c=cloudFilter.resources.cloudUniforms.uniforms;c.uCamera=u.uCamera;c.uScale=scale;c.uResolution=u.uResolution;}$('zoom-label').textContent=Math.round(scale/BUILDING_SCALE*100)+'%';townRenderer?.update(camera,scale,map.clientWidth,map.clientHeight);portRenderer?.update(camera,scale,map.clientWidth,map.clientHeight);industryIconRenderer?.update(camera,scale,map.clientWidth,map.clientHeight,Number($('layer').value));sailingTest?.render(camera,scale,map.clientWidth,map.clientHeight);merchantTraffic?.render(camera,scale,map.clientWidth,map.clientHeight);}
 function fit(){if(!world)return;if(sailingTest?.ship)sailingTest.follow.checked=false;camera={x:world.bounds.width/2,y:world.bounds.height/2};fitScale=Math.min((map.clientWidth-70)/world.bounds.width,Math.max(180,map.clientHeight-180)/world.bounds.height)*.94;scale=fitScale;sync();}
 function buildingView(center=false){if(!world)return;const island=world.islands[0];if(center===true&&world.ports?.length)camera={...centralPort(world).harborPosition};else if(center===true)camera=island?axialToWorld(island.q,island.r):{x:world.bounds.width/2,y:world.bounds.height/2};scale=BUILDING_SCALE;sync();}
 function zoom(factor,point={x:map.clientWidth/2,y:map.clientHeight/2}){if(!world)return;const next=Math.max(fitScale*.6,Math.min(Math.max(BUILDING_SCALE*4,fitScale*18),scale*factor));const sx=point.x-map.clientWidth/2,sy=point.y-map.clientHeight/2;camera.x+=sx/scale-sx/next;camera.y+=sy/scale-sy/next;scale=next;sync();}
 worker.onmessage=({data})=>{if(data.id!==activeId)return;if(data.error)return fail(data.error);try{
- world=data.world;world.configuration=configurationRegistry.reconstruct(world.configuration);const old=mapSource;
+ world=data.world;const verified=validateWorldScenario(world,{expected:activeGeneration.scenario});if(configurationRegistry.serialize(verified.snapshot)!==configurationRegistry.serialize(activeGeneration.snapshot))throw Error('Stale world configuration response');world.configuration=verified.snapshot;const old=mapSource;
  mapSource=new PIXI.BufferImageSource({resource:world.data,width:world.terrainN,height:world.terrainN,format:'rgba32float',scaleMode:'nearest',alphaMode:'no-premultiply-alpha',autoGenerateMipmaps:false});
  filter.resources.uMap=mapSource;filter.resources.worldUniforms.uniforms.uN=world.n;if(old)old.destroy();
  const oldShore=shoreSource;shoreSource=new PIXI.BufferImageSource({resource:world.shore.data,width:world.shore.width,height:world.shore.height,format:'rgba32float',scaleMode:'nearest',alphaMode:'no-premultiply-alpha',autoGenerateMipmaps:false});

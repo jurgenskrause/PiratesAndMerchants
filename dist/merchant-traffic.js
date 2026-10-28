@@ -1,5 +1,6 @@
 import {industryMarker} from './industry-markers.js?v=babbc3d3950e';
 import {configurationRegistry,developerSelectedValues} from './configuration-registry.js?v=babbc3d3950e';
+import {validateWorldScenario} from './world-scenario.js';
 import {settingsForWorld} from './compiled-configuration.js?v=babbc3d3950e';
 import {replaceRoadTerrain,resetRoadTerrain} from './feeder-roads.js?v=babbc3d3950e';
 import {runtimeFaction} from './simulation-registry.js?v=babbc3d3950e';
@@ -12,7 +13,7 @@ import {shipShadowStyle} from './sailing-test.js?v=babbc3d3950e';
 import {trafficPose} from './traffic-motion.js?v=babbc3d3950e';
 const fieldCopy=field=>field?{width:field.width,height:field.height,spacing:field.spacing,data:field.data}:null;
 export class MerchantTraffic {
- constructor({app,getWorld,getWind,getField,getBasePort,getFrames,getPlayer=()=>null,onInfrastructure=()=>{},onConfiguration=()=>{},workerFactory=()=>new Worker(new URL('./merchant.worker.js?v=benchmark-50-20261021',import.meta.url),{type:'module'}),status}){
+ constructor({app,getWorld,getWind,getField,getBasePort,getFrames,getPlayer=()=>null,onInfrastructure=()=>{},onConfiguration=()=>{},workerFactory=()=>new Worker(new URL('./merchant.worker.js?v=economic-improvement-phase1-20261028',import.meta.url),{type:'module'}),status}){
   Object.assign(this,{app,getWorld,getWind,getField,getBasePort,getFrames,getPlayer,onInfrastructure,onConfiguration,workerFactory,status});this.configurationRequests=new Map();this.configurationSerial=0;this.sessionId=null;this.worker=null;this.records=new Map();this.failed=new Set();this.epoch=0;this.environmentTime=0;this.playerTime=0;this.dockRequest=0;this.dockListener=null;this.density=6;this.simulationSpeed=1;
   this.layer=new PIXI.Container({isRenderGroup:true});this.layer.eventMode='none';app.stage.addChild(this.layer);this.layer.visible=false;
   this.showRoutes=false;this.routeLayer=new PIXI.Container({isRenderGroup:true});this.routes=new PIXI.Graphics();this.routeLayer.addChild(this.routes);this.layer.addChild(this.routeLayer);
@@ -20,7 +21,7 @@ export class MerchantTraffic {
  }
  start(){
   if(this.worker)return;this.stop();const epoch=this.epoch,world=this.getWorld();if(!world)return;
-  world.configuration=world.configuration?configurationRegistry.reconstruct(world.configuration):configurationRegistry.resolve(developerSelectedValues);this.settings=settingsForWorld(world);this.configurationRevision=this.settings.revision;this.density=Math.min(this.density,this.settings.fleet.maxMerchants);this.infrastructureWorld=world;this.industryBaseline=structuredClone(world.industries??[]);this.industryDataBaseline=world.data?.slice();this.infrastructureBaseline=new Map(world.ports.map(p=>[p.id,{docks:structuredClone(p.docks??[]),townTiles:[...(p.townTiles??[])],buildings:structuredClone(p.buildings??[]),roadTiles:structuredClone(p.roadTiles??[]),population:p.population,capacity:p.capacity,infrastructureRevision:p.infrastructureRevision??0}]));this.layer.visible=true;this.status.textContent='Preparing merchant traffic…';
+  world.configuration=world.configuration?validateWorldScenario(world).snapshot:configurationRegistry.resolve(developerSelectedValues);this.settings=settingsForWorld(world);this.configurationRevision=this.settings.revision;this.density=Math.min(this.density,this.settings.fleet.maxMerchants);this.infrastructureWorld=world;this.industryBaseline=structuredClone(world.industries??[]);this.industryDataBaseline=world.data?.slice();this.infrastructureBaseline=new Map(world.ports.map(p=>[p.id,{docks:structuredClone(p.docks??[]),townTiles:[...(p.townTiles??[])],buildings:structuredClone(p.buildings??[]),roadTiles:structuredClone(p.roadTiles??[]),population:p.population,capacity:p.capacity,infrastructureRevision:p.infrastructureRevision??0}]));this.layer.visible=true;this.status.textContent='Preparing merchant traffic…';
   try{
    const worker=this.workerFactory();this.worker=worker;
    worker.onmessage=({data})=>{
@@ -54,10 +55,10 @@ export class MerchantTraffic {
     const active=new Set(ships.map(s=>s.id));for(const [id,record] of this.records)if(!active.has(id)){if(record)this.destroy(record);this.records.delete(id);}
    };
    worker.onerror=()=>{if(this.worker===worker){this.stop();this.status.textContent='Merchant traffic unavailable. Restart the test to retry.';}};
-   const {n,bounds,h,depth,moisture,rock,biomes,ports,industries,config,configuration}=world;
+   const {n,bounds,h,depth,moisture,rock,biomes,ports,industries,config,configuration,scenario}=world;
    const s=this.getPlayer(),player=s?{type:s.type,x:s.x,y:s.y,heading:s.heading,vx:s.vx,vy:s.vy,speed:s.speed,stationary:!!s.docked||!!s.anchored,assisted:!!s.docking}:null;
    // Structured clone copies these arrays. Never transfer/detach renderer buffers.
-   worker.postMessage({type:'start',world:{n,bounds,h,depth,moisture,rock,biomes,ports,industries,config,configuration},wind:this.getWind(),field:fieldCopy(this.getField()),basePortId:this.getBasePort()?.id,density:this.density,simulationSpeed:this.simulationSpeed,player});
+   worker.postMessage({type:'start',world:{n,bounds,h,depth,moisture,rock,biomes,ports,industries,config,configuration,scenario},wind:this.getWind(),field:fieldCopy(this.getField()),basePortId:this.getBasePort()?.id,density:this.density,simulationSpeed:this.simulationSpeed,player});
   }catch(error){this.stop();this.status.textContent='Merchant traffic unavailable. Restart the test to retry.';console.error(error);}
  }
  create(snapshot,frames,time=this.snapshotTime??0){

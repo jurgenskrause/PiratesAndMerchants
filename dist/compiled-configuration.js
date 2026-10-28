@@ -19,7 +19,15 @@ export function compileWorldConfiguration(input){
  // Transitional public alias. Values are derived here, never stored in a second catalog.
  const global={id:'global',globalDailyWagePerCrew:economy.dailyWagePerCrew,...clock,...scaling,feederRoadRadius:roads.radius,roadMountainHeight:roads.mountainHeight,roadMaxSearchNodes:roads.maxNodes};
  const provisions={revision,refillSeconds:v['provisions.refill_seconds'],diversionImprovement:v['provisions.diversion_improvement']};
- return freeze({revision,clock,investment,industryGeneration,economy,merchant,fleet,scaling,roads,threat,navigation,provisions,global});
+ const opening={revision,enabled:v['opening.enabled'],participants:{british:v['opening.british_enabled'],spanish:v['opening.spanish_enabled'],french:v['opening.french_enabled'],pirates:v['opening.pirates_enabled']},
+  colonies:{perFaction:v['opening.colonies_per_faction'],crownPerNation:v['opening.crown_colonies_per_nation'],smallPerNation:v['opening.small_colonies_per_nation'],smallPerPirate:v['opening.small_colonies_per_pirate'],industriesPerColony:v['opening.industries_per_colony']},
+  docks:{crown:v['opening.crown_dock_type'],small:v['opening.small_dock_type']},
+  fleet:{crownWarshipClass:v['opening.crown_warship_class'],crownMerchantClasses:[v['opening.crown_merchant_class_a'],v['opening.crown_merchant_class_b']],smallMerchantClass:v['opening.small_merchant_class'],pirateShipClass:v['opening.pirate_ship_class'],crownWarships:v['opening.crown_warships'],crownMerchants:v['opening.crown_merchants'],smallMerchants:v['opening.small_merchants'],pirateShipsPerColony:v['opening.pirate_ships_per_colony']},
+  requiredIndustryPolicy:v['opening.required_industry_policy'],
+  funding:{treasuryGold:v['opening.starting_treasury_gold'],crownPortGold:v['opening.crown_port_gold'],smallPortGold:v['opening.small_port_gold'],bootstrapWood:v['opening.bootstrap_wood'],bootstrapIronBars:v['opening.bootstrap_iron_bars'],bootstrapCotton:v['opening.bootstrap_cotton']},
+  shipyards:Object.fromEntries(['small','medium','large'].map(tier=>[tier,{population:v[`opening.shipyard_${tier}_population`],wood:v[`opening.shipyard_${tier}_wood`],ironBars:v[`opening.shipyard_${tier}_iron_bars`]}])),
+  anchorage:{minCoastDistance:v['opening.anchor_min_coast_distance'],preferredCoastDistance:v['opening.anchor_preferred_coast_distance'],maxCoastDistance:v['opening.anchor_max_coast_distance'],minDepth:v['opening.anchor_min_depth']}};
+ return freeze({revision,clock,investment,industryGeneration,economy,merchant,fleet,scaling,roads,threat,navigation,provisions,opening,global});
 }
 export function compileApplicationConfiguration(input){
  const snapshot=configurationRegistry.reconstruct(input);if(snapshot.scope!=='application')throw TypeError('Application snapshot required');const v=snapshot.values,revision=snapshot.revision;

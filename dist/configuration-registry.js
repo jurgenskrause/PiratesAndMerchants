@@ -4,6 +4,7 @@ import {economyConfigurationValidator} from './economy-configuration-validator.j
 import {logisticsConfigurationValidator} from './logistics-configuration-validator.js?v=babbc3d3950e';
 import {navigationConfigurationValidator} from './navigation-configuration-validator.js?v=babbc3d3950e';
 import {loadCatalogs,validateSchema} from './catalog-loader.js?v=babbc3d3950e';
+import {openingConfigurationValidator} from './opening-configuration-validator.js';
 export const CONFIGURATION_FORMAT_VERSION=1;
 const freeze=value=>{if(value&&typeof value==='object'){for(const child of Object.values(value))freeze(child);Object.freeze(value);}return value;};
 const record=(value,label)=>{if(!value||typeof value!=='object'||Array.isArray(value)||![Object.prototype,null].includes(Object.getPrototypeOf(value)))throw TypeError(label+': expected plain object');};
@@ -101,7 +102,7 @@ export class ConfigurationRegistry{
  deserialize(text){if(typeof text!=='string')throw TypeError('Serialized configuration must be a string');return this.reconstruct(JSON.parse(text));}
 }
 const {catalog,schema}=await loadCatalogs();
-export const configurationRegistry=new ConfigurationRegistry(catalog.configuration_definitions,schema.properties.configuration_definitions.items,{constraints:catalog.configuration_constraints,constraintSchema:schema.properties.configuration_constraints.items,validators:[economyConfigurationValidator,logisticsConfigurationValidator,navigationConfigurationValidator,renderingConfigurationValidator]});
+export const configurationRegistry=new ConfigurationRegistry(catalog.configuration_definitions,schema.properties.configuration_definitions.items,{constraints:catalog.configuration_constraints,constraintSchema:schema.properties.configuration_constraints.items,validators:[economyConfigurationValidator,logisticsConfigurationValidator,navigationConfigurationValidator,renderingConfigurationValidator,openingConfigurationValidator(catalog)]});
 const initialSelections=configurationRegistry.validateSelections(catalog.configuration_overrides);
 if(!initialSelections.ok)throw new ConfigurationValidationError(initialSelections.diagnostics);
 export const developerSelectedValues=initialSelections.selected;

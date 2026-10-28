@@ -2,7 +2,7 @@ import {portEconomicInfo,portCargoHistories} from './port-economic-info.js?v=bab
 import {EconomicHistory} from './economic-history.js?v=babbc3d3950e';
 import {ConfigurationTransaction} from './configuration-transaction.js?v=babbc3d3950e';
 import {prepareWorldActivation} from './runtime-configuration-owner.js?v=babbc3d3950e';
-import {configurationRegistry} from './configuration-registry.js?v=babbc3d3950e';
+import {WORLD_SCENARIOS,validateWorldScenario} from './world-scenario.js';
 import {FACTIONS} from './economy.js?v=babbc3d3950e';
 import {SimulationRuntime} from './simulation-runtime.js?v=babbc3d3950e';
 import {settingsForWorld} from './compiled-configuration.js?v=babbc3d3950e';
@@ -51,7 +51,7 @@ self.onmessage=({data})=>{
 // until all initialization and timer preparation have succeeded.
 function prepareStart(data){
  if(!data.world?.configuration)throw TypeError('World configuration snapshot required');
- const world=structuredClone(data.world);world.configuration=configurationRegistry.reconstruct(world.configuration);settingsForWorld(world,{requireSnapshot:true});
+ const world=structuredClone(data.world),validated=validateWorldScenario(world);world.configuration=validated.snapshot;world.scenario=validated.scenario;settingsForWorld(world,{requireSnapshot:true});
  const baseline=structuredClone(world),nextSession=createMerchantSession(world,data.wind,data.field,data.basePortId,{maxShips:data.density??6,player:data.player??null,bridge:true}),nextRuntime=new SimulationRuntime(nextSession);
  const nextController=new ConfigurationTransaction({snapshot:world.configuration,sessionId:'session-'+(sessionSerial+1),prepare:p=>prepareWorldActivation(nextRuntime,p),notify:m=>self.postMessage(m)});nextRuntime.configurationController=nextController;
  const journal=new VoyageJournal();journal.begin(data.basePortId,null,0,0);
@@ -74,6 +74,7 @@ function advance(){
 }
 function configurationMessage(data){
  if(!controller){self.postMessage({type:'configuration-result',requestId:data.requestId,status:'rejected',diagnostics:[{id:'configuration.uninitialized',severity:'error',setting_ids:[],message:'Start the simulation first'}]});return;}
+ if(initialWorld?.scenario===WORLD_SCENARIOS.LEGACY_BENCHMARK){controller.reject(data,'configuration.benchmark','The fixed benchmark profile cannot be edited');return;}
  if(data.type==='configuration-request'){controller.request(data);return;}
  const conflict=controller.check(data);if(conflict){controller.reject(data,'configuration.conflict',conflict);return;}
  if(data.type==='configuration-cancel'){controller.cancel('Developer cancelled batch');controller.response(data,'accepted',{revision:controller.active.revision,activationBoundary:'unchanged',snapshot:controller.active});return;}

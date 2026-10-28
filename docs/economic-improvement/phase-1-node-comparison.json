@@ -1,0 +1,113 @@
+{
+  "schema": "economic-improvement-phase0-node-baseline-v1",
+  "capturedAt": "2026-10-28T12:38:07.443Z",
+  "configurationRevision": 0,
+  "seed": "BENCHMARK-COAST-01",
+  "settings": {
+    "seed": "BENCHMARK-COAST-01",
+    "density": 48,
+    "scale": 50,
+    "roughness": 55,
+    "moisture": 60,
+    "mountains": 35,
+    "industryDensity": 50
+  },
+  "runtime": {
+    "node": "v24.22.1",
+    "platform": "linux",
+    "architecture": "x64",
+    "cpuModel": null,
+    "logicalCpus": 0,
+    "systemMemoryGiB": 9.73,
+    "gcEnabled": true
+  },
+  "notes": [
+    "Invokes the actual module worker handler in Node on one process, not a browser Worker; workerMessageSetupMs includes handler execution but excludes cross-thread cloning and transfer.",
+    "Eligible harbor edges count adjacent land/water edges where the existing dockFootprint accepts the dock type; this is a geometric upper bound, not a validated founding/draft capacity.",
+    "Memory is process-wide after each size, includes previously generated scenes; no GPU timing or browser heap is measured.",
+    "One cold sequence of each map size. Timing is descriptive, not a stable performance comparison."
+  ],
+  "scenes": [
+    {
+      "size": 32,
+      "islands": 1,
+      "removedEdgeIslands": 1,
+      "eligibleHarborEdges": {
+        "small_pier": 36,
+        "deep_water_quay": 42
+      },
+      "islandsWithEligibleEdges": {
+        "small_pier": 1,
+        "deep_water_quay": 1
+      },
+      "ports": 0,
+      "industries": 0,
+      "industryTypes": {},
+      "terrainGenerationMs": 14.35,
+      "workerGenerationMs": 45.25,
+      "workerMessageSetupMs": 46.22,
+      "processMemoryMiB": null,
+      "v8UsedHeapMiB": 12.27
+    },
+    {
+      "size": 128,
+      "islands": 45,
+      "removedEdgeIslands": 3,
+      "eligibleHarborEdges": {
+        "small_pier": 1932,
+        "deep_water_quay": 2194
+      },
+      "islandsWithEligibleEdges": {
+        "small_pier": 45,
+        "deep_water_quay": 45
+      },
+      "ports": 23,
+      "industries": 25,
+      "industryTypes": {
+        "cannonball_foundry": 1,
+        "cotton": 8,
+        "iron": 8,
+        "ironworks": 1,
+        "sugar": 7
+      },
+      "terrainGenerationMs": 69.15,
+      "workerGenerationMs": 251.15,
+      "workerMessageSetupMs": 251.83,
+      "processMemoryMiB": null,
+      "v8UsedHeapMiB": 13.8
+    },
+    {
+      "size": 512,
+      "islands": 715,
+      "removedEdgeIslands": 16,
+      "eligibleHarborEdges": {
+        "small_pier": 30686,
+        "deep_water_quay": 36047
+      },
+      "islandsWithEligibleEdges": {
+        "small_pier": 715,
+        "deep_water_quay": 715
+      },
+      "ports": 377,
+      "industries": 382,
+      "industryTypes": {
+        "cannon_foundry": 1,
+        "cannonball_foundry": 1,
+        "cotton": 125,
+        "iron": 126,
+        "ironworks": 1,
+        "rum_distillery": 1,
+        "sugar": 126,
+        "textile_mill": 1
+      },
+      "terrainGenerationMs": 550.37,
+      "workerGenerationMs": 2775.33,
+      "workerMessageSetupMs": 2776.03,
+      "processMemoryMiB": null,
+      "v8UsedHeapMiB": 18.62
+    }
+  ],
+  "referenceBaseCommit": "e53cba80f14f43a93c29d89d4b589f9bc3786960",
+  "measuredBranch": "phase-1/economic-opening-config",
+  "note": "Normal legacy gameplay route after subphase 1.2, working tree before commit; benchmark profile frames were not measured in a browser."
+}
